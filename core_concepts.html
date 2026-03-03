@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core Concepts &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Migration Guide" href="migration.html" />
+    <link rel="prev" title="Multi-Level Methods &amp; QM/MM Partitioning" href="multilevel.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Core Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#molecular-graph">Molecular Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#chemistry-utilities">Chemistry Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#key-capabilities">Key Capabilities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#chemicalsystem">ChemicalSystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#molecule">Molecule</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fragment">Fragment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fragmenttree">FragmentTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fragmentation-scheme">Fragmentation Scheme</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fragmentation-rules">Fragmentation Rules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rule-actions">Rule Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#built-in-rules">Built-in Rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Core Concepts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/core_concepts.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-concepts">
+<h1>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading"></a></h1>
+<p>AutoFragment is built upon a robust graph-based representation of molecular systems and a set of chemistry-aware utilities. This foundation ensures that fragmentation algorithms operate on physically meaningful structures.</p>
+<section id="molecular-graph">
+<h2>Molecular Graph<a class="headerlink" href="#molecular-graph" title="Link to this heading"></a></h2>
+<p>At the heart of the library is the <code class="docutils literal notranslate"><span class="pre">MolecularGraph</span></code> class, which wraps a NetworkX graph to represent atoms as nodes and bonds as edges.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.core.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularGraph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.core.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atom</span>
+
+<span class="c1"># Methane example</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span>
+    <span class="n">Atom</span><span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]),</span>
+    <span class="c1"># ... more hydrogens</span>
+<span class="p">]</span>
+
+<span class="c1"># Create graph and infer bonds automatically</span>
+<span class="n">mg</span> <span class="o">=</span> <span class="n">MolecularGraph</span><span class="o">.</span><span class="n">from_molecules</span><span class="p">([</span><span class="n">atoms</span><span class="p">],</span> <span class="n">infer_bonds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Atoms: </span><span class="si">{</span><span class="n">mg</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">, Bonds: </span><span class="si">{</span><span class="n">mg</span><span class="o">.</span><span class="n">n_bonds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Bond Inference</strong>: Automatically detects bonds based on inter-atomic distances and covalent radii.</p></li>
+<li><p><strong>Ring Detection</strong>: Identifies rings (cycles) crucial for aromaticity and fragmentation rules.</p></li>
+<li><p><strong>Bridge Detection</strong>: Finds “bridges” or cut-edges, which are often good candidates for fragmentation points.</p></li>
+<li><p><strong>Subgraph Extraction</strong>: Efficiently extract specific fragments or regions as independent graphs.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check for rings</span>
+<span class="n">rings</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">find_rings</span><span class="p">()</span>
+
+<span class="c1"># Check if a bond is a bridge (removable without disconnecting the graph component)</span>
+<span class="n">is_bridge</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">is_bridge</span><span class="p">(</span><span class="n">atom1_idx</span><span class="p">,</span> <span class="n">atom2_idx</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="chemistry-utilities">
+<h2>Chemistry Utilities<a class="headerlink" href="#chemistry-utilities" title="Link to this heading"></a></h2>
+<p>AutoFragment includes a built-in chemistry engine (<code class="docutils literal notranslate"><span class="pre">autofragment.core.chemistry</span></code>) to handle fundamental chemical properties.</p>
+<section id="key-capabilities">
+<h3>Key Capabilities<a class="headerlink" href="#key-capabilities" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Periodic Table Data</strong>: Masses, valence electrons, electronegativity, and covalent radii.</p></li>
+<li><p><strong>Bond Order Inference</strong>: Infers Single, Double, Triple, and Aromatic (1.5) bond orders from geometry.</p></li>
+<li><p><strong>Aromaticity Detection</strong>: Uses Huckel’s rule heuristics and bond order analysis to detect aromatic systems (e.g., Benzene).</p></li>
+<li><p><strong>Formal Charge</strong>: Estimates formal charges on atoms based on connectivity and valence.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">chemistry</span>
+
+<span class="n">order</span> <span class="o">=</span> <span class="n">chemistry</span><span class="o">.</span><span class="n">infer_bond_order</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">1.40</span><span class="p">)</span>
+<span class="c1"># Returns 1.5 for aromatic C-C bond</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Link to this heading"></a></h2>
+<section id="chemicalsystem">
+<h3>ChemicalSystem<a class="headerlink" href="#chemicalsystem" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ChemicalSystem</span></code> is the canonical representation of a full system: all atoms,
+optional bonds, metadata, and lattice information. Public APIs accept a
+<code class="docutils literal notranslate"><span class="pre">ChemicalSystem</span></code> for system-level operations.</p>
+</section>
+<section id="molecule">
+<h3>Molecule<a class="headerlink" href="#molecule" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Molecule</span></code> is a lightweight helper for isolated fragments (e.g., single waters)
+and geometry utilities. Conversions between <code class="docutils literal notranslate"><span class="pre">ChemicalSystem</span></code> and molecule lists
+are explicit via <code class="docutils literal notranslate"><span class="pre">system_to_molecules</span></code> and <code class="docutils literal notranslate"><span class="pre">molecules_to_system</span></code>.</p>
+</section>
+<section id="fragment">
+<h3>Fragment<a class="headerlink" href="#fragment" title="Link to this heading"></a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Fragment</span></code> represents a subset of a molecular system. It carries:</p>
+<ul class="simple">
+<li><p><strong>Symbols &amp; Geometry</strong>: The atomic make-up.</p></li>
+<li><p><strong>Child Fragments</strong>: Optional <code class="docutils literal notranslate"><span class="pre">fragments</span></code> field for hierarchical nesting. A leaf fragment (<code class="docutils literal notranslate"><span class="pre">is_leaf</span> <span class="pre">==</span> <span class="pre">True</span></code>) holds atoms directly; a non-leaf fragment contains child <code class="docutils literal notranslate"><span class="pre">Fragment</span></code> objects.</p></li>
+<li><p><strong>Metadata</strong>: <code class="docutils literal notranslate"><span class="pre">molecular_charge</span></code>, <code class="docutils literal notranslate"><span class="pre">molecular_multiplicity</span></code>, and methods for <code class="docutils literal notranslate"><span class="pre">layer</span></code> (QM/MM) assignment.</p></li>
+<li><p><strong>Graph Awareness</strong>: Can map back to the original <code class="docutils literal notranslate"><span class="pre">MolecularGraph</span></code>.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">n_atoms</span></code> property recurses through children, so it works correctly at any level of the hierarchy.</p>
+</section>
+<section id="fragmenttree">
+<h3>FragmentTree<a class="headerlink" href="#fragmenttree" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">FragmentTree</span></code> is the primary output container. It holds:</p>
+<ul class="simple">
+<li><p><strong>Fragments</strong>: The list of resulting fragments (flat or hierarchical).</p></li>
+<li><p><strong>Interfragment Bonds</strong>: Explicit records of bonds that were cut, allowing for detailed analysis or restoration (e.g., capping).</p></li>
+<li><p><strong>Provenance</strong>: Metadata about the source file and algorithm used.</p></li>
+</ul>
+<p>For hierarchical trees (produced by tiered partitioning), <code class="docutils literal notranslate"><span class="pre">FragmentTree</span></code> provides:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_primary</span></code>: Number of top-level fragments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_is_hierarchical</span></code>: Whether any fragment has children.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_fragments</span></code>: Total count across all hierarchy levels.</p></li>
+</ul>
+</section>
+<section id="fragmentation-scheme">
+<h3>Fragmentation Scheme<a class="headerlink" href="#fragmentation-scheme" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">FragmentationScheme</span></code> holds the algorithm configuration used to generate a
+<code class="docutils literal notranslate"><span class="pre">FragmentTree</span></code>.</p>
+</section>
+</section>
+<section id="fragmentation-rules">
+<h2>Fragmentation Rules<a class="headerlink" href="#fragmentation-rules" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">autofragment.rules</span></code> module provides a <strong>Rules Engine</strong> that determines which bonds can be broken during fragmentation. Rules encode chemical knowledge to ensure fragments remain chemically meaningful.</p>
+<section id="rule-actions">
+<h3>Rule Actions<a class="headerlink" href="#rule-actions" title="Link to this heading"></a></h3>
+<p>Rules return one of four actions (most to least restrictive):</p>
+<ol class="arabic simple">
+<li><p><strong>MUST_NOT_BREAK</strong>: Bond must never be broken (aromatic rings, double bonds)</p></li>
+<li><p><strong>PREFER_KEEP</strong>: Prefer keeping, but can break if necessary (peptide bonds)</p></li>
+<li><p><strong>ALLOW</strong>: No preference (default)</p></li>
+<li><p><strong>PREFER_BREAK</strong>: Good fragmentation point (alpha-beta carbon bonds)</p></li>
+</ol>
+</section>
+<section id="built-in-rules">
+<h3>Built-in Rules<a class="headerlink" href="#built-in-rules" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Common</strong>: <code class="docutils literal notranslate"><span class="pre">AromaticRingRule</span></code>, <code class="docutils literal notranslate"><span class="pre">DoubleBondRule</span></code>, <code class="docutils literal notranslate"><span class="pre">MetalCoordinationRule</span></code>, <code class="docutils literal notranslate"><span class="pre">FunctionalGroupRule</span></code></p></li>
+<li><p><strong>Biological</strong> (configurable): <code class="docutils literal notranslate"><span class="pre">PeptideBondRule</span></code>, <code class="docutils literal notranslate"><span class="pre">DisulfideBondRule</span></code>, <code class="docutils literal notranslate"><span class="pre">ProlineRingRule</span></code>, <code class="docutils literal notranslate"><span class="pre">HydrogenBondRule</span></code></p></li>
+<li><p><strong>Materials Science</strong>: <code class="docutils literal notranslate"><span class="pre">SiloxaneBridgeRule</span></code>, <code class="docutils literal notranslate"><span class="pre">MOFLinkerRule</span></code>, <code class="docutils literal notranslate"><span class="pre">MetalNodeRule</span></code>, <code class="docutils literal notranslate"><span class="pre">PerovskiteOctahedralRule</span></code></p></li>
+</ul>
+<p>See the <a class="reference internal" href="rules.html"><span class="std std-doc">Rules Documentation</span></a> for complete details on creating and using fragmentation rules.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="multilevel.html" class="btn btn-neutral float-left" title="Multi-Level Methods &amp; QM/MM Partitioning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="migration.html" class="btn btn-neutral float-right" title="Migration Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

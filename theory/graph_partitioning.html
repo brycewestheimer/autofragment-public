@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Partitioning for Molecular Fragmentation &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fragmentation Scoring Functions" href="scoring.html" />
+    <link rel="prev" title="Clustering Algorithms for Molecular Fragmentation" href="clustering.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Graph Partitioning for Molecular Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#molecular-graph-representation">Molecular Graph Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#minimum-cut-problem">Minimum Cut Problem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stoer-wagner-algorithm">Stoer-Wagner Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitation-trivial-cuts">Limitation: Trivial Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#balanced-partitioning">Balanced Partitioning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ratio-cut">Ratio Cut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#normalized-cut-ncut">Normalized Cut (NCut)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kernighan-lin-algorithm">Kernighan-Lin Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#community-detection">Community Detection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modularity">Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#louvain-algorithm">Louvain Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resolution-parameter">Resolution Parameter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metis-algorithm">METIS Algorithm</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multilevel-paradigm">Multilevel Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metis-for-molecules">METIS for Molecules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#k-way-partitioning">k-way Partitioning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#direct-k-way">Direct k-way</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recursive-bisection">Recursive Bisection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#application-to-molecular-fragmentation">Application to Molecular Fragmentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#weight-functions-for-chemistry">Weight Functions for Chemistry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparison-of-methods">Comparison of Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Graph Partitioning for Molecular Fragmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/graph_partitioning.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="graph-partitioning-for-molecular-fragmentation">
+<h1>Graph Partitioning for Molecular Fragmentation<a class="headerlink" href="#graph-partitioning-for-molecular-fragmentation" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Graph partitioning algorithms divide a molecular graph into disjoint subsets (fragments) while minimizing the weight of edges between partitions. These methods are fundamental to molecular fragmentation, where the graph representation naturally captures atomic connectivity.</p>
+</section>
+<section id="molecular-graph-representation">
+<h2>Molecular Graph Representation<a class="headerlink" href="#molecular-graph-representation" title="Link to this heading"></a></h2>
+<p>A molecule is represented as a weighted graph $G = (V, E, w)$ where:</p>
+<ul class="simple">
+<li><p>$V = {v_1, \ldots, v_n}$: vertices (atoms)</p></li>
+<li><p>$E \subseteq V \times V$: edges (bonds)</p></li>
+<li><p>$w: E \to \mathbb{R}^+$: edge weights (bond strengths)</p></li>
+</ul>
+<p>Edge weights can encode:</p>
+<ul class="simple">
+<li><p><strong>Bond order</strong>: single (1.0), double (2.0), triple (3.0), aromatic (1.5)</p></li>
+<li><p><strong>Bond energy</strong>: energy cost of breaking the bond</p></li>
+<li><p><strong>Interaction strength</strong>: electrostatic or van der Waals interactions</p></li>
+</ul>
+</section>
+<section id="minimum-cut-problem">
+<h2>Minimum Cut Problem<a class="headerlink" href="#minimum-cut-problem" title="Link to this heading"></a></h2>
+<section id="definition">
+<h3>Definition<a class="headerlink" href="#definition" title="Link to this heading"></a></h3>
+<p>A <strong>cut</strong> $(S, \bar{S})$ partitions vertices into two disjoint sets where $S \cup \bar{S} = V$.</p>
+<p>The <strong>cut weight</strong> is the sum of edge weights crossing the partition:</p>
+<p>$$
+\text{cut}(S, \bar{S}) = \sum_{u \in S, v \in \bar{S}} w(u, v)
+$$</p>
+<p>The <strong>minimum cut</strong> minimizes this value:</p>
+<p>$$
+(S^<em>, \bar{S}^</em>) = \arg\min_{S \subset V} \text{cut}(S, \bar{S})
+$$</p>
+</section>
+<section id="stoer-wagner-algorithm">
+<h3>Stoer-Wagner Algorithm<a class="headerlink" href="#stoer-wagner-algorithm" title="Link to this heading"></a></h3>
+<p>Finds the global minimum cut in $O(|V||E| + |V|^2 \log|V|)$ time:</p>
+<ol class="arabic simple">
+<li><p>Start with arbitrary vertex $a$</p></li>
+<li><p>Grow a maximum adjacency ordering from $a$</p></li>
+<li><p>The last two vertices $(s, t)$ define a cut-of-the-phase</p></li>
+<li><p>Contract $s$ and $t$ into a single vertex</p></li>
+<li><p>Repeat until two vertices remain</p></li>
+<li><p>Return minimum cut found across all phases</p></li>
+</ol>
+</section>
+<section id="limitation-trivial-cuts">
+<h3>Limitation: Trivial Cuts<a class="headerlink" href="#limitation-trivial-cuts" title="Link to this heading"></a></h3>
+<p>Minimum cut tends to isolate single vertices (especially terminal atoms like hydrogen). For molecular fragmentation, we need <strong>balanced</strong> partitions.</p>
+</section>
+</section>
+<section id="balanced-partitioning">
+<h2>Balanced Partitioning<a class="headerlink" href="#balanced-partitioning" title="Link to this heading"></a></h2>
+<section id="ratio-cut">
+<h3>Ratio Cut<a class="headerlink" href="#ratio-cut" title="Link to this heading"></a></h3>
+<p>Normalize the cut by partition sizes:</p>
+<p>$$
+\text{RatioCut}(S, \bar{S}) = \frac{\text{cut}(S, \bar{S})}{|S|} + \frac{\text{cut}(S, \bar{S})}{|\bar{S}|}
+$$</p>
+<p>This penalizes highly imbalanced partitions.</p>
+</section>
+<section id="normalized-cut-ncut">
+<h3>Normalized Cut (NCut)<a class="headerlink" href="#normalized-cut-ncut" title="Link to this heading"></a></h3>
+<p>Normalize by the <strong>volume</strong> (total edge weight) of each partition:</p>
+<p>$$
+\text{NCut}(S, \bar{S}) = \frac{\text{cut}(S, \bar{S})}{\text{vol}(S)} + \frac{\text{cut}(S, \bar{S})}{\text{vol}(\bar{S})}
+$$</p>
+<p>where:</p>
+<p>$$
+\text{vol}(S) = \sum_{i \in S} d_i = \sum_{i \in S} \sum_{j} w_{ij}
+$$</p>
+<p>NCut is equivalent to finding the second smallest eigenvector of the normalized Laplacian (spectral clustering).</p>
+</section>
+<section id="kernighan-lin-algorithm">
+<h3>Kernighan-Lin Algorithm<a class="headerlink" href="#kernighan-lin-algorithm" title="Link to this heading"></a></h3>
+<p>Iterative improvement algorithm for balanced bipartitioning:</p>
+<ol class="arabic simple">
+<li><p><strong>Initialize</strong>: Split vertices into two equal-sized sets $A$ and $B$</p></li>
+<li><p><strong>Compute gains</strong>: For each pair $(a, b)$ with $a \in A$, $b \in B$:
+$$
+g(a, b) = D_a + D_b - 2w(a, b)
+$$
+where $D_a = \sum_{v \in B} w(a, v) - \sum_{v \in A} w(a, v)$ is the external - internal cost</p></li>
+<li><p><strong>Select best swap</strong>: Find $(a^<em>, b^</em>)$ maximizing $g$</p></li>
+<li><p><strong>Lock and update</strong>: Mark swapped vertices, update gains</p></li>
+<li><p><strong>Repeat</strong>: Until all vertices considered</p></li>
+<li><p><strong>Apply prefix</strong>: Keep swaps up to maximum cumulative gain</p></li>
+</ol>
+<p><strong>Complexity</strong>: $O(n^2 \log n)$ per pass, typically converges in few passes.</p>
+</section>
+</section>
+<section id="community-detection">
+<h2>Community Detection<a class="headerlink" href="#community-detection" title="Link to this heading"></a></h2>
+<p>Community detection finds densely connected groups without requiring balance constraints.</p>
+<section id="modularity">
+<h3>Modularity<a class="headerlink" href="#modularity" title="Link to this heading"></a></h3>
+<p>Modularity measures the quality of a partition by comparing edge density within communities to a random graph:</p>
+<p>$$
+Q = \frac{1}{2m} \sum_{ij} \left[ A_{ij} - \frac{k_i k_j}{2m} \right] \delta(c_i, c_j)
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$A_{ij}$: adjacency matrix entry</p></li>
+<li><p>$k_i = \sum_j A_{ij}$: degree of vertex $i$</p></li>
+<li><p>$m = \frac{1}{2}\sum_{ij} A_{ij}$: total edge weight</p></li>
+<li><p>$c_i$: community assignment of vertex $i$</p></li>
+<li><p>$\delta(c_i, c_j) = 1$ if $c_i = c_j$, else $0$</p></li>
+</ul>
+<p>Modularity ranges from $-0.5$ to $1$, with higher values indicating stronger community structure.</p>
+</section>
+<section id="louvain-algorithm">
+<h3>Louvain Algorithm<a class="headerlink" href="#louvain-algorithm" title="Link to this heading"></a></h3>
+<p>Fast modularity optimization with hierarchical aggregation:</p>
+<p><strong>Phase 1 (Local moves)</strong>:</p>
+<ol class="arabic simple">
+<li><p>For each vertex $i$ in random order</p></li>
+<li><p>Compute modularity gain from moving $i$ to each neighbor’s community:
+$$
+\Delta Q = \left[ \frac{\Sigma_{in} + k_{i,in}}{2m} - \left(\frac{\Sigma_{tot} + k_i}{2m}\right)^2 \right] - \left[ \frac{\Sigma_{in}}{2m} - \left(\frac{\Sigma_{tot}}{2m}\right)^2 - \left(\frac{k_i}{2m}\right)^2 \right]
+$$
+where $\Sigma_{in}$ = sum of weights inside community, $\Sigma_{tot}$ = total weight of community, $k_{i,in}$ = sum of weights from $i$ to community</p></li>
+<li><p>Move $i$ to community with maximum positive $\Delta Q$</p></li>
+<li><p>Repeat until no improvement</p></li>
+</ol>
+<p><strong>Phase 2 (Aggregation)</strong>:</p>
+<ol class="arabic simple">
+<li><p>Build new graph where each community becomes a super-vertex</p></li>
+<li><p>Edge weights between super-vertices = sum of edges between constituent communities</p></li>
+<li><p>Self-loops = internal edges of original community</p></li>
+</ol>
+<p><strong>Repeat</strong>: Apply Phase 1 to aggregated graph until convergence.</p>
+<p><strong>Complexity</strong>: $O(n \log n)$ for sparse graphs, making it suitable for large molecules.</p>
+</section>
+<section id="resolution-parameter">
+<h3>Resolution Parameter<a class="headerlink" href="#resolution-parameter" title="Link to this heading"></a></h3>
+<p>Modularity has a resolution limit—it may merge small communities. Introduce resolution parameter $\gamma$:</p>
+<p>$$
+Q_\gamma = \frac{1}{2m} \sum_{ij} \left[ A_{ij} - \gamma\frac{k_i k_j}{2m} \right] \delta(c_i, c_j)
+$$</p>
+<ul class="simple">
+<li><p>$\gamma &gt; 1$: Favor smaller communities (more fragments)</p></li>
+<li><p>$\gamma &lt; 1$: Favor larger communities (fewer fragments)</p></li>
+</ul>
+</section>
+</section>
+<section id="metis-algorithm">
+<h2>METIS Algorithm<a class="headerlink" href="#metis-algorithm" title="Link to this heading"></a></h2>
+<p>METIS is an industry-standard multilevel graph partitioning library optimized for large graphs.</p>
+<section id="multilevel-paradigm">
+<h3>Multilevel Paradigm<a class="headerlink" href="#multilevel-paradigm" title="Link to this heading"></a></h3>
+<p><strong>1. Coarsening Phase</strong>
+Progressively collapse vertices into coarser graphs:</p>
+<ul class="simple">
+<li><p><strong>Heavy Edge Matching (HEM)</strong>: Match vertices connected by heaviest edges</p></li>
+<li><p><strong>Sorted Heavy Edge Matching (SHEM)</strong>: Process vertices in decreasing degree order</p></li>
+</ul>
+<p>After $\ell$ coarsening levels: $|V_\ell| \ll |V_0|$</p>
+<p><strong>2. Initial Partitioning</strong>
+Apply exact or heuristic algorithm to small coarsened graph. Common choices:</p>
+<ul class="simple">
+<li><p>Greedy bisection</p></li>
+<li><p>Spectral partitioning</p></li>
+<li><p>Kernighan-Lin</p></li>
+</ul>
+<p><strong>3. Uncoarsening/Refinement</strong>
+Project partition back to finer levels, refining at each step:</p>
+<ul class="simple">
+<li><p><strong>Boundary refinement</strong>: Only consider moving vertices at partition boundary</p></li>
+<li><p><strong>FM refinement</strong>: Fiduccia-Mattheyses variant optimized for moves</p></li>
+</ul>
+</section>
+<section id="metis-for-molecules">
+<h3>METIS for Molecules<a class="headerlink" href="#metis-for-molecules" title="Link to this heading"></a></h3>
+<p>METIS partitions into $k$ balanced parts minimizing edge cut. For molecules:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pymetis</span>
+
+<span class="c1"># Molecule as adjacency list</span>
+<span class="n">adjacency</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+
+<span class="c1"># Partition into 2 fragments</span>
+<span class="n">n_cuts</span><span class="p">,</span> <span class="n">membership</span> <span class="o">=</span> <span class="n">pymetis</span><span class="o">.</span><span class="n">part_graph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">adjacency</span><span class="p">)</span>
+
+<span class="c1"># membership[i] = fragment assignment for atom i</span>
+</pre></div>
+</div>
+<p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p>Very fast: $O(|E|)$ time complexity</p></li>
+<li><p>Produces balanced partitions</p></li>
+<li><p>Minimal edge cut (bond breaking)</p></li>
+</ul>
+<p><strong>Considerations</strong>:</p>
+<ul class="simple">
+<li><p>Requires installation of <code class="docutils literal notranslate"><span class="pre">pymetis</span></code></p></li>
+<li><p>Balance constraint may conflict with chemical constraints</p></li>
+</ul>
+</section>
+</section>
+<section id="k-way-partitioning">
+<h2>k-way Partitioning<a class="headerlink" href="#k-way-partitioning" title="Link to this heading"></a></h2>
+<section id="direct-k-way">
+<h3>Direct k-way<a class="headerlink" href="#direct-k-way" title="Link to this heading"></a></h3>
+<p>Partition into $k &gt; 2$ parts directly:</p>
+<p>$$
+\text{minimize} \quad \sum_{i=1}^{k-1} \sum_{j=i+1}^{k} \text{cut}(V_i, V_j)
+$$</p>
+<p>subject to balance constraints:</p>
+<p>$$
+|V_i| \leq (1 + \epsilon) \frac{|V|}{k}, \quad \forall i
+$$</p>
+</section>
+<section id="recursive-bisection">
+<h3>Recursive Bisection<a class="headerlink" href="#recursive-bisection" title="Link to this heading"></a></h3>
+<p>Alternative approach:</p>
+<ol class="arabic simple">
+<li><p>Bisect graph into two parts</p></li>
+<li><p>Recursively bisect each part</p></li>
+<li><p>Continue until $k$ parts obtained</p></li>
+</ol>
+<p>For $k = 2^p$, requires $k-1$ cuts.</p>
+</section>
+</section>
+<section id="application-to-molecular-fragmentation">
+<h2>Application to Molecular Fragmentation<a class="headerlink" href="#application-to-molecular-fragmentation" title="Link to this heading"></a></h2>
+<section id="weight-functions-for-chemistry">
+<h3>Weight Functions for Chemistry<a class="headerlink" href="#weight-functions-for-chemistry" title="Link to this heading"></a></h3>
+<p>Design edge weights that encode chemical knowledge:</p>
+<p><strong>Bond energy weight</strong>:
+$$
+w(u, v) = E_{\text{bond}}(u, v)
+$$
+Penalizes breaking strong bonds.</p>
+<p><strong>Aromaticity weight</strong>:
+$$
+w(u, v) = \begin{cases}
+\infty &amp; \text{if bond is aromatic} \
+E_{\text{bond}} &amp; \text{otherwise}
+\end{cases}
+$$
+Prevents breaking aromatic systems.</p>
+<p><strong>Functional group weight</strong>:
+$$
+w(u, v) = \begin{cases}
+\infty &amp; \text{if bond is within functional group} \
+E_{\text{bond}} \cdot f(\text{rotatable}) &amp; \text{otherwise}
+\end{cases}
+$$</p>
+</section>
+<section id="comparison-of-methods">
+<h3>Comparison of Methods<a class="headerlink" href="#comparison-of-methods" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Complexity</p></th>
+<th class="head"><p>Balance</p></th>
+<th class="head"><p>Quality</p></th>
+<th class="head"><p>Best For</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Min-cut</p></td>
+<td><p>$O(VE + V^2 \log V)$</p></td>
+<td><p>No</p></td>
+<td><p>Exact</p></td>
+<td><p>Bipartition</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kernighan-Lin</p></td>
+<td><p>$O(n^2 \log n)$</p></td>
+<td><p>Strict</p></td>
+<td><p>Good</p></td>
+<td><p>Balanced bipartition</p></td>
+</tr>
+<tr class="row-even"><td><p>Louvain</p></td>
+<td><p>$O(n \log n)$</p></td>
+<td><p>No</p></td>
+<td><p>Good</p></td>
+<td><p>Natural clusters</p></td>
+</tr>
+<tr class="row-odd"><td><p>METIS</p></td>
+<td><p>$O(E)$</p></td>
+<td><p>Yes</p></td>
+<td><p>Excellent</p></td>
+<td><p>Large molecules</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Stoer, M., &amp; Wagner, F. (1997). A simple min-cut algorithm. <em>JACM</em>, 44(4), 585-591.</p></li>
+<li><p>Kernighan, B. W., &amp; Lin, S. (1970). An efficient heuristic procedure for partitioning graphs. <em>Bell System Technical Journal</em>, 49(2), 291-307.</p></li>
+<li><p>Blondel, V. D., et al. (2008). Fast unfolding of communities in large networks. <em>JSTAT</em>, P10008.</p></li>
+<li><p>Karypis, G., &amp; Kumar, V. (1998). A fast and high quality multilevel scheme for partitioning irregular graphs. <em>SIAM Journal on Scientific Computing</em>, 20(1), 359-392.</p></li>
+<li><p>Shi, J., &amp; Malik, J. (2000). Normalized cuts and image segmentation. <em>IEEE TPAMI</em>, 22(8), 888-905.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="clustering.html" class="btn btn-neutral float-left" title="Clustering Algorithms for Molecular Fragmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scoring.html" class="btn btn-neutral float-right" title="Fragmentation Scoring Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

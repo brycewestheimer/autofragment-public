@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>autofragment.core &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="autofragment.core.atom" href="autofragment.core.atom.html" />
+    <link rel="prev" title="autofragment.BatchPartitioner" href="autofragment.BatchPartitioner.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../autofragment.html">autofragment API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../autofragment.html#top-level">Top-level</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../autofragment.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">autofragment.core</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.data.html">autofragment.data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.chemistry.html">autofragment.chemistry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.rules.html">autofragment.rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.algorithms.html">autofragment.algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.io.html">autofragment.io</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.partitioners.html">autofragment.partitioners</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autofragment.multilevel.html">autofragment.multilevel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../autofragment.html">autofragment API</a></li>
+      <li class="breadcrumb-item active">autofragment.core</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_generated/autofragment.core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-autofragment.core">
+<span id="autofragment-core"></span><h1>autofragment.core<a class="headerlink" href="#module-autofragment.core" title="Link to this heading"></a></h1>
+<p>Core data structures and utilities for autofragment.</p>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autofragment.core.atom.html#module-autofragment.core.atom" title="autofragment.core.atom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atom</span></code></a></p></td>
+<td><p>Memory-efficient atom storage utilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autofragment.core.bonds.html#module-autofragment.core.bonds" title="autofragment.core.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a></p></td>
+<td><p>Bond detection and interfragment bond representation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="autofragment.core.chemistry.html#module-autofragment.core.chemistry" title="autofragment.core.chemistry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chemistry</span></code></a></p></td>
+<td><p>Chemistry utilities and periodic table data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autofragment.core.geometry.html#module-autofragment.core.geometry" title="autofragment.core.geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometry</span></code></a></p></td>
+<td><p>Geometric utilities for isolated molecular fragments.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="autofragment.core.graph.html#module-autofragment.core.graph" title="autofragment.core.graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graph</span></code></a></p></td>
+<td><p>Graph-based molecular representation using networkx.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autofragment.core.lattice.html#module-autofragment.core.lattice" title="autofragment.core.lattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lattice</span></code></a></p></td>
+<td><p>Lattice vector representation and operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="autofragment.core.periodic.html#module-autofragment.core.periodic" title="autofragment.core.periodic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">periodic</span></code></a></p></td>
+<td><p>Periodic boundary condition utilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="autofragment.core.types.html#module-autofragment.core.types" title="autofragment.core.types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">types</span></code></a></p></td>
+<td><p>Core data types for autofragment.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="autofragment.BatchPartitioner.html" class="btn btn-neutral float-left" title="autofragment.BatchPartitioner" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="autofragment.core.atom.html" class="btn btn-neutral float-right" title="autofragment.core.atom" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

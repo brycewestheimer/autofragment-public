@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFragment Examples &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Quickstart Guide" href="guides/quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AutoFragment Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#notebooks">Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">AutoFragment Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="autofragment-examples">
+<h1>AutoFragment Examples<a class="headerlink" href="#autofragment-examples" title="Link to this heading"></a></h1>
+<p>This directory contains examples and test data for <code class="docutils literal notranslate"><span class="pre">autofragment</span></code>.</p>
+<section id="notebooks">
+<h2>Notebooks<a class="headerlink" href="#notebooks" title="Link to this heading"></a></h2>
+<p>Interactive Jupyter notebooks demonstrating core features:</p>
+<ol class="arabic simple">
+<li><p><strong><a class="reference download internal" download="" href="_downloads/994e4072a3395bb268d45bf482b2b8d3/01_quickstart.ipynb"><span class="xref download myst">Quickstart</span></a></strong>: A 5-minute introduction to fragmentation concepts.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/0b7d6b691e2509df716126bf99a2e66f/02_water_mbe.ipynb"><span class="xref download myst">Water Cluster MBE</span></a></strong>: Many-Body Expansion (MBE) fragmentation of water clusters.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/cf303eb5804c83c028976ce63e738d2f/03_protein_efmo.ipynb"><span class="xref download myst">Protein EFMO</span></a></strong>: Fragmenting proteins for GAMESS EFMO calculations.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/bdd2c6eec1cef9b4f3b249fec8e55647/04_compare_algorithms.ipynb"><span class="xref download myst">Algorithm Comparison</span></a></strong>: Benchmarking different partitioning algorithms.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/573feaff90b3a2cd983a1e8cb39b5fa3/05_custom_scoring.ipynb"><span class="xref download myst">Custom Scoring</span></a></strong>: Implementing custom partitioning logic.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/a8852d9653ed1e31b1ed6612029d7b27/06_zeolite_fragment.ipynb"><span class="xref download myst">Zeolite Fragmentation</span></a></strong>: Dealing with periodic systems and CIF files.</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/4981e68ddc4697d290012b3062428ee0/07_qmmm_setup.ipynb"><span class="xref download myst">QM/MM Setup</span></a></strong>: Defining QM and MM regions.</p></li>
+</ol>
+</section>
+<section id="data">
+<h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
+<p>Test data files used in the examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1l2y.pdb</span></code>: Trp-cage protein structure (20 residues).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1l2y.cif</span></code>: Trp-cage protein structure (mmCIF format).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sodalite.cif</span></code>: Sodalite zeolite unit cell.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aspirin.xyz</span></code>: Aspirin molecule.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">caffeine.xyz</span></code>: Caffeine molecule.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dna_hairpin.pdb</span></code>: DNA hairpin structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">water_64.xyz</span></code>: Cluster of 64 water molecules.</p></li>
+</ul>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>To run the notebooks, ensure you have <code class="docutils literal notranslate"><span class="pre">jupyter</span></code> installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>jupyter
+</pre></div>
+</div>
+<p>Then start the notebook server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter<span class="w"> </span>notebook<span class="w"> </span>examples/notebooks/
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guides/quickstart.html" class="btn btn-neutral float-left" title="Quickstart Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

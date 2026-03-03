@@ -1,0 +1,20 @@
+﻿autofragment.partitioners.molecular
+===================================
+
+.. automodule:: autofragment.partitioners.molecular
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MolecularPartitioner
+      PartitionResult
+      TieredPartitionResult
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PartitionError
+   

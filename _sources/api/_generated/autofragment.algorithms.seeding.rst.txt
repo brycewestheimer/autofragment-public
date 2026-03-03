@@ -1,0 +1,13 @@
+autofragment.algorithms.seeding
+===============================
+
+.. automodule:: autofragment.algorithms.seeding
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_seeds
+      get_strategy
+   

@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biological System Support &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Materials Science Fragmentation" href="materials.html" />
+    <link rel="prev" title="Fragmentation Algorithms Guide" href="guides/algorithms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Biological System Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#amino-acids-proteins">Amino Acids &amp; Proteins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#charge-handling">Charge Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#biopartitioner">BioPartitioner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#secondary-structure">Secondary Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nucleic-acids-dna-rna">Nucleic Acids (DNA/RNA)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#partitioning-strategies">Partitioning Strategies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Biological System Support</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/biological.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="biological-system-support">
+<h1>Biological System Support<a class="headerlink" href="#biological-system-support" title="Link to this heading"></a></h1>
+<p>AutoFragment (v0.5+) includes specialized support for partitioning biological macromolecules like proteins and nucleic acids.</p>
+<section id="amino-acids-proteins">
+<h2>Amino Acids &amp; Proteins<a class="headerlink" href="#amino-acids-proteins" title="Link to this heading"></a></h2>
+<p>Documentation of the 20 standard amino acids, plus common variants, is built-in.</p>
+<section id="charge-handling">
+<h3>Charge Handling<a class="headerlink" href="#charge-handling" title="Link to this heading"></a></h3>
+<p>AutoFragment includes a sophisticated pH-dependent charge calculation engine.</p>
+<ul class="simple">
+<li><p><strong>Standard Charges:</strong> Default charges for all 20 amino acids.</p></li>
+<li><p><strong>pH Dependency:</strong> Uses the Henderson-Hasselbalch equation to calculate partial charges at arbitrary pH values.</p>
+<ul>
+<li><p>Example: Histidine at pH 7.4 has a partial positive charge (~+0.1).</p></li>
+</ul>
+</li>
+<li><p><strong>Terminals:</strong> N- and C- termini pKa values are average-adjusted based on the residue type (e.g., Proline N-term).</p></li>
+<li><p><strong>PTMs:</strong> Support for Post-Translational Modifications:</p>
+<ul>
+<li><p>Phosphorylation (SEP, TPO, PTR)</p></li>
+<li><p>Acetylation (ALY)</p></li>
+<li><p>Methylation (MLY, M3L)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="biopartitioner">
+<h3>BioPartitioner<a class="headerlink" href="#biopartitioner" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">BioPartitioner</span></code> class is enhanced to use this data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">BioPartitioner</span>
+
+<span class="c1"># Partition with physiological charges</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">BioPartitioner</span><span class="p">(</span><span class="n">pdb_file</span><span class="o">=</span><span class="s2">&quot;protein.pdb&quot;</span><span class="p">,</span> <span class="n">ph</span><span class="o">=</span><span class="mf">7.4</span><span class="p">)</span>
+<span class="n">fragments</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="secondary-structure">
+<h3>Secondary Structure<a class="headerlink" href="#secondary-structure" title="Link to this heading"></a></h3>
+<p>Partitioning respects secondary structure elements if provided (HELIX/SHEET records in PDB/CIF). It avoids breaking consecutive residues within a helix or beta-sheet strand.</p>
+</section>
+</section>
+<section id="nucleic-acids-dna-rna">
+<h2>Nucleic Acids (DNA/RNA)<a class="headerlink" href="#nucleic-acids-dna-rna" title="Link to this heading"></a></h2>
+<p>Specialized support for DNA and RNA fragmentation is provided via <code class="docutils literal notranslate"><span class="pre">NucleicPartitioner</span></code>.</p>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Nucleotide Data:</strong> Comprehensive definitions for DNA (dA, dT, dG, dC) and RNA (A, U, G, C) bases.</p></li>
+<li><p><strong>Backbone Charges:</strong> Phosphodiester backbone is assigned -1 charge per nucleotide.</p></li>
+<li><p><strong>Base Pairs:</strong> Can detect Watson-Crick (A-T, G-C, A-U) and Wobble (G-U) base pairs to keep paired bases in the same partition if desired.</p></li>
+</ul>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">NucleicPartitioner</span>
+
+<span class="c1"># Partition DNA, keeping base pairs together</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">NucleicPartitioner</span><span class="p">(</span>
+    <span class="n">nucleotides_per_fragment</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">preserve_base_pairs</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="partitioning-strategies">
+<h3>Partitioning Strategies<a class="headerlink" href="#partitioning-strategies" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Backbone (Default):</strong> Breaks the phosphate backbone, keeping each base attached to its sugar and phosphate.</p></li>
+<li><p><strong>Base Separation:</strong> separates nucleobases from the sugar-phosphate backbone (useful for specific QM studies).</p></li>
+<li><p><strong>Hybrid:</strong> Flexible fragmentation based on size.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guides/algorithms.html" class="btn btn-neutral float-left" title="Fragmentation Algorithms Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="materials.html" class="btn btn-neutral float-right" title="Materials Science Fragmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

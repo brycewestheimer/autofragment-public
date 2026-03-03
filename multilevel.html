@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Level Methods &amp; QM/MM Partitioning &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core Concepts" href="core_concepts.html" />
+    <link rel="prev" title="Materials Science Fragmentation" href="materials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multi-Level Methods &amp; QM/MM Partitioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-qm-mm-partitioning">Basic QM/MM Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oniom-calculations">ONIOM Calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#computational-layers">Computational Layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#layer-types">Layer Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-layers">Creating Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embedding-types">Embedding Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#qm-region-selection">QM Region Selection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#selection-strategies">Selection Strategies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atom-selection-explicit">Atom Selection (Explicit)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#distance-selection-spherical">Distance Selection (Spherical)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#residue-selection-biological">Residue Selection (Biological)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#combined-selection">Combined Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#topology-selection-graph-euclidean-layers">Topology Selection (Graph / Euclidean Layers)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reusable-topology-utility">Reusable Topology Utility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#link-atoms">Link Atoms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-link-atom-placement">Automatic Link Atom Placement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bond-length-data">Bond Length Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#point-charge-embedding">Point Charge Embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#layer-assignment-algorithms">Layer Assignment Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oniom-input-generation">ONIOM Input Generation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#two-layer-oniom">Two-Layer ONIOM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#three-layer-oniom">Three-Layer ONIOM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#converting-results">Converting Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#to-multilevelscheme">To MultiLevelScheme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#to-fragmenttree">To FragmentTree</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#serialization">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selection-classes">Selection Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multi-Level Methods &amp; QM/MM Partitioning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/multilevel.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multi-level-methods-qm-mm-partitioning">
+<h1>Multi-Level Methods &amp; QM/MM Partitioning<a class="headerlink" href="#multi-level-methods-qm-mm-partitioning" title="Link to this heading"></a></h1>
+<p>AutoFragment provides comprehensive support for multi-level computational methods, including ONIOM-style calculations and QM/MM partitioning. This module enables sophisticated treatment of large molecular systems by dividing them into regions treated with different levels of theory.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Multi-level methods allow you to:</p>
+<ul class="simple">
+<li><p><strong>Define computational layers</strong> with different methods and basis sets</p></li>
+<li><p><strong>Partition systems into QM/MM regions</strong> with automatic boundary detection</p></li>
+<li><p><strong>Position link atoms</strong> at covalent boundaries using g-factor approaches</p></li>
+<li><p><strong>Generate point charges</strong> for electrostatic embedding</p></li>
+<li><p><strong>Create ONIOM input</strong> for Gaussian and GAMESS</p></li>
+</ul>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="basic-qm-mm-partitioning">
+<h3>Basic QM/MM Partitioning<a class="headerlink" href="#basic-qm-mm-partitioning" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QMMMPartitioner</span><span class="p">,</span>
+    <span class="n">AtomSelection</span><span class="p">,</span>
+    <span class="n">DistanceSelection</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Define QM region by explicit atom indices</span>
+<span class="n">selection</span> <span class="o">=</span> <span class="n">AtomSelection</span><span class="p">(</span><span class="n">atom_indices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">})</span>
+
+<span class="c1"># Create partitioner with buffer region</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">QMMMPartitioner</span><span class="p">(</span>
+    <span class="n">qm_selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+    <span class="n">buffer_radius</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>  <span class="c1"># Angstrom</span>
+    <span class="n">link_scheme</span><span class="o">=</span><span class="s2">&quot;hydrogen&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Partition molecules</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+<span class="c1"># Access regions</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;QM atoms: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">qm_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buffer atoms: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">buffer_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MM atoms: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">mm_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link atoms: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">link_atoms</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="oniom-calculations">
+<h3>ONIOM Calculations<a class="headerlink" href="#oniom-calculations" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ONIOMScheme</span>
+
+<span class="c1"># Parse from Gaussian-style string</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">ONIOMScheme</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;ONIOM(B3LYP/6-31G*:UFF)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set atoms for each layer</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">set_layer_atoms</span><span class="p">(</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">})</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">set_layer_atoms</span><span class="p">(</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">})</span>
+
+<span class="c1"># Generate input files</span>
+<span class="n">gaussian_input</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">to_gaussian_input</span><span class="p">()</span>
+<span class="c1"># Output: ONIOM(B3LYP/6-31G*:UFF)</span>
+
+<span class="n">gamess_input</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">to_gamess_input</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="computational-layers">
+<h2>Computational Layers<a class="headerlink" href="#computational-layers" title="Link to this heading"></a></h2>
+<section id="layer-types">
+<h3>Layer Types<a class="headerlink" href="#layer-types" title="Link to this heading"></a></h3>
+<p>AutoFragment supports four layer types:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Layer Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HIGH</span></code></p></td>
+<td><p>Highest level QM</p></td>
+<td><p>Active site, reaction center</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MEDIUM</span></code></p></td>
+<td><p>Intermediate QM</p></td>
+<td><p>First solvation shell</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LOW</span></code></p></td>
+<td><p>Low-level QM/SE</p></td>
+<td><p>Extended environment</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MM</span></code></p></td>
+<td><p>Molecular mechanics</p></td>
+<td><p>Bulk solvent</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="creating-layers">
+<h3>Creating Layers<a class="headerlink" href="#creating-layers" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ComputationalLayer</span><span class="p">,</span>
+    <span class="n">LayerType</span><span class="p">,</span>
+    <span class="n">MultiLevelScheme</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a high-level QM layer</span>
+<span class="n">qm_layer</span> <span class="o">=</span> <span class="n">ComputationalLayer</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;active_site&quot;</span><span class="p">,</span>
+    <span class="n">layer_type</span><span class="o">=</span><span class="n">LayerType</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">basis_set</span><span class="o">=</span><span class="s2">&quot;6-311G(2d,2p)&quot;</span><span class="p">,</span>
+    <span class="n">atom_indices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="n">charge</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">multiplicity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create an MM layer</span>
+<span class="n">mm_layer</span> <span class="o">=</span> <span class="n">ComputationalLayer</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;environment&quot;</span><span class="p">,</span>
+    <span class="n">layer_type</span><span class="o">=</span><span class="n">LayerType</span><span class="o">.</span><span class="n">MM</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;AMBER&quot;</span><span class="p">,</span>
+    <span class="n">atom_indices</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="c1"># Combine into a scheme</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">MultiLevelScheme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;enzyme_qmmm&quot;</span><span class="p">,</span>
+    <span class="n">scheme_type</span><span class="o">=</span><span class="s2">&quot;qmmm&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">qm_layer</span><span class="p">)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">mm_layer</span><span class="p">)</span>
+
+<span class="c1"># Access layers</span>
+<span class="n">high</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">get_high_layer</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;QM method: </span><span class="si">{</span><span class="n">high</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">high</span><span class="o">.</span><span class="n">basis_set</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="embedding-types">
+<h3>Embedding Types<a class="headerlink" href="#embedding-types" title="Link to this heading"></a></h3>
+<p>Control how layers interact:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmbeddingType</span>
+
+<span class="c1"># Electrostatic embedding (QM sees MM charges)</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">MultiLevelScheme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;qmmm&quot;</span><span class="p">,</span>
+    <span class="n">embedding_type</span><span class="o">=</span><span class="n">EmbeddingType</span><span class="o">.</span><span class="n">ELECTROSTATIC</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Mechanical embedding (no electronic coupling)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">=</span> <span class="n">EmbeddingType</span><span class="o">.</span><span class="n">MECHANICAL</span>
+
+<span class="c1"># Polarizable embedding (mutual polarization)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">embedding_type</span> <span class="o">=</span> <span class="n">EmbeddingType</span><span class="o">.</span><span class="n">POLARIZABLE</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="qm-region-selection">
+<h2>QM Region Selection<a class="headerlink" href="#qm-region-selection" title="Link to this heading"></a></h2>
+<section id="selection-strategies">
+<h3>Selection Strategies<a class="headerlink" href="#selection-strategies" title="Link to this heading"></a></h3>
+<p>AutoFragment provides multiple ways to define the QM region:</p>
+<section id="atom-selection-explicit">
+<h4>Atom Selection (Explicit)<a class="headerlink" href="#atom-selection-explicit" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">AtomSelection</span>
+
+<span class="c1"># Specify exact atom indices</span>
+<span class="n">selection</span> <span class="o">=</span> <span class="n">AtomSelection</span><span class="p">(</span><span class="n">atom_indices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="distance-selection-spherical">
+<h4>Distance Selection (Spherical)<a class="headerlink" href="#distance-selection-spherical" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceSelection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Select all atoms within 5 Å of a point</span>
+<span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">])</span>
+<span class="n">selection</span> <span class="o">=</span> <span class="n">DistanceSelection</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="residue-selection-biological">
+<h4>Residue Selection (Biological)<a class="headerlink" href="#residue-selection-biological" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResidueSelection</span>
+
+<span class="c1"># Select by residue name (for proteins)</span>
+<span class="n">selection</span> <span class="o">=</span> <span class="n">ResidueSelection</span><span class="p">(</span><span class="n">residue_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HIS&quot;</span><span class="p">,</span> <span class="s2">&quot;CYS&quot;</span><span class="p">,</span> <span class="s2">&quot;ASP&quot;</span><span class="p">])</span>
+
+<span class="c1"># Or by residue number</span>
+<span class="n">selection</span> <span class="o">=</span> <span class="n">ResidueSelection</span><span class="p">(</span><span class="n">residue_numbers</span><span class="o">=</span><span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">102</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="combined-selection">
+<h4>Combined Selection<a class="headerlink" href="#combined-selection" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">CombinedSelection</span>
+
+<span class="c1"># Union: atoms matching any criterion</span>
+<span class="n">union_selection</span> <span class="o">=</span> <span class="n">CombinedSelection</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">atom_sel</span><span class="p">,</span> <span class="n">distance_sel</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;union&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Intersection: atoms matching all criteria</span>
+<span class="n">intersection_selection</span> <span class="o">=</span> <span class="n">CombinedSelection</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">residue_sel</span><span class="p">,</span> <span class="n">distance_sel</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;intersection&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="topology-selection-graph-euclidean-layers">
+<h4>Topology Selection (Graph / Euclidean Layers)<a class="headerlink" href="#topology-selection-graph-euclidean-layers" title="Link to this heading"></a></h4>
+<p>Use topology-aware neighborhood growth from one or more seed atoms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">TopologySelection</span>
+
+<span class="c1"># Graph-hop expansion from active-site seed atoms</span>
+<span class="n">topology_sel</span> <span class="o">=</span> <span class="n">TopologySelection</span><span class="p">(</span>
+    <span class="n">seed_atoms</span><span class="o">=</span><span class="p">{</span><span class="mi">120</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">122</span><span class="p">},</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>        <span class="c1"># or &quot;euclidean&quot;</span>
+    <span class="n">hops</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>               <span class="c1"># graph mode depth</span>
+    <span class="n">layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>             <span class="c1"># euclidean mode only</span>
+    <span class="n">k_per_layer</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>       <span class="c1"># euclidean mode only</span>
+    <span class="n">expand_residues</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">bond_policy</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span> <span class="c1"># or &quot;strict&quot; (requires explicit bonds)</span>
+<span class="p">)</span>
+
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">QMMMPartitioner</span><span class="p">(</span><span class="n">qm_selection</span><span class="o">=</span><span class="n">topology_sel</span><span class="p">,</span> <span class="n">buffer_radius</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span>
+    <span class="n">system</span><span class="p">,</span>
+    <span class="n">residue_names</span><span class="o">=</span><span class="n">residue_names</span><span class="p">,</span>
+    <span class="n">residue_numbers</span><span class="o">=</span><span class="n">residue_numbers</span><span class="p">,</span>
+    <span class="n">chains</span><span class="o">=</span><span class="n">chains</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">TopologySelection</span></code> uses the shared <code class="docutils literal notranslate"><span class="pre">TopologyNeighborSelection</span></code> utility, which is also available for non-QM/MM workflows.</p>
+</section>
+</section>
+<section id="reusable-topology-utility">
+<h3>Reusable Topology Utility<a class="headerlink" href="#reusable-topology-utility" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">TopologyNeighborSelection</span>
+
+<span class="n">selector</span> <span class="o">=</span> <span class="n">TopologyNeighborSelection</span><span class="p">(</span>
+    <span class="n">seed_atoms</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+    <span class="n">hops</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">bond_policy</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">selection_result</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">elements</span><span class="p">,</span> <span class="n">bonds</span><span class="o">=</span><span class="n">bonds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">selection_result</span><span class="o">.</span><span class="n">selected_atoms</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">selection_result</span><span class="o">.</span><span class="n">shells</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="link-atoms">
+<h2>Link Atoms<a class="headerlink" href="#link-atoms" title="Link to this heading"></a></h2>
+<p>When covalent bonds cross the QM/MM boundary, link atoms (typically hydrogen) cap the QM region.</p>
+<section id="automatic-link-atom-placement">
+<h3>Automatic Link Atom Placement<a class="headerlink" href="#automatic-link-atom-placement" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">calculate_g_factor</span><span class="p">,</span>
+    <span class="n">create_link_atoms_for_cut_bonds</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># G-factor determines link atom position</span>
+<span class="c1"># R_link = R_QM + g * (R_MM - R_QM)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">calculate_g_factor</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">)</span>  <span class="c1"># ~0.708</span>
+
+<span class="c1"># Create link atoms for cut bonds</span>
+<span class="n">link_atoms</span> <span class="o">=</span> <span class="n">create_link_atoms_for_cut_bonds</span><span class="p">(</span>
+    <span class="n">coords</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+    <span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span>
+    <span class="n">cut_bonds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>  <span class="c1"># (qm_idx, mm_idx)</span>
+    <span class="n">link_element</span><span class="o">=</span><span class="s2">&quot;H&quot;</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">la</span> <span class="ow">in</span> <span class="n">link_atoms</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link H at QM atom </span><span class="si">{</span><span class="n">la</span><span class="o">.</span><span class="n">qm_atom_index</span><span class="si">}</span><span class="s2">, replacing MM atom </span><span class="si">{</span><span class="n">la</span><span class="o">.</span><span class="n">mm_atom_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position: </span><span class="si">{</span><span class="n">la</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bond-length-data">
+<h3>Bond Length Data<a class="headerlink" href="#bond-length-data" title="Link to this heading"></a></h3>
+<p>Common bond lengths used for g-factor calculations:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bond</p></th>
+<th class="head"><p>Length (Å)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C-H</p></td>
+<td><p>1.09</p></td>
+</tr>
+<tr class="row-odd"><td><p>C-C</p></td>
+<td><p>1.54</p></td>
+</tr>
+<tr class="row-even"><td><p>C-N</p></td>
+<td><p>1.47</p></td>
+</tr>
+<tr class="row-odd"><td><p>N-H</p></td>
+<td><p>1.01</p></td>
+</tr>
+<tr class="row-even"><td><p>C-O</p></td>
+<td><p>1.43</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="point-charge-embedding">
+<h2>Point Charge Embedding<a class="headerlink" href="#point-charge-embedding" title="Link to this heading"></a></h2>
+<p>For electrostatic QM/MM, MM atoms are represented as point charges:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PointChargeEmbedding</span>
+
+<span class="c1"># Create embedding generator</span>
+<span class="n">embedding</span> <span class="o">=</span> <span class="n">PointChargeEmbedding</span><span class="p">(</span>
+    <span class="n">charge_scheme</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">exclude_link_atoms</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Don&#39;t double-count</span>
+<span class="p">)</span>
+
+<span class="c1"># Generate point charges</span>
+<span class="n">charges</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">generate_charges</span><span class="p">(</span>
+    <span class="n">coords</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+    <span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span>
+    <span class="n">mm_atoms</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">mm_atoms</span><span class="p">,</span>
+    <span class="n">link_mm_atoms</span><span class="o">=</span><span class="p">{</span><span class="n">la</span><span class="o">.</span><span class="n">mm_atom_index</span> <span class="k">for</span> <span class="n">la</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">link_atoms</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="c1"># Get arrays for QM program</span>
+<span class="n">positions</span><span class="p">,</span> <span class="n">charge_values</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">to_arrays</span><span class="p">(</span><span class="n">charges</span><span class="p">)</span>
+
+<span class="c1"># Generate GAMESS input</span>
+<span class="n">gamess_efrag</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">to_gamess_format</span><span class="p">(</span><span class="n">charges</span><span class="p">)</span>
+
+<span class="c1"># Generate Gaussian-style charges</span>
+<span class="n">gaussian_charges</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">to_gaussian_format</span><span class="p">(</span><span class="n">charges</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="layer-assignment-algorithms">
+<h2>Layer Assignment Algorithms<a class="headerlink" href="#layer-assignment-algorithms" title="Link to this heading"></a></h2>
+<p>Automatically assign atoms to layers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">assign_by_distance</span><span class="p">,</span>
+    <span class="n">assign_by_residue</span><span class="p">,</span>
+    <span class="n">assign_by_element</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Distance-based: atoms within cutoffs from center</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">assign_by_distance</span><span class="p">(</span>
+    <span class="n">coords</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+    <span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span>
+    <span class="n">center_indices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="n">cutoffs</span><span class="o">=</span><span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>  <span class="c1"># Creates 3 layers</span>
+<span class="p">)</span>
+
+<span class="c1"># Residue-based: group by residue names</span>
+<span class="n">qm_atoms</span> <span class="o">=</span> <span class="n">assign_by_residue</span><span class="p">(</span>
+    <span class="n">coords</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+    <span class="n">residue_names</span><span class="o">=</span><span class="n">residue_names</span><span class="p">,</span>
+    <span class="n">qm_residues</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;HIS&quot;</span><span class="p">,</span> <span class="s2">&quot;CYS&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="c1"># Element-based: group by element type</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="n">assign_by_element</span><span class="p">(</span>
+    <span class="n">coords</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+    <span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span>
+    <span class="n">element_layers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Fe&quot;</span><span class="p">:</span> <span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="oniom-input-generation">
+<h2>ONIOM Input Generation<a class="headerlink" href="#oniom-input-generation" title="Link to this heading"></a></h2>
+<section id="two-layer-oniom">
+<h3>Two-Layer ONIOM<a class="headerlink" href="#two-layer-oniom" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_oniom_scheme</span>
+
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">create_oniom_scheme</span><span class="p">(</span>
+    <span class="n">high_method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">high_basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">high_atoms</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="n">low_method</span><span class="o">=</span><span class="s2">&quot;UFF&quot;</span><span class="p">,</span>
+    <span class="n">low_atoms</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">to_gaussian_input</span><span class="p">())</span>
+<span class="c1"># ONIOM(B3LYP/6-31G*:UFF)</span>
+</pre></div>
+</div>
+</section>
+<section id="three-layer-oniom">
+<h3>Three-Layer ONIOM<a class="headerlink" href="#three-layer-oniom" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scheme</span> <span class="o">=</span> <span class="n">ONIOMScheme</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span>
+    <span class="s2">&quot;ONIOM(CCSD(T)/cc-pVTZ:B3LYP/6-31G*:AMBER)&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Access layers</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">high_method</span><span class="p">)</span>   <span class="c1"># CCSD(T)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">medium_method</span><span class="p">)</span> <span class="c1"># B3LYP</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">low_method</span><span class="p">)</span>    <span class="c1"># AMBER</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="converting-results">
+<h2>Converting Results<a class="headerlink" href="#converting-results" title="Link to this heading"></a></h2>
+<section id="to-multilevelscheme">
+<h3>To MultiLevelScheme<a class="headerlink" href="#to-multilevelscheme" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert QMMMResult to MultiLevelScheme</span>
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">to_multilevel_scheme</span><span class="p">(</span>
+    <span class="n">qm_method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">qm_basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">mm_method</span><span class="o">=</span><span class="s2">&quot;AMBER&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;enzyme_active_site&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="to-fragmenttree">
+<h3>To FragmentTree<a class="headerlink" href="#to-fragmenttree" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For compatibility with other AutoFragment workflows</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition_to_fragment_tree</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">&quot;qmmm_fragments.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="serialization">
+<h2>Serialization<a class="headerlink" href="#serialization" title="Link to this heading"></a></h2>
+<p>All data structures support JSON serialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;qmmm_result.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># Load</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">QMMMResult</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;qmmm_result.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">QMMMResult</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.ComputationalLayer</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.MultiLevelScheme</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.ONIOMScheme</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.LinkAtom</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.PointCharge</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.multilevel.PointChargeEmbedding</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.QMMMPartitioner</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.QMMMResult</span></code></p></li>
+</ul>
+</section>
+<section id="selection-classes">
+<h3>Selection Classes<a class="headerlink" href="#selection-classes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.AtomSelection</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.DistanceSelection</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.ResidueSelection</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.CombinedSelection</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.TopologySelection</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">autofragment.partitioners.TopologyNeighborSelection</span></code></p></li>
+</ul>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">autofragment.multilevel.assign_by_distance()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">autofragment.multilevel.assign_by_residue()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">autofragment.multilevel.assign_by_element()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">autofragment.multilevel.calculate_g_factor()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">autofragment.multilevel.create_link_atoms_for_cut_bonds()</span></code></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="materials.html" class="btn btn-neutral float-left" title="Materials Science Fragmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core_concepts.html" class="btn btn-neutral float-right" title="Core Concepts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

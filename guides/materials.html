@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Materials Science Guide &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Custom Rules Authoring Guide" href="custom_rules.html" />
+    <link rel="prev" title="Protein Fragmentation Guide" href="proteins.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Materials Science Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-periodic-systems">Loading Periodic Systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-cif-files">From CIF Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-vasp-files">From VASP Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lattice-operations">Lattice Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#surface-systems">Surface Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-work">Future Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tips">Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Materials Science Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/materials.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="materials-science-guide">
+<h1>Materials Science Guide<a class="headerlink" href="#materials-science-guide" title="Link to this heading"></a></h1>
+<p>This guide covers the fragmentation of materials science systems, including surfaces and other periodic systems.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChemicalSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">SurfacePartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.readers</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_cif</span><span class="p">,</span> <span class="n">read_poscar</span>
+</pre></div>
+</div>
+</section>
+<section id="loading-periodic-systems">
+<h2>Loading Periodic Systems<a class="headerlink" href="#loading-periodic-systems" title="Link to this heading"></a></h2>
+<section id="from-cif-files">
+<h3>From CIF Files<a class="headerlink" href="#from-cif-files" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">read_cif</span><span class="p">(</span><span class="s2">&quot;structure.cif&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Atoms: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">system</span><span class="o">.</span><span class="n">lattice</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lattice: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">lattice</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="from-vasp-files">
+<h3>From VASP Files<a class="headerlink" href="#from-vasp-files" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">read_poscar</span><span class="p">(</span><span class="s2">&quot;POSCAR&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="lattice-operations">
+<h3>Lattice Operations<a class="headerlink" href="#lattice-operations" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lattice</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">lattice</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a, b, c: </span><span class="si">{</span><span class="n">lattice</span><span class="o">.</span><span class="n">lengths</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alpha, beta, gamma: </span><span class="si">{</span><span class="n">lattice</span><span class="o">.</span><span class="n">angles</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Volume: </span><span class="si">{</span><span class="n">lattice</span><span class="o">.</span><span class="n">volume</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> A^3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="surface-systems">
+<h2>Surface Systems<a class="headerlink" href="#surface-systems" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">SurfacePartitioner</span><span class="p">(</span>
+    <span class="n">surface_normal</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>         <span class="c1"># z-axis</span>
+    <span class="n">n_surface_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">n_bulk_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fragments</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">slab</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="future-work">
+<h2>Future Work<a class="headerlink" href="#future-work" title="Link to this heading"></a></h2>
+<p>The following partitioners are planned for future releases but not yet implemented:</p>
+<ul class="simple">
+<li><p><strong>MOFPartitioner</strong>: Metal-Organic Framework decomposition into nodes and linkers</p></li>
+<li><p><strong>ZeolitePartitioner</strong>: Aluminosilicate framework partitioning</p></li>
+</ul>
+<p>Similarly, the following writers are planned:</p>
+<ul class="simple">
+<li><p><strong>VASP writer</strong>: POSCAR output for periodic fragments</p></li>
+<li><p><strong>Quantum ESPRESSO writer</strong>: pw.in output for periodic DFT</p></li>
+</ul>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Use large enough supercells to avoid periodic image artifacts</p></li>
+<li><p>Keep complete coordination spheres in fragments</p></li>
+<li><p>Protect aromatic rings and functional groups</p></li>
+<li><p>Use appropriate charges for accurate embedding</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="proteins.html" class="btn btn-neutral float-left" title="Protein Fragmentation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom_rules.html" class="btn btn-neutral float-right" title="Custom Rules Authoring Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

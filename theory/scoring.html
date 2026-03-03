@@ -1,0 +1,654 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fragmentation Scoring Functions &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Many-Body Expansion (MBE) Theory" href="mbe.html" />
+    <link rel="prev" title="Graph Partitioning for Molecular Fragmentation" href="graph_partitioning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fragmentation Scoring Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#total-score-formulation">Total Score Formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#component-scores">Component Scores</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bond-breaking-penalty-s-text-bond">Bond Breaking Penalty ($S_{\text{bond}}$)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bond-type-multipliers">Bond Type Multipliers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bond-energy-estimation">Bond Energy Estimation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#size-variance-s-text-size">Size Variance ($S_{\text{size}}$)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#size-range-penalty">Size Range Penalty</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interface-score-s-text-interface">Interface Score ($S_{\text{interface}}$)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#approximations-for-interface-energy">Approximations for Interface Energy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#chemical-integrity-s-text-chem">Chemical Integrity ($S_{\text{chem}}$)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#validity-criteria">Validity Criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#computational-cost-s-text-comp">Computational Cost ($S_{\text{comp}}$)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scaling-estimates">Scaling Estimates</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#distance-from-target-size-s-text-target">Distance from Target Size ($S_{\text{target}}$)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#number-of-fragments-s-text-count">Number of Fragments ($S_{\text{count}}$)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#weight-selection">Weight Selection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default-weights">Default Weights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#application-specific-weights">Application-Specific Weights</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-objective-optimization">Multi-Objective Optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pareto-optimality">Pareto Optimality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scalarization">Scalarization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constraint-method">ε-Constraint Method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trade-offs-and-considerations">Trade-offs and Considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bond-breaking-vs-size-balance">Bond Breaking vs. Size Balance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chemical-integrity-vs-flexibility">Chemical Integrity vs. Flexibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#computational-cost-vs-accuracy">Computational Cost vs. Accuracy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#score-normalization">Score Normalization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#z-score-normalization">Z-Score Normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#min-max-scaling">Min-Max Scaling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-notes">Implementation Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fragmentation Scoring Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/scoring.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fragmentation-scoring-functions">
+<h1>Fragmentation Scoring Functions<a class="headerlink" href="#fragmentation-scoring-functions" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Scoring functions quantify the quality of a molecular fragmentation to guide optimization algorithms. A good fragmentation should:</p>
+<ol class="arabic simple">
+<li><p>Minimize breaking of strong chemical bonds</p></li>
+<li><p>Produce fragments of reasonable, uniform size</p></li>
+<li><p>Minimize interfragment interactions</p></li>
+<li><p>Preserve chemical integrity (functional groups, rings)</p></li>
+<li><p>Balance computational cost across fragments</p></li>
+</ol>
+</section>
+<section id="total-score-formulation">
+<h2>Total Score Formulation<a class="headerlink" href="#total-score-formulation" title="Link to this heading"></a></h2>
+<p>The total score is a weighted combination of component scores:</p>
+<p>$$
+S_{\text{total}} = \sum_{i} w_i \cdot S_i
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$w_i$ are tunable weights for each component</p></li>
+<li><p>$S_i$ are individual score components</p></li>
+<li><p>Higher scores indicate better fragmentations</p></li>
+</ul>
+<p>Alternative formulation as minimization (penalty-based):</p>
+<p>$$
+P_{\text{total}} = \sum_{i} w_i \cdot P_i
+$$</p>
+<p>where $P_i$ are penalty terms and lower values are better.</p>
+</section>
+<section id="component-scores">
+<h2>Component Scores<a class="headerlink" href="#component-scores" title="Link to this heading"></a></h2>
+<section id="bond-breaking-penalty-s-text-bond">
+<h3>Bond Breaking Penalty ($S_{\text{bond}}$)<a class="headerlink" href="#bond-breaking-penalty-s-text-bond" title="Link to this heading"></a></h3>
+<p>The most critical component—penalizes breaking covalent bonds:</p>
+<p>$$
+S_{\text{bond}} = -\sum_{b \in \text{broken}} E_{\text{bond}}(b) \cdot f_{\text{type}}(b)
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$E_{\text{bond}}(b)$ is the estimated bond energy</p></li>
+<li><p>$f_{\text{type}}(b)$ is a multiplier based on bond type</p></li>
+</ul>
+<section id="bond-type-multipliers">
+<h4>Bond Type Multipliers<a class="headerlink" href="#bond-type-multipliers" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bond Type</p></th>
+<th class="head"><p>$f_{\text{type}}$</p></th>
+<th class="head"><p>Rationale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Single (rotatable)</p></td>
+<td><p>1.0</p></td>
+<td><p>Preferred break points</p></td>
+</tr>
+<tr class="row-odd"><td><p>Single (non-rotatable)</p></td>
+<td><p>1.5</p></td>
+<td><p>Somewhat penalized</p></td>
+</tr>
+<tr class="row-even"><td><p>Aromatic</p></td>
+<td><p>10.0</p></td>
+<td><p>Strongly discouraged</p></td>
+</tr>
+<tr class="row-odd"><td><p>Double</p></td>
+<td><p>50.0</p></td>
+<td><p>Almost forbidden</p></td>
+</tr>
+<tr class="row-even"><td><p>Triple</p></td>
+<td><p>100.0</p></td>
+<td><p>Forbidden</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bond-energy-estimation">
+<h4>Bond Energy Estimation<a class="headerlink" href="#bond-energy-estimation" title="Link to this heading"></a></h4>
+<p>Approximate bond energies (kcal/mol):</p>
+<p>$$
+E_{\text{bond}}(X-Y) \approx \sqrt{E(X-X) \cdot E(Y-Y)}
+$$</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bond</p></th>
+<th class="head"><p>Energy (kcal/mol)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C-C</p></td>
+<td><p>83</p></td>
+</tr>
+<tr class="row-odd"><td><p>C-H</p></td>
+<td><p>99</p></td>
+</tr>
+<tr class="row-even"><td><p>C-N</p></td>
+<td><p>73</p></td>
+</tr>
+<tr class="row-odd"><td><p>C-O</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-even"><td><p>C=O</p></td>
+<td><p>180</p></td>
+</tr>
+<tr class="row-odd"><td><p>C=C</p></td>
+<td><p>146</p></td>
+</tr>
+<tr class="row-even"><td><p>C≡C</p></td>
+<td><p>200</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="size-variance-s-text-size">
+<h3>Size Variance ($S_{\text{size}}$)<a class="headerlink" href="#size-variance-s-text-size" title="Link to this heading"></a></h3>
+<p>Encourages fragments of uniform size to balance computational load:</p>
+<p>$$
+S_{\text{size}} = -\alpha \cdot \frac{\sigma(n_i)}{\bar{n}}
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$n_i$ is the number of atoms in fragment $i$</p></li>
+<li><p>$\bar{n} = \frac{1}{k}\sum_i n_i$ is the mean fragment size</p></li>
+<li><p>$\sigma(n_i) = \sqrt{\frac{1}{k}\sum_i (n_i - \bar{n})^2}$ is the standard deviation</p></li>
+<li><p>$\alpha$ is a scaling parameter</p></li>
+</ul>
+<p><strong>Alternative</strong>: Use coefficient of variation as penalty:</p>
+<p>$$
+\text{CV} = \frac{\sigma(n_i)}{\bar{n}}
+$$</p>
+<p>Normalized score:</p>
+<p>$$
+S_{\text{size}} = 1 - \text{CV}
+$$</p>
+</section>
+<section id="size-range-penalty">
+<h3>Size Range Penalty<a class="headerlink" href="#size-range-penalty" title="Link to this heading"></a></h3>
+<p>Penalize fragments outside acceptable size range:</p>
+<p>$$
+P_{\text{range}} = \sum_i \max(0, n_i - n_{\max}) + \sum_i \max(0, n_{\min} - n_i)
+$$</p>
+<p>where $n_{\min}$ and $n_{\max}$ are target fragment size bounds.</p>
+</section>
+<section id="interface-score-s-text-interface">
+<h3>Interface Score ($S_{\text{interface}}$)<a class="headerlink" href="#interface-score-s-text-interface" title="Link to this heading"></a></h3>
+<p>Minimizes interaction energy across fragment boundaries:</p>
+<p>$$
+S_{\text{interface}} = -\sum_{(F_i, F_j)} E_{\text{int}}(F_i, F_j)
+$$</p>
+<section id="approximations-for-interface-energy">
+<h4>Approximations for Interface Energy<a class="headerlink" href="#approximations-for-interface-energy" title="Link to this heading"></a></h4>
+<p><strong>Exposed surface area</strong>:</p>
+<p>$$
+E_{\text{int}} \approx \gamma \cdot A_{\text{exposed}}
+$$</p>
+<p>where $\gamma$ is surface tension and $A_{\text{exposed}}$ is solvent-accessible surface area at cut points.</p>
+<p><strong>Electrostatic interaction</strong>:</p>
+<p>$$
+E_{\text{int}} \approx \sum_{a \in F_i} \sum_{b \in F_j} \frac{q_a q_b}{r_{ab}}
+$$</p>
+<p><strong>Number of cut bonds</strong> (simplified):</p>
+<p>$$
+E_{\text{int}} \approx N_{\text{cut}}
+$$</p>
+</section>
+</section>
+<section id="chemical-integrity-s-text-chem">
+<h3>Chemical Integrity ($S_{\text{chem}}$)<a class="headerlink" href="#chemical-integrity-s-text-chem" title="Link to this heading"></a></h3>
+<p>Rewards preservation of chemically meaningful units:</p>
+<p>$$
+S_{\text{chem}} = \sum_f I_{\text{valid}}(f)
+$$</p>
+<p>where $I_{\text{valid}}(f)$ is an indicator for chemically sensible fragments.</p>
+<section id="validity-criteria">
+<h4>Validity Criteria<a class="headerlink" href="#validity-criteria" title="Link to this heading"></a></h4>
+<ol class="arabic simple">
+<li><p><strong>No broken rings</strong>:
+$$
+I_{\text{ring}}(f) = \begin{cases}
+0 &amp; \text{if ring is split} \
+1 &amp; \text{otherwise}
+\end{cases}
+$$</p></li>
+<li><p><strong>Complete functional groups</strong>:
+$$
+I_{\text{func}}(f) = \begin{cases}
+0 &amp; \text{if functional group is split} \
+1 &amp; \text{otherwise}
+\end{cases}
+$$</p></li>
+<li><p><strong>Proper valence</strong>:
+$$
+I_{\text{valence}}(f) = \begin{cases}
+1 &amp; \text{if all atoms have valid valence (after capping)} \
+0 &amp; \text{otherwise}
+\end{cases}
+$$</p></li>
+</ol>
+</section>
+</section>
+<section id="computational-cost-s-text-comp">
+<h3>Computational Cost ($S_{\text{comp}}$)<a class="headerlink" href="#computational-cost-s-text-comp" title="Link to this heading"></a></h3>
+<p>Estimates total computational cost of the fragmentation:</p>
+<p>$$
+S_{\text{comp}} = -\sum_i C(n_i)
+$$</p>
+<p>where $C(n)$ is the cost function for QM calculations.</p>
+<section id="scaling-estimates">
+<h4>Scaling Estimates<a class="headerlink" href="#scaling-estimates" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Scaling</p></th>
+<th class="head"><p>$C(n)$</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HF</p></td>
+<td><p>$O(n^4)$</p></td>
+<td><p>$n^4$</p></td>
+</tr>
+<tr class="row-odd"><td><p>DFT</p></td>
+<td><p>$O(n^3)$</p></td>
+<td><p>$n^3$</p></td>
+</tr>
+<tr class="row-even"><td><p>MP2</p></td>
+<td><p>$O(n^5)$</p></td>
+<td><p>$n^5$</p></td>
+</tr>
+<tr class="row-odd"><td><p>CCSD</p></td>
+<td><p>$O(n^6)$</p></td>
+<td><p>$n^6$</p></td>
+</tr>
+<tr class="row-even"><td><p>CCSD(T)</p></td>
+<td><p>$O(n^7)$</p></td>
+<td><p>$n^7$</p></td>
+</tr>
+</tbody>
+</table>
+<p>For many-body expansion, include pair interaction costs:</p>
+<p>$$
+S_{\text{comp}}^{\text{MBE}} = -\left[ \sum_i C(n_i) + \frac{1}{2}\sum_{i \neq j} C(n_i + n_j) \right]
+$$</p>
+</section>
+</section>
+<section id="distance-from-target-size-s-text-target">
+<h3>Distance from Target Size ($S_{\text{target}}$)<a class="headerlink" href="#distance-from-target-size-s-text-target" title="Link to this heading"></a></h3>
+<p>Encourages fragments close to specified target size:</p>
+<p>$$
+S_{\text{target}} = -\sum_i \left| n_i - n_{\text{target}} \right|^p
+$$</p>
+<p>Common choices:</p>
+<ul class="simple">
+<li><p>$p = 1$: Linear penalty (MAE)</p></li>
+<li><p>$p = 2$: Quadratic penalty (MSE), more severe for large deviations</p></li>
+</ul>
+</section>
+<section id="number-of-fragments-s-text-count">
+<h3>Number of Fragments ($S_{\text{count}}$)<a class="headerlink" href="#number-of-fragments-s-text-count" title="Link to this heading"></a></h3>
+<p>Penalize excessive fragmentation:</p>
+<p>$$
+S_{\text{count}} = -|k - k_{\text{target}}|
+$$</p>
+<p>where $k$ is the number of fragments.</p>
+</section>
+</section>
+<section id="weight-selection">
+<h2>Weight Selection<a class="headerlink" href="#weight-selection" title="Link to this heading"></a></h2>
+<section id="default-weights">
+<h3>Default Weights<a class="headerlink" href="#default-weights" title="Link to this heading"></a></h3>
+<p>Balanced for general molecular fragmentation:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Weight</p></th>
+<th class="head"><p>Rationale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>$w_{\text{bond}}$</p></td>
+<td><p>1.0</p></td>
+<td><p>Primary consideration</p></td>
+</tr>
+<tr class="row-odd"><td><p>$w_{\text{size}}$</p></td>
+<td><p>0.3</p></td>
+<td><p>Moderate importance</p></td>
+</tr>
+<tr class="row-even"><td><p>$w_{\text{interface}}$</p></td>
+<td><p>0.2</p></td>
+<td><p>Secondary</p></td>
+</tr>
+<tr class="row-odd"><td><p>$w_{\text{chem}}$</p></td>
+<td><p>0.5</p></td>
+<td><p>Important for validity</p></td>
+</tr>
+<tr class="row-even"><td><p>$w_{\text{comp}}$</p></td>
+<td><p>0.1</p></td>
+<td><p>Use when balancing load</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="application-specific-weights">
+<h3>Application-Specific Weights<a class="headerlink" href="#application-specific-weights" title="Link to this heading"></a></h3>
+<p><strong>FMO calculations</strong> (prioritize size balance):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>  <span class="c1"># Higher for balanced fragments</span>
+    <span class="s2">&quot;chem&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Critical for FMO</span>
+    <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Large protein fragmentation</strong> (prioritize computational cost):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;comp&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># Consider cost</span>
+    <span class="s2">&quot;chem&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Water clusters</strong> (minimize interactions):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># Weak H-bonds</span>
+    <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Minimize water-water</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Less important</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="multi-objective-optimization">
+<h2>Multi-Objective Optimization<a class="headerlink" href="#multi-objective-optimization" title="Link to this heading"></a></h2>
+<section id="pareto-optimality">
+<h3>Pareto Optimality<a class="headerlink" href="#pareto-optimality" title="Link to this heading"></a></h3>
+<p>Multiple objectives can conflict. A fragmentation is <strong>Pareto optimal</strong> if no objective can be improved without worsening another.</p>
+<p>The <strong>Pareto frontier</strong> contains all Pareto-optimal fragmentations:</p>
+<p>$$
+\mathcal{P} = {f : \nexists f’ \text{ such that } S_i(f’) \geq S_i(f) \forall i \text{ and } S_j(f’) &gt; S_j(f) \text{ for some } j}
+$$</p>
+</section>
+<section id="scalarization">
+<h3>Scalarization<a class="headerlink" href="#scalarization" title="Link to this heading"></a></h3>
+<p>Convert to single objective via weighted sum:</p>
+<p>$$
+S_{\text{total}}(\mathbf{w}) = \sum_i w_i S_i
+$$</p>
+<p>Different weight vectors explore different points on Pareto frontier.</p>
+</section>
+<section id="constraint-method">
+<h3>ε-Constraint Method<a class="headerlink" href="#constraint-method" title="Link to this heading"></a></h3>
+<p>Optimize one objective subject to constraints on others:</p>
+<p>$$
+\maximize \quad S_1 \
+\text{subject to} \quad S_i \geq \epsilon_i, \quad i = 2, \ldots, k
+$$</p>
+</section>
+</section>
+<section id="trade-offs-and-considerations">
+<h2>Trade-offs and Considerations<a class="headerlink" href="#trade-offs-and-considerations" title="Link to this heading"></a></h2>
+<section id="bond-breaking-vs-size-balance">
+<h3>Bond Breaking vs. Size Balance<a class="headerlink" href="#bond-breaking-vs-size-balance" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fewer cuts → larger fragments → worse computational scaling</p></li>
+<li><p>More cuts → smaller fragments → more interface energy</p></li>
+</ul>
+<p>Optimal balance depends on:</p>
+<ul class="simple">
+<li><p>Target QM method (scaling exponent)</p></li>
+<li><p>System type (proteins need larger fragments than water)</p></li>
+<li><p>Accuracy requirements</p></li>
+</ul>
+</section>
+<section id="chemical-integrity-vs-flexibility">
+<h3>Chemical Integrity vs. Flexibility<a class="headerlink" href="#chemical-integrity-vs-flexibility" title="Link to this heading"></a></h3>
+<p>Strict preservation of all functional groups may produce:</p>
+<ul class="simple">
+<li><p>Fragments that are too large</p></li>
+<li><p>Poor size balance</p></li>
+<li><p>Suboptimal partitioning</p></li>
+</ul>
+<p>Consider relaxing constraints for:</p>
+<ul class="simple">
+<li><p>Long-chain functional groups</p></li>
+<li><p>Repeated patterns (polymers)</p></li>
+</ul>
+</section>
+<section id="computational-cost-vs-accuracy">
+<h3>Computational Cost vs. Accuracy<a class="headerlink" href="#computational-cost-vs-accuracy" title="Link to this heading"></a></h3>
+<p><strong>Many-body expansion trade-off</strong>:</p>
+<ul class="simple">
+<li><p>Fewer, larger fragments → fewer pairs → faster → less accurate</p></li>
+<li><p>More, smaller fragments → more pairs → slower → more accurate</p></li>
+</ul>
+<p>Target fragment size should be chosen based on desired accuracy.</p>
+</section>
+</section>
+<section id="score-normalization">
+<h2>Score Normalization<a class="headerlink" href="#score-normalization" title="Link to this heading"></a></h2>
+<section id="z-score-normalization">
+<h3>Z-Score Normalization<a class="headerlink" href="#z-score-normalization" title="Link to this heading"></a></h3>
+<p>For comparing across systems:</p>
+<p>$$
+S_i^{\text{norm}} = \frac{S_i - \mu_i}{\sigma_i}
+$$</p>
+<p>where $\mu_i$ and $\sigma_i$ are mean and std from reference fragmentations.</p>
+</section>
+<section id="min-max-scaling">
+<h3>Min-Max Scaling<a class="headerlink" href="#min-max-scaling" title="Link to this heading"></a></h3>
+<p>$$
+S_i^{\text{scaled}} = \frac{S_i - S_i^{\min}}{S_i^{\max} - S_i^{\min}}
+$$</p>
+<p>Bounds scores to $[0, 1]$ range.</p>
+</section>
+</section>
+<section id="implementation-notes">
+<h2>Implementation Notes<a class="headerlink" href="#implementation-notes" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.scoring</span><span class="w"> </span><span class="kn">import</span> <span class="n">FragmentationScorer</span>
+
+<span class="n">scorer</span> <span class="o">=</span> <span class="n">FragmentationScorer</span><span class="p">(</span>
+    <span class="n">weights</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+        <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="s2">&quot;chem&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Score a fragmentation</span>
+<span class="n">fragments</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
+
+<span class="c1"># Get component breakdown</span>
+<span class="n">breakdown</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">score_breakdown</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">breakdown</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">component</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Fedorov, D. G., &amp; Kitaura, K. (2007). Extending the power of quantum chemistry to large systems with the fragment molecular orbital method. <em>JPC A</em>, 111(30), 6904-6914.</p></li>
+<li><p>Gordon, M. S., et al. (2012). Fragmentation methods: A route to accurate calculations on large systems. <em>Chemical Reviews</em>, 112(1), 632-672.</p></li>
+<li><p>Collins, M. A., &amp; Bettens, R. P. (2015). Energy-based molecular fragmentation methods. <em>Chemical Reviews</em>, 115(12), 5607-5642.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="graph_partitioning.html" class="btn btn-neutral float-left" title="Graph Partitioning for Molecular Fragmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mbe.html" class="btn btn-neutral float-right" title="Many-Body Expansion (MBE) Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

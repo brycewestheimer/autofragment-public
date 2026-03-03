@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Materials Science Fragmentation &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multi-Level Methods &amp; QM/MM Partitioning" href="multilevel.html" />
+    <link rel="prev" title="Biological System Support" href="biological.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Materials Science Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#periodic-system-handling">Periodic System Handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lattice-vectors">Lattice Vectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-image-convention">Minimum Image Convention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supercells">Supercells</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#materials-partitioners">Materials Partitioners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#material-specific-rules">Material-Specific Rules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zeolites">Zeolites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metal-organic-frameworks-mofs">Metal-Organic Frameworks (MOFs)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polymers">Polymers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perovskites">Perovskites</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-example">Usage Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Materials Science Fragmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/materials.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="materials-science-fragmentation">
+<h1>Materials Science Fragmentation<a class="headerlink" href="#materials-science-fragmentation" title="Link to this heading"></a></h1>
+<p>AutoFragment provides specialized support for materials science systems, including periodic solids, surfaces, and extended structures like MOFs and zeolites.</p>
+<section id="periodic-system-handling">
+<h2>Periodic System Handling<a class="headerlink" href="#periodic-system-handling" title="Link to this heading"></a></h2>
+<p>Fundamental to materials science is the treatment of periodic boundary conditions (PBC). AutoFragment handles this through several core components:</p>
+<section id="lattice-vectors">
+<h3>Lattice Vectors<a class="headerlink" href="#lattice-vectors" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Lattice</span></code> class represents the crystallographic unit cell. It supports:</p>
+<ul class="simple">
+<li><p>Conversion between <strong>Fractional</strong> and <strong>Cartesian</strong> coordinates.</p></li>
+<li><p><strong>Reciprocal Lattice</strong> calculations.</p></li>
+<li><p>Cell volume and parameter extraction.</p></li>
+</ul>
+</section>
+<section id="minimum-image-convention">
+<h3>Minimum Image Convention<a class="headerlink" href="#minimum-image-convention" title="Link to this heading"></a></h3>
+<p>All distance-based calculations (bond detection, radial partitioning) in periodic systems automatically use the <strong>Minimum Image Convention</strong>, ensuring that the shortest distance through periodic boundaries is considered.</p>
+</section>
+<section id="supercells">
+<h3>Supercells<a class="headerlink" href="#supercells" title="Link to this heading"></a></h3>
+<p>AutoFragment can generate supercells (<code class="docutils literal notranslate"><span class="pre">make_supercell</span></code>) that maintain full bonding continuity. This is essential for studying larger domains or performing fragmentation on expanded systems.</p>
+</section>
+</section>
+<section id="materials-partitioners">
+<h2>Materials Partitioners<a class="headerlink" href="#materials-partitioners" title="Link to this heading"></a></h2>
+<p>Specialized partitioners are available for materials, inheriting from <code class="docutils literal notranslate"><span class="pre">MatSciPartitioner</span></code>.</p>
+<ul class="simple">
+<li><p><strong>RadialPartitioner</strong>: Shell-based fragmentation around a specific center (e.g., an defect site).</p></li>
+<li><p><strong>SlabPartitioner</strong>: Layer-based fragmentation along a specified lattice axis. High useful for surface science.</p></li>
+<li><p><strong>UnitCellPartitioner</strong>: Divides a supercell into smaller units based on the underlying grid.</p></li>
+<li><p><strong>SurfacePartitioner</strong>: Automatically distinguishes between <strong>Top Surface</strong>, <strong>Bottom Surface</strong>, and <strong>Bulk</strong> regions based on vacuum distribution.</p></li>
+</ul>
+</section>
+<section id="material-specific-rules">
+<h2>Material-Specific Rules<a class="headerlink" href="#material-specific-rules" title="Link to this heading"></a></h2>
+<p>AutoFragment includes pre-defined rules for common material classes:</p>
+<section id="zeolites">
+<h3>Zeolites<a class="headerlink" href="#zeolites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Siloxane bridges</strong> (Si-O-Si) are identified as valid fragmentation points.</p></li>
+<li><p><strong>Brønsted acid sites</strong> (Al-O(H)-Si) are specifically protected to maintain chemical integrity of the active site.</p></li>
+</ul>
+</section>
+<section id="metal-organic-frameworks-mofs">
+<h3>Metal-Organic Frameworks (MOFs)<a class="headerlink" href="#metal-organic-frameworks-mofs" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Metal Clusters (Nodes)</strong> are preserved.</p></li>
+<li><p><strong>Organic Linkers</strong> are kept intact.</p></li>
+<li><p><strong>Metal-Carboxylate</strong> bonds can be marked as breakable to separate nodes from linkers.</p></li>
+</ul>
+</section>
+<section id="polymers">
+<h3>Polymers<a class="headerlink" href="#polymers" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Backbone Detection</strong>: Identifies C-C chains and distinguishes between internal and terminal monomers.</p></li>
+<li><p><strong>Side-chain Preservation</strong>: Keeps functional side-groups attached to the backbone.</p></li>
+</ul>
+</section>
+<section id="perovskites">
+<h3>Perovskites<a class="headerlink" href="#perovskites" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Octahedral preservation</strong>: Maintains the integrity of $MO_6$ octahedra while allowing for corner-sharing separation.</p></li>
+</ul>
+</section>
+</section>
+<section id="usage-example">
+<h2>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners.geometric</span><span class="w"> </span><span class="kn">import</span> <span class="n">SurfacePartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_cif</span>
+
+<span class="c1"># Load a slab system</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_cif</span><span class="p">(</span><span class="s2">&quot;slab_system.cif&quot;</span><span class="p">)</span>
+
+<span class="c1"># Partition by surface vs bulk</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">SurfacePartitioner</span><span class="p">(</span><span class="n">surface_axis</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">surface_depth</span><span class="o">=</span><span class="mf">4.5</span><span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="c1"># tree.fragments now contains &quot;surface_top&quot;, &quot;surface_bottom&quot;, and &quot;bulk&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="biological.html" class="btn btn-neutral float-left" title="Biological System Support" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multilevel.html" class="btn btn-neutral float-right" title="Multi-Level Methods &amp; QM/MM Partitioning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

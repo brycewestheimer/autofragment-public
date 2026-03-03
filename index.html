@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>autofragment &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart Guide" href="guides/quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">autofragment</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="autofragment">
+<h1>autofragment<a class="headerlink" href="#autofragment" title="Link to this heading"></a></h1>
+<p>Molecular fragmentation for computational chemistry.</p>
+<p><code class="docutils literal notranslate"><span class="pre">autofragment</span></code> partitions molecular systems (water clusters, proteins, etc.) into fragments suitable for many-body expansion calculations. Supports both <strong>flat</strong> partitioning and <strong>tiered hierarchical</strong> fragmentation (2-tier and 3-tier).</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#your-first-fragmentation">Your First Fragmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#export-to-a-quantum-chemistry-program">Export to a Quantum Chemistry Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#common-workflows">Common Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#getting-help">Getting Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/quickstart.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#notebooks">Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#conda-recommended">Conda (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-pypi">Pip (PyPI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pip-fallback-from-source">Pip fallback (from source)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-extras">Optional extras</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verify-installation">Verify installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#coverage-workflow">Coverage workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#top-level-shortcut-single-file">Top-level shortcut (single file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#fragment-a-single-xyz">Fragment a single XYZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#batch-mode-consistent-labeling">Batch mode (consistent labeling)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#biological-systems-mmcif">Biological systems (mmCIF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#geometric-tiling-mode">Geometric tiling mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#tiered-hierarchical-partitioning">Tiered (hierarchical) partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#show-version-and-optional-features">Show version and optional features</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#step-1-load-water-cluster">Step 1: Load Water Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#step-2-partition-into-fragments">Step 2: Partition into Fragments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#step-3-write-input-files">Step 3: Write Input Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#step-4-export-and-save-results">Step 4: Export and Save Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#step-5-quick-api">Step 5: Quick API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#complete-example">Complete Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#tips-and-best-practices">Tips and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/water_clusters.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#step-1-partition-from-mmcif">Step 1: Partition from mmCIF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#step-2-generate-fmo-input">Step 2: Generate FMO Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#step-3-charge-assignment">Step 3: Charge Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#complete-example">Complete Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/proteins.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/materials.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/materials.html#loading-periodic-systems">Loading Periodic Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/materials.html#surface-systems">Surface Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/materials.html#future-work">Future Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/materials.html#tips">Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#rule-system-overview">Rule System Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#rule-actions">Rule Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#base-classes">Base Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#creating-bond-rules">Creating Bond Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#creating-custom-rule-classes">Creating Custom Rule Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#advanced-smarts-patterns">Advanced: SMARTS Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#building-a-ruleset">Building a RuleSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#using-custom-rules">Using Custom Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#example-polymer-rule-set">Example: Polymer Rule Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#debugging-rules">Debugging Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/custom_rules.html#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#supported-programs">Supported Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#gamess">GAMESS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#psi4">Psi4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#q-chem">Q-Chem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#orca">ORCA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#nwchem">NWChem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#molpro">Molpro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#turbomole">Turbomole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#cfour">CFOUR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#generic-formats">Generic Formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#format-registry">Format Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#writer-options">Writer Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#batch-writing">Batch Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/output_formats.html#custom-writers">Custom Writers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="partitioning/geometric_tiling.html#available-tiling-shapes">Available tiling shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partitioning/geometric_tiling.html#cli-usage">CLI usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partitioning/geometric_tiling.html#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="partitioning/geometric_tiling.html#output-metadata">Output metadata</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#quick-api">Quick API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#partitioner-objects">Partitioner objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#tiered-hierarchical-partitioning">Tiered (Hierarchical) Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#topology-aware-selection">Topology-Aware Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#molecular-topology-refinement">Molecular Topology Refinement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#rules-engine">Rules Engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#reading-molecular-structures">Reading Molecular Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#writing-fragment-files">Writing Fragment Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#format-registry">Format Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#coordinate-units">Coordinate Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#tips-for-large-files">Tips for Large Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io_formats.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#rule-actions">Rule Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#built-in-rules">Built-in Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#creating-custom-rules">Creating Custom Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#ruleengine-api">RuleEngine API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#example-protein-fragmentation">Example: Protein Fragmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#example-mof-fragmentation">Example: MOF Fragmentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#clustering-algorithms">Clustering Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#k-means-seeding-strategies">K-Means Seeding Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#graph-partitioning">Graph Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#scoring">Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/algorithms.html#choosing-the-right-algorithm">Choosing the Right Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="biological.html#amino-acids-proteins">Amino Acids &amp; Proteins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biological.html#nucleic-acids-dna-rna">Nucleic Acids (DNA/RNA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="materials.html#periodic-system-handling">Periodic System Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materials.html#materials-partitioners">Materials Partitioners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materials.html#material-specific-rules">Material-Specific Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materials.html#usage-example">Usage Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#computational-layers">Computational Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#qm-region-selection">QM Region Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#link-atoms">Link Atoms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#point-charge-embedding">Point Charge Embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#layer-assignment-algorithms">Layer Assignment Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#oniom-input-generation">ONIOM Input Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#converting-results">Converting Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#serialization">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multilevel.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#molecular-graph">Molecular Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#chemistry-utilities">Chemistry Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#data-structures">Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core_concepts.html#fragmentation-rules">Fragmentation Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="migration.html#chemicalsystem-is-the-canonical-system-container">ChemicalSystem Is the Canonical System Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migration.html#xyz-reader-changes">XYZ Reader Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migration.html#partitioner-inputs">Partitioner Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migration.html#writing-xyz-files">Writing XYZ Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="output.html#high-level-shape">High-level shape</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#spectral-clustering">Spectral Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#application-to-molecular-fragmentation">Application to Molecular Fragmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/clustering.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#molecular-graph-representation">Molecular Graph Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#minimum-cut-problem">Minimum Cut Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#balanced-partitioning">Balanced Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#community-detection">Community Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#metis-algorithm">METIS Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#k-way-partitioning">k-way Partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#application-to-molecular-fragmentation">Application to Molecular Fragmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/graph_partitioning.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#total-score-formulation">Total Score Formulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#component-scores">Component Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#weight-selection">Weight Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#multi-objective-optimization">Multi-Objective Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#trade-offs-and-considerations">Trade-offs and Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#score-normalization">Score Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#implementation-notes">Implementation Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/scoring.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#mathematical-foundation">Mathematical Foundation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#convergence-properties">Convergence Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#computational-scaling">Computational Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#hierarchy-of-methods">Hierarchy of Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#implementation-notes">Implementation Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#basis-set-superposition-error-bsse">Basis Set Superposition Error (BSSE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#comparison-with-other-fragment-methods">Comparison with Other Fragment Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#applications">Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/mbe.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#qm-mm-energy-expression">QM/MM Energy Expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#embedding-schemes">Embedding Schemes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#boundary-treatments">Boundary Treatments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#oniom-method">ONIOM Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#effective-fragment-potential-efp">Effective Fragment Potential (EFP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#implementation-in-autofragment">Implementation in AutoFragment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theory/qmmm.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/autofragment.html">autofragment API</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guides/quickstart.html" class="btn btn-neutral float-right" title="Quickstart Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

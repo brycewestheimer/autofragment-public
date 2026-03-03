@@ -1,0 +1,574 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fragmentation Rules &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fragmentation Algorithms Guide" href="guides/algorithms.html" />
+    <link rel="prev" title="I/O Formats Guide" href="io_formats.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fragmentation Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rule-actions">Rule Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#priority-system">Priority System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#built-in-rules">Built-in Rules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-chemical-rules">Common Chemical Rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aromaticringrule">AromaticRingRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#doublebondrule">DoubleBondRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metalcoordinationrule">MetalCoordinationRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functionalgrouprule">FunctionalGroupRule</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biological-rules">Biological Rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#peptidebondrule">PeptideBondRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disulfidebondrule">DisulfideBondRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alphabetacarbonrule">AlphaBetaCarbonRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prolineringrule">ProlineRingRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hydrogenbondrule">HydrogenBondRule</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#materials-science-rules">Materials Science Rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siloxanebridgerule">SiloxaneBridgeRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#moflinkerrule">MOFLinkerRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metalnoderule">MetalNodeRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#perovskiteoctahedralrule">PerovskiteOctahedralRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#zeoliteacidsiterule">ZeoliteAcidSiteRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#silanolrule">SilanolRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metalcarboxylaterule">MetalCarboxylateRule</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polymerbackbonerule">PolymerBackboneRule</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-custom-rules">Creating Custom Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ruleengine-api">RuleEngine API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-protein-fragmentation">Example: Protein Fragmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-mof-fragmentation">Example: MOF Fragmentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fragmentation Rules</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/rules.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fragmentation-rules">
+<h1>Fragmentation Rules<a class="headerlink" href="#fragmentation-rules" title="Link to this heading"></a></h1>
+<p>The Rules Engine is the core component that controls which bonds can or cannot be broken during molecular fragmentation. Rules encode chemical knowledge to ensure fragments remain chemically meaningful.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The rules system provides:</p>
+<ul class="simple">
+<li><p><strong>Flexible rule definitions</strong> via the <code class="docutils literal notranslate"><span class="pre">FragmentationRule</span></code> abstract base class</p></li>
+<li><p><strong>Priority-based evaluation</strong> where critical rules are evaluated first</p></li>
+<li><p><strong>Conflict resolution</strong> where the most restrictive action wins</p></li>
+<li><p><strong>Pre-built rules</strong> for common chemistry, biology, and materials science</p></li>
+</ul>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.rules</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RuleEngine</span><span class="p">,</span>
+    <span class="n">RuleAction</span><span class="p">,</span>
+    <span class="n">AromaticRingRule</span><span class="p">,</span>
+    <span class="n">DoubleBondRule</span><span class="p">,</span>
+    <span class="n">PeptideBondRule</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create an engine with rules</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">RuleEngine</span><span class="p">([</span>
+    <span class="n">AromaticRingRule</span><span class="p">(),</span>      <span class="c1"># Never break aromatic rings</span>
+    <span class="n">DoubleBondRule</span><span class="p">(),</span>        <span class="c1"># Never break double/triple bonds</span>
+    <span class="n">PeptideBondRule</span><span class="p">(),</span>       <span class="c1"># Prefer keeping peptide bonds</span>
+<span class="p">])</span>
+
+<span class="c1"># Evaluate a specific bond</span>
+<span class="n">action</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">evaluate_bond</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">chemical_system</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">RuleAction</span><span class="o">.</span><span class="n">MUST_NOT_BREAK</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This bond cannot be broken&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get all breakable bonds in a system</span>
+<span class="n">breakable</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_breakable_bonds</span><span class="p">(</span><span class="n">chemical_system</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rule-actions">
+<h2>Rule Actions<a class="headerlink" href="#rule-actions" title="Link to this heading"></a></h2>
+<p>Rules return one of four actions, ordered from most to least restrictive:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Action</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MUST_NOT_BREAK</span></code></p></td>
+<td><p>Bond must never be broken</p></td>
+<td><p>Aromatic rings, double bonds</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PREFER_KEEP</span></code></p></td>
+<td><p>Prefer keeping, can break if necessary</p></td>
+<td><p>Peptide bonds, metal coordination</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ALLOW</span></code></p></td>
+<td><p>No preference (neutral)</p></td>
+<td><p>Default when no rules apply</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PREFER_BREAK</span></code></p></td>
+<td><p>Good fragmentation point</p></td>
+<td><p>Alpha-beta carbon bonds</p></td>
+</tr>
+</tbody>
+</table>
+<p>When multiple rules apply to the same bond, <strong>the most restrictive action wins</strong>.</p>
+</section>
+<section id="priority-system">
+<h2>Priority System<a class="headerlink" href="#priority-system" title="Link to this heading"></a></h2>
+<p>Rules have integer priorities (higher = evaluated first):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Constant</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Typical Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PRIORITY_CRITICAL</span></code></p></td>
+<td><p>1000</p></td>
+<td><p>Aromatic rings, proline rings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRIORITY_HIGH</span></code></p></td>
+<td><p>800</p></td>
+<td><p>Metal coordination, peptide bonds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PRIORITY_MEDIUM</span></code></p></td>
+<td><p>500</p></td>
+<td><p>General rules (default)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRIORITY_LOW</span></code></p></td>
+<td><p>200</p></td>
+<td><p>Hydrogen bonds</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Override default priority</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">AromaticRingRule</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">999</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>  <span class="c1"># 999</span>
+</pre></div>
+</div>
+</section>
+<section id="built-in-rules">
+<h2>Built-in Rules<a class="headerlink" href="#built-in-rules" title="Link to this heading"></a></h2>
+<section id="common-chemical-rules">
+<h3>Common Chemical Rules<a class="headerlink" href="#common-chemical-rules" title="Link to this heading"></a></h3>
+<p>These rules apply universally to all molecular systems.</p>
+<section id="aromaticringrule">
+<h4>AromaticRingRule<a class="headerlink" href="#aromaticringrule" title="Link to this heading"></a></h4>
+<p>Never break bonds within aromatic ring systems (benzene, naphthalene, pyridine, etc.).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">AromaticRingRule</span><span class="p">()</span>
+<span class="c1"># Priority: CRITICAL</span>
+<span class="c1"># Action: MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="doublebondrule">
+<h4>DoubleBondRule<a class="headerlink" href="#doublebondrule" title="Link to this heading"></a></h4>
+<p>Never break double or triple bonds. Configurable minimum bond order.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">DoubleBondRule</span><span class="p">(</span><span class="n">min_order</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>  <span class="c1"># Catches aromatic bonds too</span>
+<span class="c1"># Priority: CRITICAL</span>
+<span class="c1"># Action: MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="metalcoordinationrule">
+<h4>MetalCoordinationRule<a class="headerlink" href="#metalcoordinationrule" title="Link to this heading"></a></h4>
+<p>Preserve metal-ligand coordination bonds. Supports custom metal sets.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">MetalCoordinationRule</span><span class="p">(</span>
+    <span class="n">metals</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Fe&quot;</span><span class="p">,</span> <span class="s2">&quot;Cu&quot;</span><span class="p">,</span> <span class="s2">&quot;Zn&quot;</span><span class="p">},</span>
+    <span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">MUST_NOT_BREAK</span>
+<span class="p">)</span>
+<span class="c1"># Priority: HIGH</span>
+</pre></div>
+</div>
+</section>
+<section id="functionalgrouprule">
+<h4>FunctionalGroupRule<a class="headerlink" href="#functionalgrouprule" title="Link to this heading"></a></h4>
+<p>Keep common functional groups intact (carboxyl, nitro, phosphate, etc.).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">FunctionalGroupRule</span><span class="p">()</span>
+<span class="c1"># Default groups: carboxyl, nitro, sulfonate, phosphate, amino</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="biological-rules">
+<h3>Biological Rules<a class="headerlink" href="#biological-rules" title="Link to this heading"></a></h3>
+<p>Designed for proteins and nucleic acids. <strong>These rules are configurable</strong> to support different fragmentation strategies.</p>
+<section id="peptidebondrule">
+<h4>PeptideBondRule<a class="headerlink" href="#peptidebondrule" title="Link to this heading"></a></h4>
+<p>Handle peptide bonds between amino acid residues.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Traditional FMO: keep peptide bonds</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">PeptideBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_KEEP</span><span class="p">)</span>
+
+<span class="c1"># Residue-based fragmentation: break at peptide bonds</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">PeptideBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_BREAK</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="disulfidebondrule">
+<h4>DisulfideBondRule<a class="headerlink" href="#disulfidebondrule" title="Link to this heading"></a></h4>
+<p>Handle disulfide bridges (Cys-Cys S-S bonds).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Preserve structure</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">DisulfideBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">MUST_NOT_BREAK</span><span class="p">)</span>
+
+<span class="c1"># Allow breaking for domain separation</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">DisulfideBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">ALLOW</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="alphabetacarbonrule">
+<h4>AlphaBetaCarbonRule<a class="headerlink" href="#alphabetacarbonrule" title="Link to this heading"></a></h4>
+<p>Mark C-alpha to C-beta bonds as preferred break points (sidechain separation).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">AlphaBetaCarbonRule</span><span class="p">()</span>
+<span class="c1"># Default action: PREFER_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="prolineringrule">
+<h4>ProlineRingRule<a class="headerlink" href="#prolineringrule" title="Link to this heading"></a></h4>
+<p>Never break the proline pyrrolidine ring (5-membered ring with N).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">ProlineRingRule</span><span class="p">()</span>
+<span class="c1"># Always: MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="hydrogenbondrule">
+<h4>HydrogenBondRule<a class="headerlink" href="#hydrogenbondrule" title="Link to this heading"></a></h4>
+<p>Handle hydrogen bonds. <strong>Defaults to ALLOW</strong> because H-bonds often need to be broken.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For water clusters: allow breaking (default)</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">HydrogenBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">ALLOW</span><span class="p">)</span>
+
+<span class="c1"># For secondary structure: prefer keeping</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="n">HydrogenBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_KEEP</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="materials-science-rules">
+<h3>Materials Science Rules<a class="headerlink" href="#materials-science-rules" title="Link to this heading"></a></h3>
+<p>For solid-state and extended materials systems.</p>
+<section id="siloxanebridgerule">
+<h4>SiloxaneBridgeRule<a class="headerlink" href="#siloxanebridgerule" title="Link to this heading"></a></h4>
+<p>Handle Si-O-Si siloxane bridges in silica and zeolites.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">SiloxaneBridgeRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_BREAK</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="moflinkerrule">
+<h4>MOFLinkerRule<a class="headerlink" href="#moflinkerrule" title="Link to this heading"></a></h4>
+<p>Preserve organic linker molecules in Metal-Organic Frameworks.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">MOFLinkerRule</span><span class="p">()</span>
+<span class="c1"># Protects C-C, C-N, C-O bonds within linkers</span>
+<span class="c1"># Does NOT protect metal-linker bonds</span>
+</pre></div>
+</div>
+</section>
+<section id="metalnoderule">
+<h4>MetalNodeRule<a class="headerlink" href="#metalnoderule" title="Link to this heading"></a></h4>
+<p>Preserve metal node clusters (Zn4O, Cu paddlewheels, etc.).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">MetalNodeRule</span><span class="p">(</span><span class="n">cluster_distance</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>  <span class="c1"># Angstroms</span>
+<span class="c1"># Groups metals within 4Å as a cluster</span>
+</pre></div>
+</div>
+</section>
+<section id="perovskiteoctahedralrule">
+<h4>PerovskiteOctahedralRule<a class="headerlink" href="#perovskiteoctahedralrule" title="Link to this heading"></a></h4>
+<p>Preserve MO₆ octahedra in perovskite structures.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">PerovskiteOctahedralRule</span><span class="p">(</span>
+    <span class="n">b_site_metals</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Ti&quot;</span><span class="p">,</span> <span class="s2">&quot;Zr&quot;</span><span class="p">,</span> <span class="s2">&quot;Nb&quot;</span><span class="p">},</span>
+    <span class="n">allow_corner_breaking</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="zeoliteacidsiterule">
+<h4>ZeoliteAcidSiteRule<a class="headerlink" href="#zeoliteacidsiterule" title="Link to this heading"></a></h4>
+<p>Protect Brønsted acid sites (Al-O(H)-Si) in zeolites.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">ZeoliteAcidSiteRule</span><span class="p">()</span>
+<span class="c1"># Action: MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="silanolrule">
+<h4>SilanolRule<a class="headerlink" href="#silanolrule" title="Link to this heading"></a></h4>
+<p>Preserve surface silanol groups (Si-OH).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">SilanolRule</span><span class="p">()</span>
+<span class="c1"># Action: MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="metalcarboxylaterule">
+<h4>MetalCarboxylateRule<a class="headerlink" href="#metalcarboxylaterule" title="Link to this heading"></a></h4>
+<p>Identify and allow breaking of metal-carboxylate (M-O) bonds to separate nodes from organic linkers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">MetalCarboxylateRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_BREAK</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="polymerbackbonerule">
+<h4>PolymerBackboneRule<a class="headerlink" href="#polymerbackbonerule" title="Link to this heading"></a></h4>
+<p>Heuristic for identifying polymer backbone bonds.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">PolymerBackboneRule</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="creating-custom-rules">
+<h2>Creating Custom Rules<a class="headerlink" href="#creating-custom-rules" title="Link to this heading"></a></h2>
+<p>Extend <code class="docutils literal notranslate"><span class="pre">FragmentationRule</span></code> to create custom rules:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.rules</span><span class="w"> </span><span class="kn">import</span> <span class="n">FragmentationRule</span><span class="p">,</span> <span class="n">RuleAction</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyCustomRule</span><span class="p">(</span><span class="n">FragmentationRule</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom rule for my specific system.&quot;&quot;&quot;</span>
+    
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;my_custom_rule&quot;</span>  <span class="c1"># Required: unique identifier</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="n">priority</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRIORITY_MEDIUM</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">applies_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bond</span><span class="p">,</span> <span class="n">system</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if this rule applies to the bond.&quot;&quot;&quot;</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">to_graph</span><span class="p">()</span>
+        <span class="n">atom1</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_atom</span><span class="p">(</span><span class="n">bond</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">atom2</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_atom</span><span class="p">(</span><span class="n">bond</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="c1"># Your logic here</span>
+        <span class="k">return</span> <span class="n">atom1</span><span class="p">[</span><span class="s2">&quot;element&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;X&quot;</span> <span class="ow">and</span> <span class="n">atom2</span><span class="p">[</span><span class="s2">&quot;element&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Y&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the action when this rule applies.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RuleAction</span><span class="o">.</span><span class="n">MUST_NOT_BREAK</span>
+</pre></div>
+</div>
+</section>
+<section id="ruleengine-api">
+<h2>RuleEngine API<a class="headerlink" href="#ruleengine-api" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">RuleEngine</span></code> manages rules and evaluates bonds:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">RuleEngine</span><span class="p">()</span>
+
+<span class="c1"># Add/remove rules</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">add_rule</span><span class="p">(</span><span class="n">AromaticRingRule</span><span class="p">())</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">remove_rule</span><span class="p">(</span><span class="s2">&quot;aromatic_ring&quot;</span><span class="p">)</span>  <span class="c1"># By name</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">clear_rules</span><span class="p">()</span>
+
+<span class="c1"># Query rules</span>
+<span class="n">rules</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_rules</span><span class="p">()</span>  <span class="c1"># Sorted by priority</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">engine</span><span class="p">))</span>  <span class="c1"># Number of rules</span>
+
+<span class="c1"># Evaluate bonds</span>
+<span class="n">action</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">evaluate_bond</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">system</span><span class="p">)</span>
+<span class="n">all_actions</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_bond_actions</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="c1"># Find fragmentable bonds</span>
+<span class="n">breakable</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_breakable_bonds</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>  <span class="c1"># Not MUST_NOT_BREAK</span>
+<span class="n">preferred</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">get_preferred_breaks</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>  <span class="c1"># PREFER_BREAK only</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Start with critical rules</strong>: Always include <code class="docutils literal notranslate"><span class="pre">AromaticRingRule</span></code> and <code class="docutils literal notranslate"><span class="pre">DoubleBondRule</span></code></p></li>
+<li><p><strong>Be explicit about biological rules</strong>: Choose appropriate actions for your fragmentation strategy</p></li>
+<li><p><strong>Layer rules by priority</strong>: Use CRITICAL for absolute constraints, HIGH for strong preferences</p></li>
+<li><p><strong>Test with simple systems</strong>: Verify rule behavior on small molecules before applying to large systems</p></li>
+<li><p><strong>Log rule decisions</strong>: Check which rules are triggering for debugging</p></li>
+</ol>
+</section>
+<section id="example-protein-fragmentation">
+<h2>Example: Protein Fragmentation<a class="headerlink" href="#example-protein-fragmentation" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.rules</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RuleEngine</span><span class="p">,</span>
+    <span class="n">AromaticRingRule</span><span class="p">,</span>
+    <span class="n">DoubleBondRule</span><span class="p">,</span>
+    <span class="n">PeptideBondRule</span><span class="p">,</span>
+    <span class="n">DisulfideBondRule</span><span class="p">,</span>
+    <span class="n">ProlineRingRule</span><span class="p">,</span>
+    <span class="n">AlphaBetaCarbonRule</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># FMO-style: fragment at alpha carbons, keep peptide bonds</span>
+<span class="n">fmo_engine</span> <span class="o">=</span> <span class="n">RuleEngine</span><span class="p">([</span>
+    <span class="n">AromaticRingRule</span><span class="p">(),</span>                           <span class="c1"># Protect aromatic sidechains</span>
+    <span class="n">DoubleBondRule</span><span class="p">(),</span>                             <span class="c1"># Protect double bonds</span>
+    <span class="n">ProlineRingRule</span><span class="p">(),</span>                            <span class="c1"># Protect proline rings</span>
+    <span class="n">DisulfideBondRule</span><span class="p">(),</span>                          <span class="c1"># Keep disulfides</span>
+    <span class="n">PeptideBondRule</span><span class="p">(</span><span class="n">rule_action</span><span class="o">=</span><span class="n">RuleAction</span><span class="o">.</span><span class="n">PREFER_KEEP</span><span class="p">),</span>
+    <span class="n">AlphaBetaCarbonRule</span><span class="p">(),</span>                        <span class="c1"># Break at C-alpha</span>
+<span class="p">])</span>
+
+<span class="c1"># Get fragmentation points</span>
+<span class="n">breakable</span> <span class="o">=</span> <span class="n">fmo_engine</span><span class="o">.</span><span class="n">get_breakable_bonds</span><span class="p">(</span><span class="n">protein_system</span><span class="p">)</span>
+<span class="n">preferred</span> <span class="o">=</span> <span class="n">fmo_engine</span><span class="o">.</span><span class="n">get_preferred_breaks</span><span class="p">(</span><span class="n">protein_system</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-mof-fragmentation">
+<h2>Example: MOF Fragmentation<a class="headerlink" href="#example-mof-fragmentation" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.rules</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RuleEngine</span><span class="p">,</span>
+    <span class="n">AromaticRingRule</span><span class="p">,</span>
+    <span class="n">DoubleBondRule</span><span class="p">,</span>
+    <span class="n">MetalCoordinationRule</span><span class="p">,</span>
+    <span class="n">MOFLinkerRule</span><span class="p">,</span>
+    <span class="n">MetalNodeRule</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">mof_engine</span> <span class="o">=</span> <span class="n">RuleEngine</span><span class="p">([</span>
+    <span class="n">AromaticRingRule</span><span class="p">(),</span>        <span class="c1"># Protect aromatic linkers</span>
+    <span class="n">DoubleBondRule</span><span class="p">(),</span>          <span class="c1"># Protect carboxylate C=O</span>
+    <span class="n">MOFLinkerRule</span><span class="p">(),</span>           <span class="c1"># Keep organic linkers intact</span>
+    <span class="n">MetalNodeRule</span><span class="p">(),</span>           <span class="c1"># Keep metal clusters intact</span>
+    <span class="c1"># Metal-linker bonds will be the break points</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="io_formats.html" class="btn btn-neutral float-left" title="I/O Formats Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guides/algorithms.html" class="btn btn-neutral float-right" title="Fragmentation Algorithms Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

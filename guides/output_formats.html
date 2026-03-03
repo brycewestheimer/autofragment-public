@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Output Formats Guide &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Geometric Tiling Partitioning" href="../partitioning/geometric_tiling.html" />
+    <link rel="prev" title="Custom Rules Authoring Guide" href="custom_rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Output Formats Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-programs">Supported Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gamess">GAMESS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#standard-fmo">Standard FMO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#efmo-effective-fragment-molecular-orbital">EFMO (Effective Fragment Molecular Orbital)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fmo-options">FMO Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#psi4">Psi4</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-output">Basic Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sapt-calculations">SAPT Calculations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mbe-in-psi4">MBE in Psi4</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#q-chem">Q-Chem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#efp-in-q-chem">EFP in Q-Chem</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#orca">ORCA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#orca-options">ORCA Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nwchem">NWChem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bsse-counterpoise">BSSE Counterpoise</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#molpro">Molpro</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#turbomole">Turbomole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cfour">CFOUR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generic-formats">Generic Formats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#xyz">XYZ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdb">PDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#json-for-serialization">JSON (For serialization)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#format-registry">Format Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writer-options">Writer Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-writing">Batch Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-writers">Custom Writers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Output Formats Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/output_formats.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="output-formats-guide">
+<h1>Output Formats Guide<a class="headerlink" href="#output-formats-guide" title="Link to this heading"></a></h1>
+<p>This guide covers all supported output formats for exporting fragments to quantum chemistry programs.</p>
+<section id="supported-programs">
+<h2>Supported Programs<a class="headerlink" href="#supported-programs" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Program</p></th>
+<th class="head"><p>Format</p></th>
+<th class="head"><p>Features</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GAMESS</p></td>
+<td><p>FMO/EFMO/EFP</p></td>
+<td><p>Full fragment support</p></td>
+</tr>
+<tr class="row-odd"><td><p>Psi4</p></td>
+<td><p>SAPT/MBE</p></td>
+<td><p>Interaction energies</p></td>
+</tr>
+<tr class="row-even"><td><p>Q-Chem</p></td>
+<td><p>EFP/XSAPT</p></td>
+<td><p>Embedding</p></td>
+</tr>
+<tr class="row-odd"><td><p>ORCA</p></td>
+<td><p>Multi-job</p></td>
+<td><p>Fragment calculations</p></td>
+</tr>
+<tr class="row-even"><td><p>NWChem</p></td>
+<td><p>BSSE</p></td>
+<td><p>Counterpoise</p></td>
+</tr>
+<tr class="row-odd"><td><p>Molpro</p></td>
+<td><p>SAPT/LMP2</p></td>
+<td><p>Fragment calculations</p></td>
+</tr>
+<tr class="row-even"><td><p>Turbomole</p></td>
+<td><p>Fragment</p></td>
+<td><p>Coordinate export</p></td>
+</tr>
+<tr class="row-odd"><td><p>CFOUR</p></td>
+<td><p>Fragment</p></td>
+<td><p>ZMAT export</p></td>
+</tr>
+<tr class="row-even"><td><p>Generic</p></td>
+<td><p>XYZ/PDB</p></td>
+<td><p>Structure only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="gamess">
+<h2>GAMESS<a class="headerlink" href="#gamess" title="Link to this heading"></a></h2>
+<section id="standard-fmo">
+<h3>Standard FMO<a class="headerlink" href="#standard-fmo" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span>
+
+<span class="n">write_gamess_fmo</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;output.inp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">runtyp</span><span class="o">=</span><span class="s2">&quot;ENERGY&quot;</span><span class="p">,</span>
+    <span class="n">memory</span><span class="o">=</span><span class="mi">800</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="efmo-effective-fragment-molecular-orbital">
+<h3>EFMO (Effective Fragment Molecular Orbital)<a class="headerlink" href="#efmo-effective-fragment-molecular-orbital" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_efmo</span>
+
+<span class="n">write_gamess_efmo</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;efmo.inp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="fmo-options">
+<h3>FMO Options<a class="headerlink" href="#fmo-options" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nbody</span></code></p></td>
+<td><p>MBE order (2 or 3)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">resppc</span></code></p></td>
+<td><p>ESP pair approximation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">resdim</span></code></p></td>
+<td><p>Distance threshold for ESP</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">runtyp</span></code></p></td>
+<td><p>ENERGY, GRADIENT, HESSIAN</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="psi4">
+<h2>Psi4<a class="headerlink" href="#psi4" title="Link to this heading"></a></h2>
+<section id="basic-output">
+<h3>Basic Output<a class="headerlink" href="#basic-output" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_psi4_fragment</span>
+
+<span class="n">write_psi4_fragment</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;psi4_input.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;cc-pVDZ&quot;</span><span class="p">,</span>
+    <span class="n">extra_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="s2">&quot;rhf&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="sapt-calculations">
+<h3>SAPT Calculations<a class="headerlink" href="#sapt-calculations" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_psi4_sapt</span>
+
+<span class="n">write_psi4_sapt</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">frag_a</span><span class="p">,</span> <span class="n">frag_b</span><span class="p">],</span>
+    <span class="s2">&quot;sapt.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sapt2+&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span>
+<span class="p">)</span>
+<span class="c1"># Requires exactly 2 fragments (dimer)</span>
+</pre></div>
+</div>
+</section>
+<section id="mbe-in-psi4">
+<h3>MBE in Psi4<a class="headerlink" href="#mbe-in-psi4" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">write_psi4_fragment</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;mbe.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;cc-pVDZ&quot;</span><span class="p">,</span>
+    <span class="n">runtype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="q-chem">
+<h2>Q-Chem<a class="headerlink" href="#q-chem" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_qchem_efp</span>
+
+<span class="n">write_qchem_efp</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;qchem.in&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">qm_fragment_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<section id="efp-in-q-chem">
+<h3>EFP in Q-Chem<a class="headerlink" href="#efp-in-q-chem" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_qchem_xsapt</span>
+
+<span class="n">write_qchem_xsapt</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">frag_a</span><span class="p">,</span> <span class="n">frag_b</span><span class="p">],</span>
+    <span class="s2">&quot;xsapt.in&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">xsapt_level</span><span class="o">=</span><span class="s2">&quot;xsapt(ksdft)&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="orca">
+<h2>ORCA<a class="headerlink" href="#orca" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_orca_multijob</span>
+
+<span class="n">write_orca_multijob</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;orca_fragments.inp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;B3LYP&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;def2-SVP&quot;</span><span class="p">,</span>
+    <span class="n">memory</span><span class="o">=</span><span class="mi">4000</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<section id="orca-options">
+<h3>ORCA Options<a class="headerlink" href="#orca-options" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_orca_fragment</span>
+
+<span class="n">write_orca_fragment</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;orca_single.inp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DLPNO-CCSD(T)&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;cc-pVTZ&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="nwchem">
+<h2>NWChem<a class="headerlink" href="#nwchem" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_nwchem_fragment</span>
+
+<span class="n">write_nwchem_fragment</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;nwchem.nw&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DFT&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">extra_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;xc&quot;</span><span class="p">:</span> <span class="s2">&quot;b3lyp&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<section id="bsse-counterpoise">
+<h3>BSSE Counterpoise<a class="headerlink" href="#bsse-counterpoise" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_nwchem_bsse</span>
+
+<span class="n">write_nwchem_bsse</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">frag_a</span><span class="p">,</span> <span class="n">frag_b</span><span class="p">],</span>
+    <span class="s2">&quot;bsse.nw&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mp2&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="molpro">
+<h2>Molpro<a class="headerlink" href="#molpro" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_molpro_sapt</span>
+
+<span class="n">write_molpro_sapt</span><span class="p">([</span><span class="n">frag_a</span><span class="p">,</span> <span class="n">frag_b</span><span class="p">],</span> <span class="s2">&quot;molpro.com&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="turbomole">
+<h2>Turbomole<a class="headerlink" href="#turbomole" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_turbomole_fragment</span>
+
+<span class="n">write_turbomole_fragment</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;coord&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cfour">
+<h2>CFOUR<a class="headerlink" href="#cfour" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_cfour_fragment</span>
+
+<span class="n">write_cfour_fragment</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;ZMAT&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generic-formats">
+<h2>Generic Formats<a class="headerlink" href="#generic-formats" title="Link to this heading"></a></h2>
+<section id="xyz">
+<h3>XYZ<a class="headerlink" href="#xyz" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_xyz_fragments</span>
+
+<span class="n">write_xyz_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;fragments.xyz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pdb">
+<h3>PDB<a class="headerlink" href="#pdb" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_pdb_fragments</span>
+
+<span class="n">write_pdb_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;fragments.pdb&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;chains&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="json-for-serialization">
+<h3>JSON (For serialization)<a class="headerlink" href="#json-for-serialization" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_qcschema</span><span class="p">,</span> <span class="n">read_qcschema</span>
+
+<span class="n">write_qcschema</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s2">&quot;fragments.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load back</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_qcschema</span><span class="p">(</span><span class="s2">&quot;fragments.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="format-registry">
+<h2>Format Registry<a class="headerlink" href="#format-registry" title="Link to this heading"></a></h2>
+<p>Discover available formats:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormatRegistry</span>
+
+<span class="n">formats</span> <span class="o">=</span> <span class="n">FormatRegistry</span><span class="o">.</span><span class="n">supported_formats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">formats</span><span class="p">[</span><span class="s2">&quot;write&quot;</span><span class="p">])</span>
+
+<span class="c1"># Get writer function by name</span>
+<span class="n">FormatRegistry</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;output.inp&quot;</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;gamess_fmo&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="writer-options">
+<h2>Writer Options<a class="headerlink" href="#writer-options" title="Link to this heading"></a></h2>
+<p>Available options are writer-specific. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span>
+
+<span class="n">write_gamess_fmo</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;fmo.inp&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;My calc&quot;</span><span class="p">,</span>    <span class="c1"># Title/comment</span>
+    <span class="n">memory</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>          <span class="c1"># Memory request (MW)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-writing">
+<h2>Batch Writing<a class="headerlink" href="#batch-writing" title="Link to this heading"></a></h2>
+<p>Write multiple fragments at once:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_orca_fragment</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fragment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fragments</span><span class="p">):</span>
+    <span class="n">write_orca_fragment</span><span class="p">([</span><span class="n">fragment</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;outputs/frag_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.inp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-writers">
+<h2>Custom Writers<a class="headerlink" href="#custom-writers" title="Link to this heading"></a></h2>
+<p>Create custom output format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormatRegistry</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">write_plain_xyz_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">out</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fragment</span> <span class="ow">in</span> <span class="n">fragments</span><span class="p">:</span>
+            <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">fragment</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">fragment</span><span class="o">.</span><span class="n">get_coords</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fragment</span><span class="o">.</span><span class="n">symbols</span><span class="p">):</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">FormatRegistry</span><span class="o">.</span><span class="n">register_writer</span><span class="p">(</span><span class="s2">&quot;plain_xyz_fragments&quot;</span><span class="p">,</span> <span class="n">write_plain_xyz_fragments</span><span class="p">,</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.pxyz&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="custom_rules.html" class="btn btn-neutral float-left" title="Custom Rules Authoring Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../partitioning/geometric_tiling.html" class="btn btn-neutral float-right" title="Geometric Tiling Partitioning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

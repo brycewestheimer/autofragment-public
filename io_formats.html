@@ -1,0 +1,632 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I/O Formats Guide &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fragmentation Rules" href="rules.html" />
+    <link rel="prev" title="Python API" href="python_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">I/O Formats Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-molecular-structures">Reading Molecular Structures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-input-formats">Supported Input Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdb-reader">PDB Reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mol2-reader">MOL2 Reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sdf-mol-reader">SDF/MOL Reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qcschema-reader">QCSchema Reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vasp-reader">VASP Reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-fragment-files">Writing Fragment Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-output-formats">Supported Output Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamess-fmo-writer">GAMESS FMO Writer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#psi4-sapt-writer">Psi4 SAPT Writer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q-chem-efp-writer">Q-Chem EFP Writer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdb-fragment-writer">PDB Fragment Writer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#format-registry">Format Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coordinate-units">Coordinate Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tips-for-large-files">Tips for Large Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">I/O Formats Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/io_formats.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="i-o-formats-guide">
+<h1>I/O Formats Guide<a class="headerlink" href="#i-o-formats-guide" title="Link to this heading"></a></h1>
+<p>AutoFragment provides comprehensive I/O support for reading molecular structure files and writing fragmented systems to various quantum chemistry program formats.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The I/O module (<code class="docutils literal notranslate"><span class="pre">autofragment.io</span></code>) supports:</p>
+<ul class="simple">
+<li><p><strong>11 input formats</strong> for reading molecular structures</p></li>
+<li><p><strong>12 output formats</strong> for writing fragment-annotated input files</p></li>
+<li><p><strong>FormatRegistry</strong> for extensible format handling</p></li>
+</ul>
+</section>
+<section id="reading-molecular-structures">
+<h2>Reading Molecular Structures<a class="headerlink" href="#reading-molecular-structures" title="Link to this heading"></a></h2>
+<section id="quick-start">
+<h3>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">io</span>
+
+<span class="c1"># Read from various formats (auto-detection by extension)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;protein.pdb&quot;</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_mol2</span><span class="p">(</span><span class="s2">&quot;ligand.mol2&quot;</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_sdf</span><span class="p">(</span><span class="s2">&quot;compounds.sdf&quot;</span><span class="p">)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;water64.xyz&quot;</span><span class="p">)</span>
+
+<span class="c1"># All readers return ChemicalSystem objects</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Atoms: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bonds: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">n_bonds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For isolated molecule lists, use the explicit XYZ helper:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">molecules</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_xyz_molecules</span><span class="p">(</span><span class="s2">&quot;water64.xyz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="supported-input-formats">
+<h3>Supported Input Formats<a class="headerlink" href="#supported-input-formats" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Function</p></th>
+<th class="head"><p>Extensions</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PDB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_pdb()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.pdb</span></code>, <code class="docutils literal notranslate"><span class="pre">.ent</span></code></p></td>
+<td><p>Protein Data Bank with CONECT records</p></td>
+</tr>
+<tr class="row-odd"><td><p>MOL2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_mol2()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.mol2</span></code></p></td>
+<td><p>Tripos MOL2 with atom types and charges</p></td>
+</tr>
+<tr class="row-even"><td><p>SDF/MOL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_sdf()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.sdf</span></code>, <code class="docutils literal notranslate"><span class="pre">.mol</span></code></p></td>
+<td><p>MDL V2000/V3000 structure files</p></td>
+</tr>
+<tr class="row-odd"><td><p>QCSchema</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_qcschema()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.json</span></code></p></td>
+<td><p>MolSSI standard JSON format</p></td>
+</tr>
+<tr class="row-even"><td><p>GAMESS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_gamess_input()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p>GAMESS input file geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p>Psi4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_psi4_input()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.dat</span></code></p></td>
+<td><p>Psi4 molecule blocks</p></td>
+</tr>
+<tr class="row-even"><td><p>Q-Chem</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_qchem_input()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.in</span></code></p></td>
+<td><p>Q-Chem $molecule sections</p></td>
+</tr>
+<tr class="row-odd"><td><p>ORCA</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_orca_input()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.inp</span></code></p></td>
+<td><p>ORCA *xyz blocks</p></td>
+</tr>
+<tr class="row-even"><td><p>NWChem</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_nwchem_input()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.nw</span></code></p></td>
+<td><p>NWChem geometry blocks</p></td>
+</tr>
+<tr class="row-odd"><td><p>VASP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_poscar()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.poscar</span></code>, <code class="docutils literal notranslate"><span class="pre">.contcar</span></code></p></td>
+<td><p>VASP POSCAR/CONTCAR files</p></td>
+</tr>
+<tr class="row-even"><td><p>CIF</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">read_cif()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.cif</span></code>, <code class="docutils literal notranslate"><span class="pre">.mmcif</span></code></p></td>
+<td><p>Crystallographic Information Files</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pdb-reader">
+<h3>PDB Reader<a class="headerlink" href="#pdb-reader" title="Link to this heading"></a></h3>
+<p>The PDB reader supports:</p>
+<ul class="simple">
+<li><p>ATOM and HETATM records</p></li>
+<li><p>CONECT records for explicit bonds</p></li>
+<li><p>Multi-MODEL files (select with <code class="docutils literal notranslate"><span class="pre">model=N</span></code>)</p></li>
+<li><p>Distance-based bond inference</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_pdb</span>
+
+<span class="c1"># Read with explicit bonds only</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;protein.pdb&quot;</span><span class="p">,</span> <span class="n">infer_bonds</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Read specific model from NMR ensemble</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;ensemble.pdb&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Access metadata</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source_file&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="mol2-reader">
+<h3>MOL2 Reader<a class="headerlink" href="#mol2-reader" title="Link to this heading"></a></h3>
+<p>The MOL2 reader handles:</p>
+<ul class="simple">
+<li><p>Tripos atom type mapping (C.3, N.ar, etc.)</p></li>
+<li><p>Bond orders (1=single, 2=double, ar=aromatic)</p></li>
+<li><p>Partial charges</p></li>
+<li><p>Multi-molecule files</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_mol2</span>
+
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_mol2</span><span class="p">(</span><span class="s2">&quot;ligand.mol2&quot;</span><span class="p">)</span>
+
+<span class="c1"># Charges are stored per atom</span>
+<span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">atom</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s2">: charge=</span><span class="si">{</span><span class="n">atom</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="sdf-mol-reader">
+<h3>SDF/MOL Reader<a class="headerlink" href="#sdf-mol-reader" title="Link to this heading"></a></h3>
+<p>Supports both MDL V2000 (fixed-width) and V3000 (keyword-based) formats:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_sdf</span><span class="p">,</span> <span class="n">read_sdf_multi</span>
+
+<span class="c1"># Read first molecule</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_sdf</span><span class="p">(</span><span class="s2">&quot;compound.sdf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read all molecules from multi-molecule file</span>
+<span class="n">systems</span> <span class="o">=</span> <span class="n">read_sdf_multi</span><span class="p">(</span><span class="s2">&quot;library.sdf&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sys</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">systems</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecule </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="qcschema-reader">
+<h3>QCSchema Reader<a class="headerlink" href="#qcschema-reader" title="Link to this heading"></a></h3>
+<p>Reads MolSSI QCSchema JSON format with automatic Bohr→Angstrom conversion:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_qcschema</span>
+
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_qcschema</span><span class="p">(</span><span class="s2">&quot;molecule.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access molecular properties</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Charge: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;molecular_charge&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Multiplicity: </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;molecular_multiplicity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="vasp-reader">
+<h3>VASP Reader<a class="headerlink" href="#vasp-reader" title="Link to this heading"></a></h3>
+<p>Reads POSCAR/CONTCAR files with lattice vector handling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_poscar</span>
+
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_poscar</span><span class="p">(</span><span class="s2">&quot;POSCAR&quot;</span><span class="p">)</span>
+
+<span class="c1"># Lattice vectors are in metadata</span>
+<span class="n">lattice</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;lattice&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="writing-fragment-files">
+<h2>Writing Fragment Files<a class="headerlink" href="#writing-fragment-files" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Quick Start<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span><span class="p">,</span> <span class="n">write_psi4_sapt</span>
+
+<span class="c1"># After fragmenting a system...</span>
+<span class="n">write_gamess_fmo</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;fmo_calc.inp&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">)</span>
+<span class="n">write_psi4_sapt</span><span class="p">(</span><span class="n">fragments</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;sapt_dimer.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="supported-output-formats">
+<h3>Supported Output Formats<a class="headerlink" href="#supported-output-formats" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GAMESS FMO</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_gamess_fmo()</span></code></p></td>
+<td><p>FMO with $FMO, $FMOBND, $DATA</p></td>
+</tr>
+<tr class="row-odd"><td><p>GAMESS EFMO</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_gamess_efmo()</span></code></p></td>
+<td><p>Effective Fragment MO</p></td>
+</tr>
+<tr class="row-even"><td><p>GAMESS EFP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_gamess_efp()</span></code></p></td>
+<td><p>Effective Fragment Potential</p></td>
+</tr>
+<tr class="row-odd"><td><p>Psi4 SAPT</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_psi4_sapt()</span></code></p></td>
+<td><p>SAPT with fragment separators</p></td>
+</tr>
+<tr class="row-even"><td><p>Psi4 Fragment</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_psi4_fragment()</span></code></p></td>
+<td><p>General fragment calculation</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q-Chem EFP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_qchem_efp()</span></code></p></td>
+<td><p>EFP with $molecule sections</p></td>
+</tr>
+<tr class="row-even"><td><p>Q-Chem XSAPT</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_qchem_xsapt()</span></code></p></td>
+<td><p>Extended SAPT</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q-Chem FRAGMO</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_qchem_fragmo()</span></code></p></td>
+<td><p>Fragment MO analysis</p></td>
+</tr>
+<tr class="row-even"><td><p>NWChem</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_nwchem_fragment()</span></code></p></td>
+<td><p>Fragment calculation</p></td>
+</tr>
+<tr class="row-odd"><td><p>NWChem BSSE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_nwchem_bsse()</span></code></p></td>
+<td><p>Counterpoise correction</p></td>
+</tr>
+<tr class="row-even"><td><p>ORCA</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_orca_fragment()</span></code></p></td>
+<td><p>Single fragment job</p></td>
+</tr>
+<tr class="row-odd"><td><p>ORCA Multi-job</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_orca_multijob()</span></code></p></td>
+<td><p>Separate jobs per fragment</p></td>
+</tr>
+<tr class="row-even"><td><p>QCSchema</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_qcschema()</span></code></p></td>
+<td><p>JSON with fragment annotations</p></td>
+</tr>
+<tr class="row-odd"><td><p>Molpro</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_molpro_sapt()</span></code></p></td>
+<td><p>SAPT calculation</p></td>
+</tr>
+<tr class="row-even"><td><p>Turbomole</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_turbomole_fragment()</span></code></p></td>
+<td><p>Coord file</p></td>
+</tr>
+<tr class="row-odd"><td><p>CFOUR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_cfour_fragment()</span></code></p></td>
+<td><p>ZMAT format</p></td>
+</tr>
+<tr class="row-even"><td><p>XYZ</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_xyz_fragments()</span></code></p></td>
+<td><p>XYZ with fragment markers</p></td>
+</tr>
+<tr class="row-odd"><td><p>PDB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">write_pdb_fragments()</span></code></p></td>
+<td><p>PDB with fragments as chains</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="gamess-fmo-writer">
+<h3>GAMESS FMO Writer<a class="headerlink" href="#gamess-fmo-writer" title="Link to this heading"></a></h3>
+<p>Generates complete GAMESS input for Fragment Molecular Orbital calculations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span>
+
+<span class="n">write_gamess_fmo</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;fmo_calc.inp&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31G*&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RHF&quot;</span><span class="p">,</span>
+    <span class="n">runtype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
+    <span class="n">memory</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>  <span class="c1"># MW</span>
+    <span class="n">fmo_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">nbody</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Output includes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$CONTRL</span></code> - Control options</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$SYSTEM</span></code> - Memory settings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$BASIS</span></code> - Basis set specification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$FMO</span></code> - Fragment definitions (NFRAG, INDAT, charges, multiplicities)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$GDDI</span></code> - Parallel settings</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$DATA</span></code> - Atomic coordinates</p></li>
+</ul>
+</section>
+<section id="psi4-sapt-writer">
+<h3>Psi4 SAPT Writer<a class="headerlink" href="#psi4-sapt-writer" title="Link to this heading"></a></h3>
+<p>Generates Psi4 input for Symmetry-Adapted Perturbation Theory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_psi4_sapt</span>
+
+<span class="c1"># SAPT requires exactly 2 fragments (dimer)</span>
+<span class="n">write_psi4_sapt</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">monomer_a</span><span class="p">,</span> <span class="n">monomer_b</span><span class="p">],</span>
+    <span class="s2">&quot;sapt_dimer.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sapt0&quot;</span><span class="p">,</span>  <span class="c1"># or sapt2, sapt2+, etc.</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;jun-cc-pvdz&quot;</span><span class="p">,</span>
+    <span class="n">freeze_core</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="q-chem-efp-writer">
+<h3>Q-Chem EFP Writer<a class="headerlink" href="#q-chem-efp-writer" title="Link to this heading"></a></h3>
+<p>Generates Q-Chem input for EFP calculations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_qchem_efp</span>
+
+<span class="n">write_qchem_efp</span><span class="p">(</span>
+    <span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;efp_calc.in&quot;</span><span class="p">,</span>
+    <span class="n">qm_fragment_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># First fragment is QM</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hf&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;6-31g*&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pdb-fragment-writer">
+<h3>PDB Fragment Writer<a class="headerlink" href="#pdb-fragment-writer" title="Link to this heading"></a></h3>
+<p>Writes fragments encoded in PDB format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_pdb_fragments</span>
+
+<span class="c1"># Fragments as separate chains (A, B, C, ...)</span>
+<span class="n">write_pdb_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;output.pdb&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;chains&quot;</span><span class="p">)</span>
+
+<span class="c1"># Fragments as separate MODELs</span>
+<span class="n">write_pdb_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;output.pdb&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;models&quot;</span><span class="p">)</span>
+
+<span class="c1"># Fragments as separate residues</span>
+<span class="n">write_pdb_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;output.pdb&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;residues&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="format-registry">
+<h2>Format Registry<a class="headerlink" href="#format-registry" title="Link to this heading"></a></h2>
+<p>The FormatRegistry provides a unified interface for format handling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormatRegistry</span>
+
+<span class="c1"># Auto-detect format from extension</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">FormatRegistry</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;molecule.pdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># List supported formats</span>
+<span class="n">formats</span> <span class="o">=</span> <span class="n">FormatRegistry</span><span class="o">.</span><span class="n">supported_formats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Readers: </span><span class="si">{</span><span class="n">formats</span><span class="p">[</span><span class="s1">&#39;read&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writers: </span><span class="si">{</span><span class="n">formats</span><span class="p">[</span><span class="s1">&#39;write&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Register custom format</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_reader</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="c1"># Custom parsing logic</span>
+    <span class="k">return</span> <span class="n">ChemicalSystem</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="n">FormatRegistry</span><span class="o">.</span><span class="n">register_reader</span><span class="p">(</span>
+    <span class="s2">&quot;myformat&quot;</span><span class="p">,</span>
+    <span class="n">my_reader</span><span class="p">,</span>
+    <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;.mfmt&quot;</span><span class="p">],</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;My custom format&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="coordinate-units">
+<h2>Coordinate Units<a class="headerlink" href="#coordinate-units" title="Link to this heading"></a></h2>
+<p>Different formats use different coordinate units:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Native Units</p></th>
+<th class="head"><p>AutoFragment Handling</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PDB, MOL2, SDF</p></td>
+<td><p>Angstroms</p></td>
+<td><p>Direct read</p></td>
+</tr>
+<tr class="row-odd"><td><p>QCSchema</p></td>
+<td><p>Bohr</p></td>
+<td><p>Converted to Angstroms on read</p></td>
+</tr>
+<tr class="row-even"><td><p>VASP</p></td>
+<td><p>Angstroms or fractional</p></td>
+<td><p>Converted to Cartesian Angstroms</p></td>
+</tr>
+<tr class="row-odd"><td><p>CIF</p></td>
+<td><p>Fractional</p></td>
+<td><p>Converted to Cartesian Angstroms</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>All readers raise appropriate exceptions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_pdb</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;missing.pdb&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File not found&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;malformed.pdb&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parse error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tips-for-large-files">
+<h2>Tips for Large Files<a class="headerlink" href="#tips-for-large-files" title="Link to this heading"></a></h2>
+<p>For large molecular systems:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SDF: Process molecules one at a time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.readers.sdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_sdf_multi</span>
+
+<span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">read_sdf_multi</span><span class="p">(</span><span class="s2">&quot;large_library.sdf&quot;</span><span class="p">):</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="c1"># PDB: Read only specific model</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">read_pdb</span><span class="p">(</span><span class="s2">&quot;trajectory.pdb&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="python_api.html"><span class="doc">Python API</span></a> - Full Python API reference</p></li>
+<li><p><a class="reference internal" href="core_concepts.html"><span class="doc">Core Concepts</span></a> - ChemicalSystem and Fragment types</p></li>
+<li><p><a class="reference internal" href="api/autofragment.html"><span class="doc">autofragment API</span></a> - Auto-generated API documentation</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="python_api.html" class="btn btn-neutral float-left" title="Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rules.html" class="btn btn-neutral float-right" title="Fragmentation Rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

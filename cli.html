@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Line &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Water Cluster Fragmentation Tutorial" href="guides/water_clusters.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#top-level-shortcut-single-file">Top-level shortcut (single file)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fragment-a-single-xyz">Fragment a single XYZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-mode-consistent-labeling">Batch mode (consistent labeling)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#biological-systems-mmcif">Biological systems (mmCIF)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#geometric-tiling-mode">Geometric tiling mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tiered-hierarchical-partitioning">Tiered (hierarchical) partitioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#show-version-and-optional-features">Show version and optional features</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command Line</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cli.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line">
+<h1>Command Line<a class="headerlink" href="#command-line" title="Link to this heading"></a></h1>
+<section id="top-level-shortcut-single-file">
+<h2>Top-level shortcut (single file)<a class="headerlink" href="#top-level-shortcut-single-file" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>partitioned.json<span class="w"> </span>--n-fragments<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="fragment-a-single-xyz">
+<h2>Fragment a single XYZ<a class="headerlink" href="#fragment-a-single-xyz" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>single<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>partitioned.json<span class="w"> </span>--n-fragments<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-mode-consistent-labeling">
+<h2>Batch mode (consistent labeling)<a class="headerlink" href="#batch-mode-consistent-labeling" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>batch<span class="w"> </span>--reference<span class="w"> </span>ref.xyz<span class="w"> </span>--input-dir<span class="w"> </span>./trajectory/<span class="w"> </span>--output-dir<span class="w"> </span>./partitioned/<span class="w"> </span>--n-fragments<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="biological-systems-mmcif">
+<h2>Biological systems (mmCIF)<a class="headerlink" href="#biological-systems-mmcif" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>bio<span class="w"> </span>--input<span class="w"> </span>protein.cif<span class="w"> </span>--output<span class="w"> </span>partitioned.json
+</pre></div>
+</div>
+</section>
+<section id="geometric-tiling-mode">
+<h2>Geometric tiling mode<a class="headerlink" href="#geometric-tiling-mode" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>geometric<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>tiled.json<span class="w"> </span>--tiling-shape<span class="w"> </span>cube<span class="w"> </span>--n-fragments<span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</section>
+<section id="tiered-hierarchical-partitioning">
+<h2>Tiered (hierarchical) partitioning<a class="headerlink" href="#tiered-hierarchical-partitioning" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2-tier: 4 primary x 4 secondary</span>
+autofragment<span class="w"> </span>single<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>tiered.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tiers<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n-primary<span class="w"> </span><span class="m">4</span><span class="w"> </span>--n-secondary<span class="w"> </span><span class="m">4</span><span class="w"> </span>--method<span class="w"> </span>kmeans
+
+<span class="c1"># 3-tier: 2 primary x 2 secondary x 2 tertiary</span>
+autofragment<span class="w"> </span>single<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>tiered.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tiers<span class="w"> </span><span class="m">3</span><span class="w"> </span>--n-primary<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n-secondary<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n-tertiary<span class="w"> </span><span class="m">2</span>
+
+<span class="c1"># With seeding strategy</span>
+autofragment<span class="w"> </span>single<span class="w"> </span>--input<span class="w"> </span>water64.xyz<span class="w"> </span>--output<span class="w"> </span>tiered.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tiers<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n-primary<span class="w"> </span><span class="m">4</span><span class="w"> </span>--n-secondary<span class="w"> </span><span class="m">4</span><span class="w"> </span>--init-strategy<span class="w"> </span>pca
+
+<span class="c1"># Batch mode with tiered partitioning</span>
+autofragment<span class="w"> </span>batch<span class="w"> </span>--reference<span class="w"> </span>ref.xyz<span class="w"> </span>--input-dir<span class="w"> </span>./trajectory/<span class="w"> </span>--output-dir<span class="w"> </span>./partitioned/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tiers<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n-primary<span class="w"> </span><span class="m">4</span><span class="w"> </span>--n-secondary<span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="show-version-and-optional-features">
+<h2>Show version and optional features<a class="headerlink" href="#show-version-and-optional-features" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autofragment<span class="w"> </span>info
+autofragment<span class="w"> </span>--version
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guides/water_clusters.html" class="btn btn-neutral float-right" title="Water Cluster Fragmentation Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

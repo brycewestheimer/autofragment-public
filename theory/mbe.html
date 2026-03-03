@@ -1,0 +1,581 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Many-Body Expansion (MBE) Theory &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="QM/MM and Embedding Theory" href="qmmm.html" />
+    <link rel="prev" title="Fragmentation Scoring Functions" href="scoring.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Many-Body Expansion (MBE) Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mathematical-foundation">Mathematical Foundation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#total-energy-expression">Total Energy Expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#n-body-interaction-energies">n-Body Interaction Energies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#one-body-terms-monomers">One-Body Terms (Monomers)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#two-body-terms-dimers">Two-Body Terms (Dimers)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#three-body-terms-trimers">Three-Body Terms (Trimers)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#higher-order-terms">Higher-Order Terms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#truncated-mbe">Truncated MBE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#convergence-properties">Convergence Properties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#physical-basis">Physical Basis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accuracy-guidelines">Accuracy Guidelines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#factors-affecting-convergence">Factors Affecting Convergence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#problematic-cases">Problematic Cases</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#computational-scaling">Computational Scaling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#number-of-calculations">Number of Calculations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distance-screening">Distance Screening</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallelization">Parallelization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hierarchy-of-methods">Hierarchy of Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#electrostatically-embedded-mbe-ee-mbe">Electrostatically Embedded MBE (EE-MBE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#systematic-molecular-fragmentation-smf">Systematic Molecular Fragmentation (SMF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generalized-mbe-gmbe">Generalized MBE (GMBE)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-notes">Implementation Notes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fragmentation-with-autofragment">Fragmentation with autofragment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#energy-assembly">Energy Assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gradient-assembly">Gradient Assembly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#basis-set-superposition-error-bsse">Basis Set Superposition Error (BSSE)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-problem">The Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#counterpoise-correction">Counterpoise Correction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#comparison-with-other-fragment-methods">Comparison with Other Fragment Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applications">Applications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#water-clusters">Water Clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#molecular-crystals">Molecular Crystals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reaction-energies">Reaction Energies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Many-Body Expansion (MBE) Theory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/mbe.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="many-body-expansion-mbe-theory">
+<h1>Many-Body Expansion (MBE) Theory<a class="headerlink" href="#many-body-expansion-mbe-theory" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>The many-body expansion (MBE) is a systematic approach to compute the energy of a molecular system as a sum of fragment energies and their interactions. It provides a rigorous framework for fragment-based quantum chemistry methods, enabling accurate calculations on systems too large for conventional approaches.</p>
+</section>
+<section id="mathematical-foundation">
+<h2>Mathematical Foundation<a class="headerlink" href="#mathematical-foundation" title="Link to this heading"></a></h2>
+<section id="total-energy-expression">
+<h3>Total Energy Expression<a class="headerlink" href="#total-energy-expression" title="Link to this heading"></a></h3>
+<p>The exact energy of a system of $N$ fragments can be written as:</p>
+<p>$$
+E_{\text{total}} = \sum_i E_i + \sum_{i&lt;j} \Delta E_{ij} + \sum_{i&lt;j&lt;k} \Delta E_{ijk} + \cdots + \Delta E_{12\ldots N}
+$$</p>
+<p>This expansion is <strong>exact</strong> when carried to $N$-body terms, but practical calculations truncate at lower orders.</p>
+</section>
+<section id="n-body-interaction-energies">
+<h3>n-Body Interaction Energies<a class="headerlink" href="#n-body-interaction-energies" title="Link to this heading"></a></h3>
+<section id="one-body-terms-monomers">
+<h4>One-Body Terms (Monomers)<a class="headerlink" href="#one-body-terms-monomers" title="Link to this heading"></a></h4>
+<p>The one-body terms are simply fragment energies:</p>
+<p>$$
+E^{(1)} = \sum_{i=1}^{N} E_i
+$$</p>
+<p>where $E_i$ is the quantum mechanical energy of fragment $i$ in isolation.</p>
+</section>
+<section id="two-body-terms-dimers">
+<h4>Two-Body Terms (Dimers)<a class="headerlink" href="#two-body-terms-dimers" title="Link to this heading"></a></h4>
+<p>Two-body corrections capture pairwise interactions:</p>
+<p>$$
+\Delta E_{ij} = E_{ij} - E_i - E_j
+$$</p>
+<p>This is the <strong>interaction energy</strong> between fragments $i$ and $j$. The two-body contribution to total energy:</p>
+<p>$$
+E^{(2)} = \sum_{i&lt;j} \Delta E_{ij}
+$$</p>
+</section>
+<section id="three-body-terms-trimers">
+<h4>Three-Body Terms (Trimers)<a class="headerlink" href="#three-body-terms-trimers" title="Link to this heading"></a></h4>
+<p>Three-body corrections capture <strong>non-additive</strong> effects:</p>
+<p>$$
+\Delta E_{ijk} = E_{ijk} - E_{ij} - E_{jk} - E_{ik} + E_i + E_j + E_k
+$$</p>
+<p>Equivalently:</p>
+<p>$$
+\Delta E_{ijk} = E_{ijk} - \Delta E_{ij} - \Delta E_{jk} - \Delta E_{ik} - E_i - E_j - E_k
+$$</p>
+<p>Three-body contribution:</p>
+<p>$$
+E^{(3)} = \sum_{i&lt;j&lt;k} \Delta E_{ijk}
+$$</p>
+</section>
+<section id="higher-order-terms">
+<h4>Higher-Order Terms<a class="headerlink" href="#higher-order-terms" title="Link to this heading"></a></h4>
+<p>The pattern continues for four-body and higher:</p>
+<p>$$
+\Delta E_{ijk\ell} = E_{ijk\ell} - \sum_{\text{trimers}} \Delta E - \sum_{\text{dimers}} \Delta E - \sum_{\text{monomers}} E
+$$</p>
+</section>
+</section>
+<section id="truncated-mbe">
+<h3>Truncated MBE<a class="headerlink" href="#truncated-mbe" title="Link to this heading"></a></h3>
+<p>In practice, MBE is truncated at order $n$:</p>
+<p>$$
+E_{\text{MBE}(n)} = \sum_i E_i + \sum_{i&lt;j} \Delta E_{ij} + \cdots + \sum_{i_1 &lt; \cdots &lt; i_n} \Delta E_{i_1 \cdots i_n}
+$$</p>
+<p>Common truncation levels:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Order</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Formula</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MBE(1)</p></td>
+<td><p>Monomer sum</p></td>
+<td><p>$\sum_i E_i$</p></td>
+</tr>
+<tr class="row-odd"><td><p>MBE(2)</p></td>
+<td><p>Pairwise</p></td>
+<td><p>$\sum_i E_i + \sum_{i&lt;j} \Delta E_{ij}$</p></td>
+</tr>
+<tr class="row-even"><td><p>MBE(3)</p></td>
+<td><p>Three-body</p></td>
+<td><p>$\sum_i E_i + \sum_{i&lt;j} \Delta E_{ij} + \sum_{i&lt;j&lt;k} \Delta E_{ijk}$</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="convergence-properties">
+<h2>Convergence Properties<a class="headerlink" href="#convergence-properties" title="Link to this heading"></a></h2>
+<section id="physical-basis">
+<h3>Physical Basis<a class="headerlink" href="#physical-basis" title="Link to this heading"></a></h3>
+<p>The MBE converges because many-body interactions decay with distance:</p>
+<ul class="simple">
+<li><p><strong>Two-body</strong>: Electrostatics $\sim r^{-1}$, dispersion $\sim r^{-6}$</p></li>
+<li><p><strong>Three-body</strong>: Axilrod-Teller $\sim r^{-9}$, induction $\sim r^{-6}$</p></li>
+<li><p><strong>Higher-order</strong>: Faster decay, typically negligible</p></li>
+</ul>
+</section>
+<section id="accuracy-guidelines">
+<h3>Accuracy Guidelines<a class="headerlink" href="#accuracy-guidelines" title="Link to this heading"></a></h3>
+<p>Typical errors for molecular clusters (kcal/mol):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>System Type</p></th>
+<th class="head"><p>MBE(2) Error</p></th>
+<th class="head"><p>MBE(3) Error</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Water clusters</p></td>
+<td><p>1-5</p></td>
+<td><p>0.1-0.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Noble gas clusters</p></td>
+<td><p>0.1-0.5</p></td>
+<td><p>&lt; 0.05</p></td>
+</tr>
+<tr class="row-even"><td><p>Ionic systems</p></td>
+<td><p>5-20</p></td>
+<td><p>1-3</p></td>
+</tr>
+<tr class="row-odd"><td><p>π-stacking</p></td>
+<td><p>2-5</p></td>
+<td><p>0.3-1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="factors-affecting-convergence">
+<h3>Factors Affecting Convergence<a class="headerlink" href="#factors-affecting-convergence" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Fragment size</strong>: Larger fragments → faster convergence</p></li>
+<li><p><strong>Basis set</strong>: Larger basis → better convergence</p></li>
+<li><p><strong>Interaction type</strong>: Electrostatic &gt; dispersion &gt; charge transfer</p></li>
+<li><p><strong>Geometry</strong>: Compact geometries converge slower</p></li>
+</ol>
+</section>
+<section id="problematic-cases">
+<h3>Problematic Cases<a class="headerlink" href="#problematic-cases" title="Link to this heading"></a></h3>
+<p>MBE converges slowly for:</p>
+<ul class="simple">
+<li><p>Strong charge transfer</p></li>
+<li><p>Significant covalent character across boundaries</p></li>
+<li><p>Extended conjugation</p></li>
+<li><p>Metal clusters</p></li>
+</ul>
+<p>In these cases, consider:</p>
+<ul class="simple">
+<li><p>Larger fragments</p></li>
+<li><p>Higher-order terms</p></li>
+<li><p>Embedding approaches (EFP, QM/MM)</p></li>
+</ul>
+</section>
+</section>
+<section id="computational-scaling">
+<h2>Computational Scaling<a class="headerlink" href="#computational-scaling" title="Link to this heading"></a></h2>
+<section id="number-of-calculations">
+<h3>Number of Calculations<a class="headerlink" href="#number-of-calculations" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Order</p></th>
+<th class="head"><p>Number of Calculations</p></th>
+<th class="head"><p>Scaling</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1-body</p></td>
+<td><p>$N$</p></td>
+<td><p>$O(N)$</p></td>
+</tr>
+<tr class="row-odd"><td><p>2-body</p></td>
+<td><p>$\binom{N}{2} = \frac{N(N-1)}{2}$</p></td>
+<td><p>$O(N^2)$</p></td>
+</tr>
+<tr class="row-even"><td><p>3-body</p></td>
+<td><p>$\binom{N}{3} = \frac{N(N-1)(N-2)}{6}$</p></td>
+<td><p>$O(N^3)$</p></td>
+</tr>
+<tr class="row-odd"><td><p>n-body</p></td>
+<td><p>$\binom{N}{n}$</p></td>
+<td><p>$O(N^n)$</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="distance-screening">
+<h3>Distance Screening<a class="headerlink" href="#distance-screening" title="Link to this heading"></a></h3>
+<p>Reduce calculations by screening distant pairs:</p>
+<p>$$
+\Delta E_{ij} \approx 0 \quad \text{if} \quad R_{ij} &gt; R_{\text{cutoff}}
+$$</p>
+<p>Typical cutoffs:</p>
+<ul class="simple">
+<li><p>Two-body: 10-15 Å (electrostatics), 6-8 Å (exchange)</p></li>
+<li><p>Three-body: 6-8 Å</p></li>
+</ul>
+<p>With screening, effective scaling drops to $O(N)$ for large systems.</p>
+</section>
+<section id="parallelization">
+<h3>Parallelization<a class="headerlink" href="#parallelization" title="Link to this heading"></a></h3>
+<p>MBE is <strong>embarrassingly parallel</strong>:</p>
+<ul class="simple">
+<li><p>All $n$-body calculations at a given order are independent</p></li>
+<li><p>Natural fit for distributed computing</p></li>
+<li><p>Near-linear parallel speedup</p></li>
+</ul>
+</section>
+</section>
+<section id="hierarchy-of-methods">
+<h2>Hierarchy of Methods<a class="headerlink" href="#hierarchy-of-methods" title="Link to this heading"></a></h2>
+<section id="electrostatically-embedded-mbe-ee-mbe">
+<h3>Electrostatically Embedded MBE (EE-MBE)<a class="headerlink" href="#electrostatically-embedded-mbe-ee-mbe" title="Link to this heading"></a></h3>
+<p>Include electrostatic environment in fragment calculations:</p>
+<p>$$
+E_i^{\text{embed}} = E_i^{\text{QM}} + \sum_{j \neq i} E_{ij}^{\text{point-charge}}
+$$</p>
+<p>Improves two-body truncation by capturing polarization.</p>
+</section>
+<section id="systematic-molecular-fragmentation-smf">
+<h3>Systematic Molecular Fragmentation (SMF)<a class="headerlink" href="#systematic-molecular-fragmentation-smf" title="Link to this heading"></a></h3>
+<p>Uses graph-based fragmentation with overlapping fragments. Energy reconstructed via inclusion-exclusion.</p>
+</section>
+<section id="generalized-mbe-gmbe">
+<h3>Generalized MBE (GMBE)<a class="headerlink" href="#generalized-mbe-gmbe" title="Link to this heading"></a></h3>
+<p>Allows overlapping fragments with proper overcounting corrections.</p>
+</section>
+</section>
+<section id="implementation-notes">
+<h2>Implementation Notes<a class="headerlink" href="#implementation-notes" title="Link to this heading"></a></h2>
+<section id="fragmentation-with-autofragment">
+<h3>Fragmentation with autofragment<a class="headerlink" href="#fragmentation-with-autofragment" title="Link to this heading"></a></h3>
+<p>autofragment handles the fragmentation step of an MBE workflow — partitioning a
+molecular system into fragments and writing QC input files. The n-body expansion
+and energy assembly are performed externally after running the individual QC
+calculations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">af</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span>
+
+<span class="c1"># Fragment a water cluster</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;water20.xyz&quot;</span><span class="p">)</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span><span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="c1"># Write input files for fragment-based calculations</span>
+<span class="n">write_gamess_fmo</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;water_fmo.inp&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="../guides/water_clusters.html"><span class="std std-doc">Water Clusters Tutorial</span></a> for a complete
+workflow.</p>
+</section>
+<section id="energy-assembly">
+<h3>Energy Assembly<a class="headerlink" href="#energy-assembly" title="Link to this heading"></a></h3>
+<p>For MBE(2):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">E_total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">monomer_energies</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">dimer_pairs</span><span class="p">:</span>
+    <span class="n">E_total</span> <span class="o">+=</span> <span class="n">dimer_energies</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)]</span> <span class="o">-</span> <span class="n">monomer_energies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">monomer_energies</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For MBE(3):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">E_total</span> <span class="o">=</span> <span class="n">compute_mbe2</span><span class="p">()</span>  <span class="c1"># Start with MBE(2)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">trimer_triples</span><span class="p">:</span>
+    <span class="n">delta_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">trimer_energies</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)]</span> 
+               <span class="o">-</span> <span class="n">dimer_energies</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)]</span> <span class="o">-</span> <span class="n">dimer_energies</span><span class="p">[(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)]</span> <span class="o">-</span> <span class="n">dimer_energies</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)]</span>
+               <span class="o">+</span> <span class="n">monomer_energies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">monomer_energies</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">monomer_energies</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+    <span class="n">E_total</span> <span class="o">+=</span> <span class="n">delta_3</span>
+</pre></div>
+</div>
+</section>
+<section id="gradient-assembly">
+<h3>Gradient Assembly<a class="headerlink" href="#gradient-assembly" title="Link to this heading"></a></h3>
+<p>MBE gradients follow the same pattern:</p>
+<p>$$
+\frac{\partial E_{\text{MBE}}}{\partial R_\alpha} = \sum_i \frac{\partial E_i}{\partial R_\alpha} + \sum_{i&lt;j} \frac{\partial \Delta E_{ij}}{\partial R_\alpha} + \cdots
+$$</p>
+<p>Each fragment gradient only affects coordinates within that fragment.</p>
+</section>
+</section>
+<section id="basis-set-superposition-error-bsse">
+<h2>Basis Set Superposition Error (BSSE)<a class="headerlink" href="#basis-set-superposition-error-bsse" title="Link to this heading"></a></h2>
+<section id="the-problem">
+<h3>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading"></a></h3>
+<p>When computing interaction energies, fragments can artificially lower their energy by using basis functions from neighboring fragments.</p>
+</section>
+<section id="counterpoise-correction">
+<h3>Counterpoise Correction<a class="headerlink" href="#counterpoise-correction" title="Link to this heading"></a></h3>
+<p>The Boys-Bernardi counterpoise correction for dimer interaction:</p>
+<p>$$
+\Delta E_{ij}^{\text{CP}} = E_{ij}^{AB} - E_i^{AB} - E_j^{AB}
+$$</p>
+<p>where superscript $AB$ indicates calculation in the combined basis of fragments $A$ and $B$.</p>
+<p>For MBE, apply counterpoise at each order with the full basis of all interacting fragments.</p>
+</section>
+</section>
+<section id="comparison-with-other-fragment-methods">
+<h2>Comparison with Other Fragment Methods<a class="headerlink" href="#comparison-with-other-fragment-methods" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Overlap</p></th>
+<th class="head"><p>Embedding</p></th>
+<th class="head"><p>Accuracy</p></th>
+<th class="head"><p>Scaling</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MBE</p></td>
+<td><p>No</p></td>
+<td><p>Optional</p></td>
+<td><p>Order-dependent</p></td>
+<td><p>$O(N^n)$</p></td>
+</tr>
+<tr class="row-odd"><td><p>FMO</p></td>
+<td><p>No</p></td>
+<td><p>Electrostatic</p></td>
+<td><p>High</p></td>
+<td><p>$O(N^2)$</p></td>
+</tr>
+<tr class="row-even"><td><p>SMF</p></td>
+<td><p>Yes</p></td>
+<td><p>None</p></td>
+<td><p>Size-dependent</p></td>
+<td><p>$O(N)$</p></td>
+</tr>
+<tr class="row-odd"><td><p>EE-MBE</p></td>
+<td><p>No</p></td>
+<td><p>Point charges</p></td>
+<td><p>High</p></td>
+<td><p>$O(N^2)$</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Link to this heading"></a></h2>
+<section id="water-clusters">
+<h3>Water Clusters<a class="headerlink" href="#water-clusters" title="Link to this heading"></a></h3>
+<p>Ideal for MBE(2-3):</p>
+<ul class="simple">
+<li><p>Weak, non-covalent interactions</p></li>
+<li><p>Fast convergence</p></li>
+<li><p>Accurate with counterpoise</p></li>
+</ul>
+</section>
+<section id="molecular-crystals">
+<h3>Molecular Crystals<a class="headerlink" href="#molecular-crystals" title="Link to this heading"></a></h3>
+<p>MBE for lattice energies:</p>
+<ul class="simple">
+<li><p>Periodic images become fragments</p></li>
+<li><p>Two-body captures most cohesive energy</p></li>
+<li><p>Three-body improves by ~5%</p></li>
+</ul>
+</section>
+<section id="reaction-energies">
+<h3>Reaction Energies<a class="headerlink" href="#reaction-energies" title="Link to this heading"></a></h3>
+<p>Compute reaction energies as difference:</p>
+<p>$$
+\Delta E_{\text{rxn}} = E_{\text{products}}^{\text{MBE}} - E_{\text{reactants}}^{\text{MBE}}
+$$</p>
+<p>Error cancellation often improves accuracy.</p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Dahlke, E. E., &amp; Truhlar, D. G. (2007). Electrostatically embedded many-body expansion for large systems. <em>JCTC</em>, 3(1), 46-53.</p></li>
+<li><p>Fedorov, D. G., &amp; Kitaura, K. (2007). Pair interaction energy decomposition analysis. <em>JCC</em>, 28(1), 222-237.</p></li>
+<li><p>Richard, R. M., &amp; Herbert, J. M. (2012). A generalized many-body expansion and a unified view of fragment-based methods. <em>JCP</em>, 137(6), 064113.</p></li>
+<li><p>Collins, M. A., &amp; Bettens, R. P. (2015). Energy-based molecular fragmentation methods. <em>Chemical Reviews</em>, 115(12), 5607-5642.</p></li>
+<li><p>Beran, G. J. (2016). Modeling polymorphic molecular crystals with electronic structure theory. <em>Chemical Reviews</em>, 116(9), 5567-5613.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="scoring.html" class="btn btn-neutral float-left" title="Fragmentation Scoring Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qmmm.html" class="btn btn-neutral float-right" title="QM/MM and Embedding Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

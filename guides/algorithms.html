@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fragmentation Algorithms Guide &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Biological System Support" href="../biological.html" />
+    <link rel="prev" title="Fragmentation Rules" href="../rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fragmentation Algorithms Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clustering-algorithms">Clustering Algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#topology-assisted-refinement">Topology-Assisted Refinement</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#k-means-seeding-strategies">K-Means Seeding Strategies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#direct-seeding-api">Direct Seeding API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-partitioning">Graph Partitioning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#min-cut-stoer-wagner">Min-Cut (Stoer-Wagner)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#balanced-partitioning-kernighan-lin">Balanced Partitioning (Kernighan-Lin)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#community-detection-louvain">Community Detection (Louvain)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scoring">Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-the-right-algorithm">Choosing the Right Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fragmentation Algorithms Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/algorithms.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fragmentation-algorithms-guide">
+<h1>Fragmentation Algorithms Guide<a class="headerlink" href="#fragmentation-algorithms-guide" title="Link to this heading"></a></h1>
+<p>AutoFragment provides a suite of algorithms for molecular fragmentation, ranging from simple clustering to advanced graph partitioning. This guide covers how to choose, configure, and combine these algorithms for optimal results.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Fragmentation in AutoFragment typically follows one of two paradigms:</p>
+<ol class="arabic simple">
+<li><p><strong>Clustering</strong>: Spatial-based partitioning using atom/molecule coordinates.</p></li>
+<li><p><strong>Graph Partitioning</strong>: Topology-based partitioning using bond connectivity.</p></li>
+</ol>
+</section>
+<section id="clustering-algorithms">
+<h2>Clustering Algorithms<a class="headerlink" href="#clustering-algorithms" title="Link to this heading"></a></h2>
+<p>Clustering is fast and effective for systems without a complex covalent network, such as water clusters or solvent boxes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+
+<span class="c1"># Use standard k-means (default)</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span>
+<span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Available clustering methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kmeans</span></code>: Standard k-means (default, no extra dependencies).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code>: K-means with size constraints (requires <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">autofragment[balanced]</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spectral</span></code>: Spectral clustering on the adjacency matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agglomerative</span></code>: Hierarchical clustering.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gmm</span></code>: Gaussian Mixture Models.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">birch</span></code>: BIRCH incremental clustering.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geom_planes</span></code>: Geometric plane-based partitioning.</p></li>
+</ul>
+<section id="topology-assisted-refinement">
+<h3>Topology-Assisted Refinement<a class="headerlink" href="#topology-assisted-refinement" title="Link to this heading"></a></h3>
+<p>For systems where pure spatial clustering is ambiguous, you can apply topology-based post-refinement to improve chemical locality.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+    <span class="n">topology_refine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">topology_mode</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>      <span class="c1"># or &quot;euclidean&quot;</span>
+    <span class="n">topology_hops</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">topology_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">topology_k_per_layer</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">topology_bond_policy</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span> <span class="c1"># or &quot;strict&quot;</span>
+<span class="p">)</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This refinement keeps default behavior unchanged when <code class="docutils literal notranslate"><span class="pre">topology_refine=False</span></code>.</p>
+</section>
+</section>
+<section id="k-means-seeding-strategies">
+<h2>K-Means Seeding Strategies<a class="headerlink" href="#k-means-seeding-strategies" title="Link to this heading"></a></h2>
+<p>AutoFragment provides pluggable initialization strategies for k-means clustering,
+giving better control over initial centroid placement:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+
+<span class="c1"># Use PCA-based seeding</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="n">init_strategy</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Available strategies:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Strategy</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;halfplane&quot;</span></code></p></td>
+<td><p>Angular sectors in the PCA plane</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;pca&quot;</span></code></p></td>
+<td><p>Binning along the first principal component</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;axis&quot;</span></code></p></td>
+<td><p>Binning along a Cartesian axis (auto-detected or explicit)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;radial&quot;</span></code></p></td>
+<td><p>XY angular sectors around the center of mass</p></td>
+</tr>
+</tbody>
+</table>
+<p>For the <code class="docutils literal notranslate"><span class="pre">axis</span></code> strategy, you can specify which axis to use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+    <span class="n">init_strategy</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;axis&quot;</span><span class="p">,</span> <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="s2">&quot;z&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Seeding strategies also work with <code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code>. They are silently ignored
+for methods that don’t support custom initialization (agglomerative, spectral, etc.).</p>
+<section id="direct-seeding-api">
+<h3>Direct Seeding API<a class="headerlink" href="#direct-seeding-api" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.seeding</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_seeds</span><span class="p">,</span> <span class="n">SEEDING_STRATEGIES</span>
+
+<span class="c1"># Compute seed centroids directly</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="n">compute_seeds</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+<span class="c1"># seeds.shape == (4, 3)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="graph-partitioning">
+<h2>Graph Partitioning<a class="headerlink" href="#graph-partitioning" title="Link to this heading"></a></h2>
+<p>Graph-based methods use the covalent connectivity of the molecule to find natural “cut points,” avoiding breaking strong bonds or rings.</p>
+<section id="min-cut-stoer-wagner">
+<h3>Min-Cut (Stoer-Wagner)<a class="headerlink" href="#min-cut-stoer-wagner" title="Link to this heading"></a></h3>
+<p>Finds the global minimum cut in the molecular graph.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.graph_partition</span><span class="w"> </span><span class="kn">import</span> <span class="n">min_cut_partition</span>
+
+<span class="c1"># Find the easiest way to split a molecule in two</span>
+<span class="n">cut_edges</span><span class="p">,</span> <span class="n">partition1</span><span class="p">,</span> <span class="n">partition2</span> <span class="o">=</span> <span class="n">min_cut_partition</span><span class="p">(</span><span class="n">molecular_graph</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="balanced-partitioning-kernighan-lin">
+<h3>Balanced Partitioning (Kernighan-Lin)<a class="headerlink" href="#balanced-partitioning-kernighan-lin" title="Link to this heading"></a></h3>
+<p>Recursive bisection that prioritizes equal-sized fragments while minimizing the weight of cut bonds.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.graph_partition</span><span class="w"> </span><span class="kn">import</span> <span class="n">balanced_partition</span>
+
+<span class="c1"># Split into 4 balanced fragments</span>
+<span class="n">groups</span> <span class="o">=</span> <span class="n">balanced_partition</span><span class="p">(</span><span class="n">molecular_graph</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="community-detection-louvain">
+<h3>Community Detection (Louvain)<a class="headerlink" href="#community-detection-louvain" title="Link to this heading"></a></h3>
+<p>Finds “communities” or natural clusters based on modularity. Excellent for discovery-based fragmentation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.graph_partition</span><span class="w"> </span><span class="kn">import</span> <span class="n">community_partition</span>
+
+<span class="c1"># Discover natural fragments</span>
+<span class="n">communities</span> <span class="o">=</span> <span class="n">community_partition</span><span class="p">(</span><span class="n">molecular_graph</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;louvain&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="scoring">
+<h2>Scoring<a class="headerlink" href="#scoring" title="Link to this heading"></a></h2>
+<p>The scoring system allows you to quantify the quality of a fragmentation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.scoring</span><span class="w"> </span><span class="kn">import</span> <span class="n">FragmentationScore</span>
+
+<span class="n">score</span> <span class="o">=</span> <span class="n">FragmentationScore</span><span class="p">(</span>
+    <span class="n">bond_penalty</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
+    <span class="n">size_variance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">interface_score</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">integrity_score</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Score: </span><span class="si">{</span><span class="n">score</span><span class="o">.</span><span class="n">total</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bond Penalty: </span><span class="si">{</span><span class="n">score</span><span class="o">.</span><span class="n">bond_penalty</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Size Variance: </span><span class="si">{</span><span class="n">score</span><span class="o">.</span><span class="n">size_variance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Preset scoring weights for common use cases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.scoring</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScoringWeights</span>
+
+<span class="c1"># For FMO calculations</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">ScoringWeights</span><span class="o">.</span><span class="n">for_fmo</span><span class="p">()</span>
+
+<span class="c1"># For many-body expansion</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">ScoringWeights</span><span class="o">.</span><span class="n">for_mbe</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="choosing-the-right-algorithm">
+<h2>Choosing the Right Algorithm<a class="headerlink" href="#choosing-the-right-algorithm" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>System Type</p></th>
+<th class="head"><p>Recommended Method</p></th>
+<th class="head"><p>Why?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Water Clusters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kmeans</span></code> or <code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code></p></td>
+<td><p>Spatial proximity is key; uniform sizes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Large Water Clusters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kmeans</span></code> with <code class="docutils literal notranslate"><span class="pre">tiers=2</span></code></p></td>
+<td><p>Hierarchical grouping for HMBE workflows.</p></td>
+</tr>
+<tr class="row-even"><td><p>Proteins</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bio</span></code> (BioPartitioner)</p></td>
+<td><p>Respects biological units and capping.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Large Molecules</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">balanced_partition</span></code></p></td>
+<td><p>Maintains chemical connectivity while balancing load.</p></td>
+</tr>
+<tr class="row-even"><td><p>Disordered Solids</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">community_partition</span></code></p></td>
+<td><p>Finds natural clusters in complex networks.</p></td>
+</tr>
+</tbody>
+</table>
+<p>See the <a class="reference internal" href="../theory/scoring.html"><span class="std std-doc">Theory Section</span></a> for the mathematical details behind these algorithms.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../rules.html" class="btn btn-neutral float-left" title="Fragmentation Rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../biological.html" class="btn btn-neutral float-right" title="Biological System Support" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

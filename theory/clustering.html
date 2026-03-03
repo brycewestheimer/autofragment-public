@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clustering Algorithms for Molecular Fragmentation &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Graph Partitioning for Molecular Fragmentation" href="graph_partitioning.html" />
+    <link rel="prev" title="Output format" href="../output.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering Algorithms for Molecular Fragmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#k-means-clustering">K-Means Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objective-function">Objective Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#algorithm-lloyd-s-method">Algorithm (Lloyd’s Method)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-strategies">Initialization Strategies</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#random-initialization">Random Initialization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k-means-recommended">K-means++ (Recommended)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#convergence-properties">Convergence Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complexity-analysis">Complexity Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#spectral-clustering">Spectral Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#molecular-graph-representation">Molecular Graph Representation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#affinity-matrix">Affinity Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#degree-matrix">Degree Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#graph-laplacian">Graph Laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#normalized-laplacian">Normalized Laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectral-clustering-algorithm">Spectral Clustering Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectral-gap-heuristic">Spectral Gap Heuristic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Complexity Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hierarchical-clustering">Hierarchical Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#agglomerative-clustering">Agglomerative Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linkage-criteria">Linkage Criteria</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-number-of-clusters">Choosing Number of Clusters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#application-to-molecular-fragmentation">Application to Molecular Fragmentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#distance-metrics-for-molecules">Distance Metrics for Molecules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constraint-aware-clustering">Constraint-Aware Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Clustering Algorithms for Molecular Fragmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/clustering.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="clustering-algorithms-for-molecular-fragmentation">
+<h1>Clustering Algorithms for Molecular Fragmentation<a class="headerlink" href="#clustering-algorithms-for-molecular-fragmentation" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Clustering algorithms partition atoms or molecular units into groups based on spatial proximity, connectivity, or chemical similarity. In molecular fragmentation, these algorithms help identify natural groupings that can be treated as computational fragments.</p>
+<p>AutoFragment implements several clustering approaches, each with distinct advantages:</p>
+<ul class="simple">
+<li><p><strong>K-means</strong>: Fast, scalable, best for roughly spherical clusters</p></li>
+<li><p><strong>Spectral clustering</strong>: Captures complex connectivity patterns</p></li>
+<li><p><strong>Hierarchical methods</strong>: Produces nested fragment hierarchies</p></li>
+</ul>
+</section>
+<section id="k-means-clustering">
+<h2>K-Means Clustering<a class="headerlink" href="#k-means-clustering" title="Link to this heading"></a></h2>
+<section id="objective-function">
+<h3>Objective Function<a class="headerlink" href="#objective-function" title="Link to this heading"></a></h3>
+<p>Given $n$ atoms and $k$ target fragments, k-means minimizes the within-cluster sum of squares (WCSS):</p>
+<p>$$
+J = \sum_{i=1}^{k} \sum_{\mathbf{x} \in C_i} |\mathbf{x} - \boldsymbol{\mu}_i|^2
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$C_i$ is the set of atoms in cluster $i$</p></li>
+<li><p>$\boldsymbol{\mu}<em>i = \frac{1}{|C_i|} \sum</em>{\mathbf{x} \in C_i} \mathbf{x}$ is the centroid of cluster $i$</p></li>
+<li><p>$|\cdot|$ denotes the Euclidean distance</p></li>
+</ul>
+</section>
+<section id="algorithm-lloyd-s-method">
+<h3>Algorithm (Lloyd’s Method)<a class="headerlink" href="#algorithm-lloyd-s-method" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Initialize</strong>: Choose $k$ initial centroids $\boldsymbol{\mu}_1^{(0)}, \ldots, \boldsymbol{\mu}_k^{(0)}$</p></li>
+<li><p><strong>Assign</strong>: For each atom $\mathbf{x}<em>j$, assign to nearest centroid:
+$$
+c_j^{(t)} = \arg\min</em>{i} |\mathbf{x}_j - \boldsymbol{\mu}_i^{(t)}|^2
+$$</p></li>
+<li><p><strong>Update</strong>: Recompute centroids:
+$$
+\boldsymbol{\mu}<em>i^{(t+1)} = \frac{1}{|C_i^{(t)}|} \sum</em>{\mathbf{x}_j \in C_i^{(t)}} \mathbf{x}_j
+$$</p></li>
+<li><p><strong>Repeat</strong>: Until convergence ($c_j^{(t+1)} = c_j^{(t)}$ for all $j$)</p></li>
+</ol>
+</section>
+<section id="initialization-strategies">
+<h3>Initialization Strategies<a class="headerlink" href="#initialization-strategies" title="Link to this heading"></a></h3>
+<section id="random-initialization">
+<h4>Random Initialization<a class="headerlink" href="#random-initialization" title="Link to this heading"></a></h4>
+<p>Select $k$ atoms uniformly at random as initial centroids. Simple but can lead to poor local minima.</p>
+</section>
+<section id="k-means-recommended">
+<h4>K-means++ (Recommended)<a class="headerlink" href="#k-means-recommended" title="Link to this heading"></a></h4>
+<p>Weighted random selection that favors spread-out centroids:</p>
+<ol class="arabic simple">
+<li><p>Choose first centroid uniformly at random</p></li>
+<li><p>For each atom $\mathbf{x}_j$, compute $D(\mathbf{x}_j)$ = distance to nearest centroid</p></li>
+<li><p>Choose next centroid with probability:
+$$
+P(\mathbf{x}<em>j) = \frac{D(\mathbf{x}<em>j)^2}{\sum</em>{\ell} D(\mathbf{x}</em>\ell)^2}
+$$</p></li>
+<li><p>Repeat until $k$ centroids chosen</p></li>
+</ol>
+<p>K-means++ provides an expected approximation ratio of $O(\log k)$ compared to optimal clustering.</p>
+</section>
+</section>
+<section id="convergence-properties">
+<h3>Convergence Properties<a class="headerlink" href="#convergence-properties" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Guaranteed convergence</strong>: The objective $J$ decreases monotonically and is bounded below</p></li>
+<li><p><strong>Local minimum</strong>: Converges to local (not necessarily global) minimum</p></li>
+<li><p><strong>Recommendation</strong>: Run multiple restarts (typically 10-20) and select best solution</p></li>
+</ul>
+</section>
+<section id="complexity-analysis">
+<h3>Complexity Analysis<a class="headerlink" href="#complexity-analysis" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Time Complexity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>One iteration</p></td>
+<td><p>$O(nkd)$</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total (t iterations)</p></td>
+<td><p>$O(tnkd)$</p></td>
+</tr>
+<tr class="row-even"><td><p>K-means++ init</p></td>
+<td><p>$O(nk)$</p></td>
+</tr>
+</tbody>
+</table>
+<p>where $n$ = number of atoms, $k$ = number of clusters, $d$ = dimension (typically 3 for coordinates).</p>
+</section>
+</section>
+<section id="spectral-clustering">
+<h2>Spectral Clustering<a class="headerlink" href="#spectral-clustering" title="Link to this heading"></a></h2>
+<p>Spectral clustering uses eigenvalues of a graph Laplacian matrix to embed atoms in a space where k-means works well, even for non-convex clusters.</p>
+<section id="molecular-graph-representation">
+<h3>Molecular Graph Representation<a class="headerlink" href="#molecular-graph-representation" title="Link to this heading"></a></h3>
+<p>Represent the molecule as a weighted graph $G = (V, E, W)$:</p>
+<ul class="simple">
+<li><p>Vertices $V$: atoms</p></li>
+<li><p>Edges $E$: bonds or proximity-based connections</p></li>
+<li><p>Weights $W$: bond strengths, distances, or interaction energies</p></li>
+</ul>
+</section>
+<section id="affinity-matrix">
+<h3>Affinity Matrix<a class="headerlink" href="#affinity-matrix" title="Link to this heading"></a></h3>
+<p>The affinity (or similarity) matrix $A \in \mathbb{R}^{n \times n}$ encodes pairwise relationships:</p>
+<p>$$
+A_{ij} = \begin{cases}
+w_{ij} &amp; \text{if atoms } i, j \text{ are connected} \
+0 &amp; \text{otherwise}
+\end{cases}
+$$</p>
+<p>For distance-based affinity, use Gaussian kernel:</p>
+<p>$$
+A_{ij} = \exp\left(-\frac{|\mathbf{x}_i - \mathbf{x}_j|^2}{2\sigma^2}\right)
+$$</p>
+</section>
+<section id="degree-matrix">
+<h3>Degree Matrix<a class="headerlink" href="#degree-matrix" title="Link to this heading"></a></h3>
+<p>The degree matrix $D \in \mathbb{R}^{n \times n}$ is diagonal:</p>
+<p>$$
+D_{ii} = \sum_{j=1}^{n} A_{ij} = d_i
+$$</p>
+</section>
+<section id="graph-laplacian">
+<h3>Graph Laplacian<a class="headerlink" href="#graph-laplacian" title="Link to this heading"></a></h3>
+<p>The <strong>unnormalized Laplacian</strong>:</p>
+<p>$$
+L = D - A
+$$</p>
+<p>Properties:</p>
+<ul class="simple">
+<li><p>Symmetric, positive semi-definite</p></li>
+<li><p>Smallest eigenvalue is 0 with eigenvector $\mathbf{1}$</p></li>
+<li><p>Number of 0 eigenvalues = number of connected components</p></li>
+</ul>
+</section>
+<section id="normalized-laplacian">
+<h3>Normalized Laplacian<a class="headerlink" href="#normalized-laplacian" title="Link to this heading"></a></h3>
+<p>The <strong>symmetric normalized Laplacian</strong>:</p>
+<p>$$
+L_{\text{sym}} = D^{-1/2} L D^{-1/2} = I - D^{-1/2} A D^{-1/2}
+$$</p>
+<p>The <strong>random walk Laplacian</strong>:</p>
+<p>$$
+L_{\text{rw}} = D^{-1} L = I - D^{-1} A
+$$</p>
+</section>
+<section id="spectral-clustering-algorithm">
+<h3>Spectral Clustering Algorithm<a class="headerlink" href="#spectral-clustering-algorithm" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Compute the first $k$ eigenvectors of $L_{\text{sym}}$ (smallest eigenvalues):
+$$
+L_{\text{sym}} \mathbf{u}_i = \lambda_i \mathbf{u}_i, \quad i = 1, \ldots, k
+$$</p></li>
+<li><p>Form matrix $U \in \mathbb{R}^{n \times k}$ with eigenvectors as columns</p></li>
+<li><p>Normalize rows of $U$ to unit length:
+$$
+\tilde{\mathbf{u}}_j = \frac{\mathbf{u}_j}{|\mathbf{u}_j|}
+$$</p></li>
+<li><p>Apply k-means to the rows of $\tilde{U}$ to obtain clusters</p></li>
+</ol>
+</section>
+<section id="spectral-gap-heuristic">
+<h3>Spectral Gap Heuristic<a class="headerlink" href="#spectral-gap-heuristic" title="Link to this heading"></a></h3>
+<p>The optimal number of clusters can be estimated from the <strong>spectral gap</strong>:</p>
+<p>$$
+k^* = \arg\max_k (\lambda_{k+1} - \lambda_k)
+$$</p>
+<p>A large gap indicates natural cluster structure.</p>
+</section>
+<section id="id1">
+<h3>Complexity Analysis<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Time Complexity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Laplacian construction</p></td>
+<td><p>$O(n^2)$ or $O(</p></td>
+</tr>
+<tr class="row-odd"><td><p>Eigendecomposition</p></td>
+<td><p>$O(n^3)$ or $O(kn^2)$ for $k$ eigenvectors</p></td>
+</tr>
+<tr class="row-even"><td><p>K-means on embeddings</p></td>
+<td><p>$O(tnk^2)$</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="hierarchical-clustering">
+<h2>Hierarchical Clustering<a class="headerlink" href="#hierarchical-clustering" title="Link to this heading"></a></h2>
+<section id="agglomerative-clustering">
+<h3>Agglomerative Clustering<a class="headerlink" href="#agglomerative-clustering" title="Link to this heading"></a></h3>
+<p>Bottom-up approach that builds a hierarchy (dendrogram):</p>
+<ol class="arabic simple">
+<li><p>Start with each atom as its own cluster</p></li>
+<li><p>Merge the two closest clusters</p></li>
+<li><p>Repeat until single cluster remains</p></li>
+</ol>
+</section>
+<section id="linkage-criteria">
+<h3>Linkage Criteria<a class="headerlink" href="#linkage-criteria" title="Link to this heading"></a></h3>
+<p>Distance between clusters $C_i$ and $C_j$:</p>
+<p><strong>Single linkage</strong> (minimum):
+$$
+d(C_i, C_j) = \min_{\mathbf{x} \in C_i, \mathbf{y} \in C_j} |\mathbf{x} - \mathbf{y}|
+$$</p>
+<p><strong>Complete linkage</strong> (maximum):
+$$
+d(C_i, C_j) = \max_{\mathbf{x} \in C_i, \mathbf{y} \in C_j} |\mathbf{x} - \mathbf{y}|
+$$</p>
+<p><strong>Average linkage</strong> (UPGMA):
+$$
+d(C_i, C_j) = \frac{1}{|C_i||C_j|} \sum_{\mathbf{x} \in C_i} \sum_{\mathbf{y} \in C_j} |\mathbf{x} - \mathbf{y}|
+$$</p>
+<p><strong>Ward’s method</strong> (minimize variance):
+$$
+d(C_i, C_j) = \frac{|C_i||C_j|}{|C_i| + |C_j|} |\boldsymbol{\mu}_i - \boldsymbol{\mu}_j|^2
+$$</p>
+</section>
+<section id="choosing-number-of-clusters">
+<h3>Choosing Number of Clusters<a class="headerlink" href="#choosing-number-of-clusters" title="Link to this heading"></a></h3>
+<p>Cut the dendrogram at a chosen height or number of clusters. For molecular fragmentation, Ward’s method often produces the most balanced fragments.</p>
+</section>
+</section>
+<section id="application-to-molecular-fragmentation">
+<h2>Application to Molecular Fragmentation<a class="headerlink" href="#application-to-molecular-fragmentation" title="Link to this heading"></a></h2>
+<section id="distance-metrics-for-molecules">
+<h3>Distance Metrics for Molecules<a class="headerlink" href="#distance-metrics-for-molecules" title="Link to this heading"></a></h3>
+<p>Beyond Euclidean distance, consider:</p>
+<p><strong>Through-space distance</strong>:
+$$
+d_{\text{space}}(\mathbf{x}_i, \mathbf{x}_j) = |\mathbf{x}_i - \mathbf{x}_j|
+$$</p>
+<p><strong>Through-bond distance</strong>:
+$$
+d_{\text{bond}}(i, j) = \text{shortest path in molecular graph}
+$$</p>
+<p><strong>Weighted distance</strong>:
+$$
+d_{\text{combined}}(i, j) = \alpha \cdot d_{\text{space}}(i, j) + (1-\alpha) \cdot d_{\text{bond}}(i, j)
+$$</p>
+</section>
+<section id="constraint-aware-clustering">
+<h3>Constraint-Aware Clustering<a class="headerlink" href="#constraint-aware-clustering" title="Link to this heading"></a></h3>
+<p>Incorporate chemical constraints:</p>
+<ul class="simple">
+<li><p><strong>Must-link</strong>: Atoms that must be in the same fragment</p></li>
+<li><p><strong>Cannot-link</strong>: Atoms that must be in different fragments</p></li>
+</ul>
+<p>These constraints can be incorporated into spectral clustering by modifying the affinity matrix.</p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Lloyd, S. P. (1982). Least squares quantization in PCM. <em>IEEE Transactions on Information Theory</em>, 28(2), 129-137.</p></li>
+<li><p>Arthur, D., &amp; Vassilvitskii, S. (2007). k-means++: The advantages of careful seeding. <em>SODA</em>, 1027-1035.</p></li>
+<li><p>Von Luxburg, U. (2007). A tutorial on spectral clustering. <em>Statistics and Computing</em>, 17(4), 395-416.</p></li>
+<li><p>Ng, A. Y., Jordan, M. I., &amp; Weiss, Y. (2001). On spectral clustering: Analysis and an algorithm. <em>NIPS</em>, 849-856.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../output.html" class="btn btn-neutral float-left" title="Output format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="graph_partitioning.html" class="btn btn-neutral float-right" title="Graph Partitioning for Molecular Fragmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

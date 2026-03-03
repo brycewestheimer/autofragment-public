@@ -1,0 +1,597 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QM/MM and Embedding Theory &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api/index.html" />
+    <link rel="prev" title="Many-Body Expansion (MBE) Theory" href="mbe.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">QM/MM and Embedding Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#qm-mm-energy-expression">QM/MM Energy Expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#embedding-schemes">Embedding Schemes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mechanical-embedding">Mechanical Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#electrostatic-embedding">Electrostatic Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#polarizable-embedding">Polarizable Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparison-of-embedding-schemes">Comparison of Embedding Schemes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#boundary-treatments">Boundary Treatments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#link-atoms">Link Atoms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#g-factor-calculation">G-Factor Calculation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#link-atom-force-distribution">Link Atom Force Distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#charge-redistribution">Charge Redistribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frontier-bonds">Frontier Bonds</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#oniom-method">ONIOM Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#two-layer-oniom">Two-Layer ONIOM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#three-layer-oniom">Three-Layer ONIOM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oniom-gradients">ONIOM Gradients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#effective-fragment-potential-efp">Effective Fragment Potential (EFP)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#efp-energy-decomposition">EFP Energy Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advantages-over-point-charge-mm">Advantages over Point-Charge MM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-in-autofragment">Implementation in AutoFragment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-qm-mm-setup">Basic QM/MM Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oniom-setup">ONIOM Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qm-region-selection">QM Region Selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embedding-scheme-choice">Embedding Scheme Choice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#link-atom-placement">Link Atom Placement</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">QM/MM and Embedding Theory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/theory/qmmm.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="qm-mm-and-embedding-theory">
+<h1>QM/MM and Embedding Theory<a class="headerlink" href="#qm-mm-and-embedding-theory" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>Hybrid Quantum Mechanics/Molecular Mechanics (QM/MM) methods partition a molecular system into regions treated with different levels of theory. The active site or region of interest is treated quantum mechanically, while the surrounding environment is treated with classical force fields.</p>
+<p>This approach enables:</p>
+<ul class="simple">
+<li><p>Accurate treatment of chemically important regions</p></li>
+<li><p>Inclusion of environmental effects</p></li>
+<li><p>Computational tractability for large systems</p></li>
+</ul>
+</section>
+<section id="qm-mm-energy-expression">
+<h2>QM/MM Energy Expression<a class="headerlink" href="#qm-mm-energy-expression" title="Link to this heading"></a></h2>
+<p>The total QM/MM energy is partitioned as:</p>
+<p>$$
+E_{\text{QM/MM}} = E_{\text{QM}} + E_{\text{MM}} + E_{\text{QM-MM}}
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$E_{\text{QM}}$: Quantum mechanical energy of the QM region</p></li>
+<li><p>$E_{\text{MM}}$: Molecular mechanics energy of the MM region</p></li>
+<li><p>$E_{\text{QM-MM}}$: Coupling between QM and MM regions</p></li>
+</ul>
+<p>The coupling term $E_{\text{QM-MM}}$ depends on the <strong>embedding scheme</strong>.</p>
+</section>
+<section id="embedding-schemes">
+<h2>Embedding Schemes<a class="headerlink" href="#embedding-schemes" title="Link to this heading"></a></h2>
+<section id="mechanical-embedding">
+<h3>Mechanical Embedding<a class="headerlink" href="#mechanical-embedding" title="Link to this heading"></a></h3>
+<p>The simplest approach—only non-bonded classical interactions between regions:</p>
+<p>$$
+E_{\text{QM-MM}}^{\text{mech}} = \sum_{i \in \text{QM}} \sum_{j \in \text{MM}} \left[ \frac{q_i q_j}{r_{ij}} + E_{\text{LJ}}(r_{ij}) \right]
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$q_i$, $q_j$ are partial atomic charges</p></li>
+<li><p>$E_{\text{LJ}}$ is Lennard-Jones (van der Waals) interaction</p></li>
+</ul>
+<p><strong>QM calculation</strong>: Performed in vacuum (no MM influence on wavefunction)</p>
+<p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p>Simple implementation</p></li>
+<li><p>Fast QM calculations</p></li>
+<li><p>No special QM-MM interface needed</p></li>
+</ul>
+<p><strong>Disadvantages</strong>:</p>
+<ul class="simple">
+<li><p>QM region not polarized by environment</p></li>
+<li><p>May miss important electronic effects</p></li>
+</ul>
+</section>
+<section id="electrostatic-embedding">
+<h3>Electrostatic Embedding<a class="headerlink" href="#electrostatic-embedding" title="Link to this heading"></a></h3>
+<p>MM point charges polarize the QM wavefunction:</p>
+<p>$$
+\hat{H}_{\text{QM}} = \hat{H}<em>0 + \sum</em>{j \in \text{MM}} \sum_k^{\text{elec}} \frac{-q_j}{|\mathbf{r}_k - \mathbf{R}_j|}
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$\hat{H}_0$ is the isolated QM Hamiltonian</p></li>
+<li><p>$\mathbf{r}_k$ is electron position</p></li>
+<li><p>$\mathbf{R}_j$ is MM atom position</p></li>
+<li><p>$q_j$ is MM point charge</p></li>
+</ul>
+<p>The QM-MM electrostatic interaction energy:</p>
+<p>$$
+E_{\text{QM-MM}}^{\text{elec}} = \sum_{j \in \text{MM}} \sum_{A \in \text{QM}} \frac{Z_A , q_j}{|\mathbf{R}_A - \mathbf{R}<em>j|} + \int \rho(\mathbf{r}) , V</em>{\text{MM}}(\mathbf{r}) , d\mathbf{r}
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$Z_A$ is nuclear charge of QM atom</p></li>
+<li><p>$\rho(\mathbf{r})$ is electron density</p></li>
+<li><p>$V_{\text{MM}}(\mathbf{r}) = \sum_j \frac{q_j}{|\mathbf{r} - \mathbf{R}_j|}$ is MM electrostatic potential</p></li>
+</ul>
+<p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p>QM responds to MM environment</p></li>
+<li><p>Captures polarization of active site</p></li>
+<li><p>Appropriate for charged or polar environments</p></li>
+</ul>
+<p><strong>Disadvantages</strong>:</p>
+<ul class="simple">
+<li><p>MM charges are fixed (no back-polarization)</p></li>
+<li><p>Charge overpolarization near boundary</p></li>
+<li><p>QM code must support external point charges</p></li>
+</ul>
+</section>
+<section id="polarizable-embedding">
+<h3>Polarizable Embedding<a class="headerlink" href="#polarizable-embedding" title="Link to this heading"></a></h3>
+<p>Both regions mutually polarize each other:</p>
+<p>$$
+\boldsymbol{\mu}_j = \alpha_j \mathbf{E}(\mathbf{R}_j)
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$\boldsymbol{\mu}_j$ is the induced dipole on MM atom $j$</p></li>
+<li><p>$\alpha_j$ is the atomic polarizability</p></li>
+<li><p>$\mathbf{E}(\mathbf{R}_j)$ is the total electric field at $j$</p></li>
+</ul>
+<p>The electric field includes contributions from:</p>
+<ul class="simple">
+<li><p>QM nuclear charges</p></li>
+<li><p>QM electron density</p></li>
+<li><p>Other MM charges and induced dipoles</p></li>
+</ul>
+<p><strong>Self-consistent iteration</strong>:</p>
+<ol class="arabic simple">
+<li><p>Compute QM density with current MM dipoles</p></li>
+<li><p>Update MM induced dipoles from QM field</p></li>
+<li><p>Repeat until convergence</p></li>
+</ol>
+<p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p>Most accurate embedding</p></li>
+<li><p>Captures mutual polarization</p></li>
+<li><p>Appropriate for highly polarizable environments</p></li>
+</ul>
+<p><strong>Disadvantages</strong>:</p>
+<ul class="simple">
+<li><p>Requires iterative SCF</p></li>
+<li><p>More expensive</p></li>
+<li><p>Force field must include polarizabilities</p></li>
+</ul>
+</section>
+<section id="comparison-of-embedding-schemes">
+<h3>Comparison of Embedding Schemes<a class="headerlink" href="#comparison-of-embedding-schemes" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Mechanical</p></th>
+<th class="head"><p>Electrostatic</p></th>
+<th class="head"><p>Polarizable</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>QM cost</p></td>
+<td><p>Lowest</p></td>
+<td><p>Medium</p></td>
+<td><p>Highest</p></td>
+</tr>
+<tr class="row-odd"><td><p>MM effect on QM</p></td>
+<td><p>None</p></td>
+<td><p>Charges</p></td>
+<td><p>Charges + dipoles</p></td>
+</tr>
+<tr class="row-even"><td><p>QM effect on MM</p></td>
+<td><p>None</p></td>
+<td><p>None</p></td>
+<td><p>Induced dipoles</p></td>
+</tr>
+<tr class="row-odd"><td><p>Accuracy</p></td>
+<td><p>Low</p></td>
+<td><p>Medium</p></td>
+<td><p>High</p></td>
+</tr>
+<tr class="row-even"><td><p>Implementation</p></td>
+<td><p>Simple</p></td>
+<td><p>Moderate</p></td>
+<td><p>Complex</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="boundary-treatments">
+<h2>Boundary Treatments<a class="headerlink" href="#boundary-treatments" title="Link to this heading"></a></h2>
+<p>When covalent bonds cross the QM/MM boundary, special treatment is required.</p>
+<section id="link-atoms">
+<h3>Link Atoms<a class="headerlink" href="#link-atoms" title="Link to this heading"></a></h3>
+<p>Replace the MM atom at the boundary with a hydrogen-like atom:</p>
+<p>$$
+\mathbf{R}<em>{\text{link}} = \mathbf{R}</em>{\text{QM}} + g \cdot (\mathbf{R}<em>{\text{MM}} - \mathbf{R}</em>{\text{QM}})
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p>$\mathbf{R}_{\text{QM}}$ is the QM boundary atom position</p></li>
+<li><p>$\mathbf{R}_{\text{MM}}$ is the MM boundary atom position</p></li>
+<li><p>$g$ is the <strong>g-factor</strong> scaling the QM-MM distance to QM-H distance</p></li>
+</ul>
+<section id="g-factor-calculation">
+<h4>G-Factor Calculation<a class="headerlink" href="#g-factor-calculation" title="Link to this heading"></a></h4>
+<p>$$
+g = \frac{r_{\text{QM-H}}}{r_{\text{QM-MM}}}
+$$</p>
+<p>Typical values:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bond Type</p></th>
+<th class="head"><p>$r_{\text{QM-MM}}$ (Å)</p></th>
+<th class="head"><p>$r_{\text{QM-H}}$ (Å)</p></th>
+<th class="head"><p>g-factor</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C-C</p></td>
+<td><p>1.54</p></td>
+<td><p>1.09</p></td>
+<td><p>0.708</p></td>
+</tr>
+<tr class="row-odd"><td><p>C-N</p></td>
+<td><p>1.47</p></td>
+<td><p>1.09</p></td>
+<td><p>0.741</p></td>
+</tr>
+<tr class="row-even"><td><p>C-O</p></td>
+<td><p>1.43</p></td>
+<td><p>1.09</p></td>
+<td><p>0.762</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="link-atom-force-distribution">
+<h4>Link Atom Force Distribution<a class="headerlink" href="#link-atom-force-distribution" title="Link to this heading"></a></h4>
+<p>Forces on link atoms must be redistributed:</p>
+<p>$$
+\mathbf{F}<em>{\text{QM}} = \mathbf{F}</em>{\text{link}} \cdot g + \mathbf{F}_{\text{QM}}^{\text{direct}}
+$$</p>
+<p>$$
+\mathbf{F}<em>{\text{MM}} = \mathbf{F}</em>{\text{link}} \cdot (1 - g) + \mathbf{F}_{\text{MM}}^{\text{direct}}
+$$</p>
+</section>
+</section>
+<section id="charge-redistribution">
+<h3>Charge Redistribution<a class="headerlink" href="#charge-redistribution" title="Link to this heading"></a></h3>
+<p>Avoid overpolarization by MM charges close to QM region:</p>
+<p><strong>Charge shifting</strong>: Zero charges within cutoff, add to neighbors</p>
+<p><strong>Charge scaling</strong>: Gradually scale charges near boundary</p>
+<p><strong>Gaussian blur</strong>: Replace point charges with Gaussian distributions:</p>
+<p>$$
+q_j(\mathbf{r}) = q_j \left( \frac{\alpha}{\pi} \right)^{3/2} e^{-\alpha|\mathbf{r} - \mathbf{R}_j|^2}
+$$</p>
+</section>
+<section id="frontier-bonds">
+<h3>Frontier Bonds<a class="headerlink" href="#frontier-bonds" title="Link to this heading"></a></h3>
+<p>Constraint treatment of the QM-MM bond:</p>
+<ul class="simple">
+<li><p><strong>Distance constraint</strong>: Fix QM-MM distance</p></li>
+<li><p><strong>Harmonic restraint</strong>: Soft restraint to equilibrium distance</p></li>
+<li><p><strong>Bond parameterization</strong>: Include in MM force field</p></li>
+</ul>
+</section>
+</section>
+<section id="oniom-method">
+<h2>ONIOM Method<a class="headerlink" href="#oniom-method" title="Link to this heading"></a></h2>
+<p>ONIOM (Our own N-layered Integrated molecular Orbital and molecular mechanics) is an extrapolation scheme combining multiple levels of theory.</p>
+<section id="two-layer-oniom">
+<h3>Two-Layer ONIOM<a class="headerlink" href="#two-layer-oniom" title="Link to this heading"></a></h3>
+<p>$$
+E_{\text{ONIOM}} = E_{\text{real}}^{\text{low}} + E_{\text{model}}^{\text{high}} - E_{\text{model}}^{\text{low}}
+$$</p>
+<p>where:</p>
+<ul class="simple">
+<li><p><strong>real</strong>: Full system</p></li>
+<li><p><strong>model</strong>: Inner (high-level) region only</p></li>
+<li><p><strong>high</strong>: High-level method (e.g., DFT)</p></li>
+<li><p><strong>low</strong>: Low-level method (e.g., MM or semi-empirical)</p></li>
+</ul>
+<p>This extrapolates the high-level energy to the full system by correcting for environmental effects at low level.</p>
+</section>
+<section id="three-layer-oniom">
+<h3>Three-Layer ONIOM<a class="headerlink" href="#three-layer-oniom" title="Link to this heading"></a></h3>
+<p>For three regions (inner, middle, outer):</p>
+<p>$$
+\begin{align}
+E_{\text{ONIOM}} &amp;= E_{\text{real}}^{\text{low}} \
+&amp;\quad + E_{\text{middle}}^{\text{medium}} - E_{\text{middle}}^{\text{low}} \
+&amp;\quad + E_{\text{inner}}^{\text{high}} - E_{\text{inner}}^{\text{medium}}
+\end{align}
+$$</p>
+</section>
+<section id="oniom-gradients">
+<h3>ONIOM Gradients<a class="headerlink" href="#oniom-gradients" title="Link to this heading"></a></h3>
+<p>Gradients follow same pattern with chain rule for link atoms:</p>
+<p>$$
+\nabla E_{\text{ONIOM}} = \nabla E_{\text{real}}^{\text{low}} + J^T \left( \nabla E_{\text{model}}^{\text{high}} - \nabla E_{\text{model}}^{\text{low}} \right)
+$$</p>
+<p>where $J$ is the Jacobian relating model coordinates to real coordinates.</p>
+</section>
+</section>
+<section id="effective-fragment-potential-efp">
+<h2>Effective Fragment Potential (EFP)<a class="headerlink" href="#effective-fragment-potential-efp" title="Link to this heading"></a></h2>
+<p>EFP represents MM fragments with multipoles extracted from QM calculations.</p>
+<section id="efp-energy-decomposition">
+<h3>EFP Energy Decomposition<a class="headerlink" href="#efp-energy-decomposition" title="Link to this heading"></a></h3>
+<p>$$
+E_{\text{EFP}} = E_{\text{Coulomb}} + E_{\text{polarization}} + E_{\text{dispersion}} + E_{\text{exchange-repulsion}} + E_{\text{charge-transfer}}
+$$</p>
+<p>Each term is computed from:</p>
+<ul class="simple">
+<li><p><strong>Coulomb</strong>: Distributed multipoles (through octupoles)</p></li>
+<li><p><strong>Polarization</strong>: Distributed polarizabilities</p></li>
+<li><p><strong>Dispersion</strong>: C6 coefficients</p></li>
+<li><p><strong>Exchange-repulsion</strong>: Exponential overlap</p></li>
+<li><p><strong>Charge-transfer</strong>: Optional donor-acceptor interaction</p></li>
+</ul>
+</section>
+<section id="advantages-over-point-charge-mm">
+<h3>Advantages over Point-Charge MM<a class="headerlink" href="#advantages-over-point-charge-mm" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Derived from QM (no empirical fitting)</p></li>
+<li><p>Includes higher multipoles (better electrostatics)</p></li>
+<li><p>Natural polarization treatment</p></li>
+<li><p>Transferable between systems</p></li>
+</ul>
+</section>
+</section>
+<section id="implementation-in-autofragment">
+<h2>Implementation in AutoFragment<a class="headerlink" href="#implementation-in-autofragment" title="Link to this heading"></a></h2>
+<section id="basic-qm-mm-setup">
+<h3>Basic QM/MM Setup<a class="headerlink" href="#basic-qm-mm-setup" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">QMMMPartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmbeddingType</span>
+
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">QMMMPartitioner</span><span class="p">(</span>
+    <span class="n">qm_selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span>
+    <span class="n">buffer_radius</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">link_scheme</span><span class="o">=</span><span class="s2">&quot;hydrogen&quot;</span><span class="p">,</span>
+    <span class="n">embedding</span><span class="o">=</span><span class="n">EmbeddingType</span><span class="o">.</span><span class="n">ELECTROSTATIC</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+<span class="c1"># Access link atoms</span>
+<span class="k">for</span> <span class="n">la</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">link_atoms</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link H at position </span><span class="si">{</span><span class="n">la</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Generate point charges</span>
+<span class="n">charges</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">generate_mm_charges</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="oniom-setup">
+<h3>ONIOM Setup<a class="headerlink" href="#oniom-setup" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.multilevel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ONIOMScheme</span>
+
+<span class="n">scheme</span> <span class="o">=</span> <span class="n">ONIOMScheme</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;ONIOM(B3LYP/6-31G*:UFF)&quot;</span><span class="p">)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">set_layer_atoms</span><span class="p">(</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="n">high_indices</span><span class="p">)</span>
+<span class="n">scheme</span><span class="o">.</span><span class="n">set_layer_atoms</span><span class="p">(</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="n">low_indices</span><span class="p">)</span>
+
+<span class="c1"># Generate input</span>
+<span class="n">gaussian_input</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">to_gaussian_input</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<section id="qm-region-selection">
+<h3>QM Region Selection<a class="headerlink" href="#qm-region-selection" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Include all reactive atoms/bonds</p></li>
+<li><p>Complete any rings or conjugated systems</p></li>
+<li><p>Add 1-2 residues beyond reaction center (proteins)</p></li>
+<li><p>Consider 5-10 Å for charged species</p></li>
+</ul>
+</section>
+<section id="embedding-scheme-choice">
+<h3>Embedding Scheme Choice<a class="headerlink" href="#embedding-scheme-choice" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>System</p></th>
+<th class="head"><p>Recommended Embedding</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Enzyme active site</p></td>
+<td><p>Electrostatic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Metal in protein</p></td>
+<td><p>Polarizable</p></td>
+</tr>
+<tr class="row-even"><td><p>Small molecule in solution</p></td>
+<td><p>EFP</p></td>
+</tr>
+<tr class="row-odd"><td><p>Material surface</p></td>
+<td><p>Mechanical (with correction)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="link-atom-placement">
+<h3>Link Atom Placement<a class="headerlink" href="#link-atom-placement" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Place at single, non-polar bonds (C-C ideal)</p></li>
+<li><p>Avoid cutting near charges or polar groups</p></li>
+<li><p>Match link atom to attached MM carbon</p></li>
+</ul>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Warshel, A., &amp; Levitt, M. (1976). Theoretical studies of enzymic reactions. <em>JMB</em>, 103(2), 227-249.</p></li>
+<li><p>Dapprich, S., et al. (1999). A new ONIOM implementation in Gaussian. <em>Journal of Molecular Structure</em>, 461, 1-21.</p></li>
+<li><p>Senn, H. M., &amp; Thiel, W. (2009). QM/MM methods for biomolecular systems. <em>Angewandte Chemie International Edition</em>, 48(7), 1198-1229.</p></li>
+<li><p>Gordon, M. S., et al. (2012). Accurate methods for large molecular systems. <em>JPC B</em>, 113(29), 9646-9660.</p></li>
+<li><p>Lin, H., &amp; Truhlar, D. G. (2007). QM/MM: what have we learned, where are we, and where do we go from here? <em>Theoretical Chemistry Accounts</em>, 117(2), 185-199.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mbe.html" class="btn btn-neutral float-left" title="Many-Body Expansion (MBE) Theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

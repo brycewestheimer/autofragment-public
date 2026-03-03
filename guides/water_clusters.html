@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Cluster Fragmentation Tutorial &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Protein Fragmentation Guide" href="proteins.html" />
+    <link rel="prev" title="Command Line" href="../cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Water Cluster Fragmentation Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-load-water-cluster">Step 1: Load Water Cluster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-xyz-file">From XYZ File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customizing-molecule-detection">Customizing Molecule Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-xyz-format">Example XYZ Format</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-partition-into-fragments">Step 2: Partition into Fragments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-partitioning">Basic Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#available-clustering-methods">Available Clustering Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#balanced-partitioning-with-kmeans-constrained">Balanced Partitioning with <code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#topology-aware-refinement">Topology-Aware Refinement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tiered-hierarchical-partitioning">Tiered Hierarchical Partitioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#k-means-seeding-strategies">K-Means Seeding Strategies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-write-input-files">Step 3: Write Input Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gamess-fmo">GAMESS FMO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamess-efmo">GAMESS EFMO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#psi4-sapt-dimer-interaction-energies">Psi4 SAPT (Dimer Interaction Energies)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#psi4-general-fragment-calculation">Psi4 General Fragment Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-programs">Other Programs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-export-and-save-results">Step 4: Export and Save Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qcschema-json">QCSchema JSON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qcschema-writer">QCSchema Writer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xyz-fragment-output">XYZ Fragment Output</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-quick-api">Step 5: Quick API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-example">Complete Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tips-and-best-practices">Tips and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Water Cluster Fragmentation Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/guides/water_clusters.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="water-cluster-fragmentation-tutorial">
+<h1>Water Cluster Fragmentation Tutorial<a class="headerlink" href="#water-cluster-fragmentation-tutorial" title="Link to this heading"></a></h1>
+<p>This tutorial demonstrates a complete workflow for fragmenting water clusters and
+writing quantum chemistry input files for fragment-based calculations. Water
+clusters are ideal starting points because individual water molecules are natural
+fragments with well-defined boundaries.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>We’ll cover:</p>
+<ol class="arabic simple">
+<li><p>Loading a water cluster from an XYZ file</p></li>
+<li><p>Partitioning into fragment groups with <code class="docutils literal notranslate"><span class="pre">MolecularPartitioner</span></code></p></li>
+<li><p>Choosing a clustering method (including balanced partitioning)</p></li>
+<li><p>Tiered hierarchical fragmentation for large clusters</p></li>
+<li><p>Writing fragment-based input files for GAMESS, Psi4, and other programs</p></li>
+<li><p>Exporting results as QCSchema JSON</p></li>
+</ol>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">af</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">write_gamess_fmo</span><span class="p">,</span>
+    <span class="n">write_psi4_sapt</span><span class="p">,</span>
+    <span class="n">write_psi4_fragment</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="step-1-load-water-cluster">
+<h2>Step 1: Load Water Cluster<a class="headerlink" href="#step-1-load-water-cluster" title="Link to this heading"></a></h2>
+<section id="from-xyz-file">
+<h3>From XYZ File<a class="headerlink" href="#from-xyz-file" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">read_xyz</span></code> auto-detects water molecules (groups of 3 atoms each) by default:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">system</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;water20.xyz&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total atoms: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Molecules: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;molecule_atom_indices&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[]))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="customizing-molecule-detection">
+<h3>Customizing Molecule Detection<a class="headerlink" href="#customizing-molecule-detection" title="Link to this heading"></a></h3>
+<p>For non-water systems or to disable water validation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Explicit atoms-per-molecule (e.g., methanol with 6 atoms each)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;methanol_cluster.xyz&quot;</span><span class="p">,</span> <span class="n">atoms_per_molecule</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Skip water geometry validation</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;water20.xyz&quot;</span><span class="p">,</span> <span class="n">validate_water</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-xyz-format">
+<h3>Example XYZ Format<a class="headerlink" href="#example-xyz-format" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>60
+(H2O)20 cluster
+O    0.000    0.000    0.000
+H    0.957    0.000    0.000
+H   -0.240    0.927    0.000
+O    2.800    0.000    0.000
+...
+</pre></div>
+</div>
+</section>
+</section>
+<section id="step-2-partition-into-fragments">
+<h2>Step 2: Partition into Fragments<a class="headerlink" href="#step-2-partition-into-fragments" title="Link to this heading"></a></h2>
+<section id="basic-partitioning">
+<h3>Basic Partitioning<a class="headerlink" href="#basic-partitioning" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span><span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fragments: </span><span class="si">{</span><span class="n">tree</span><span class="o">.</span><span class="n">n_fragments</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total atoms: </span><span class="si">{</span><span class="n">tree</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">frag</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">frag</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="available-clustering-methods">
+<h3>Available Clustering Methods<a class="headerlink" href="#available-clustering-methods" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">MolecularPartitioner</span></code> supports several clustering algorithms via the <code class="docutils literal notranslate"><span class="pre">method</span></code> parameter:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Extra required</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;kmeans&quot;</span></code></p></td>
+<td><p>Standard k-means (default)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;kmeans_constrained&quot;</span></code></p></td>
+<td><p>K-means with balanced cluster sizes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">autofragment[balanced]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;agglomerative&quot;</span></code></p></td>
+<td><p>Hierarchical agglomerative clustering</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;spectral&quot;</span></code></p></td>
+<td><p>Spectral clustering</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">autofragment[graph]</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;gmm&quot;</span></code></p></td>
+<td><p>Gaussian Mixture Model</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;birch&quot;</span></code></p></td>
+<td><p>BIRCH clustering</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;geom_planes&quot;</span></code></p></td>
+<td><p>Geometric partitioning by cutting planes</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="balanced-partitioning-with-kmeans-constrained">
+<h3>Balanced Partitioning with <code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code><a class="headerlink" href="#balanced-partitioning-with-kmeans-constrained" title="Link to this heading"></a></h3>
+<p>For many-body expansion (MBE) and FMO workflows, equally-sized fragments are
+often critical for load balancing and accuracy. The <code class="docutils literal notranslate"><span class="pre">kmeans_constrained</span></code> method
+enforces balanced cluster sizes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;autofragment[balanced]&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans_constrained&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="c1"># Verify balanced sizes</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">frag</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span> <span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fragment sizes: </span><span class="si">{</span><span class="n">sizes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># e.g., [15, 15, 15, 15] for 20 waters into 4 fragments</span>
+</pre></div>
+</div>
+<p>You can also enable balanced partitioning explicitly with any method that supports it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+    <span class="n">strict_balanced</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># automatically uses kmeans_constrained</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="topology-aware-refinement">
+<h3>Topology-Aware Refinement<a class="headerlink" href="#topology-aware-refinement" title="Link to this heading"></a></h3>
+<p>For better chemical locality, enable topology refinement which reassigns
+molecules based on neighborhood overlap:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+    <span class="n">topology_refine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">topology_mode</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+    <span class="n">topology_hops</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tiered-hierarchical-partitioning">
+<h3>Tiered Hierarchical Partitioning<a class="headerlink" href="#tiered-hierarchical-partitioning" title="Link to this heading"></a></h3>
+<p>For large clusters, tiered partitioning creates a hierarchy of fragments. This is
+useful for hierarchical many-body expansion (HMBE) workflows where you need
+multiple levels of spatial grouping:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2-tier: 4 primary fragments, each with 4 sub-fragments</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">tiers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_primary</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_secondary</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span>
+<span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary fragments: </span><span class="si">{</span><span class="n">tree</span><span class="o">.</span><span class="n">n_primary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total fragments: </span><span class="si">{</span><span class="n">tree</span><span class="o">.</span><span class="n">n_fragments</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">pf</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">pf</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">fragments</span><span class="p">)</span><span class="si">}</span><span class="s2"> sub-fragments&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sf</span> <span class="ow">in</span> <span class="n">pf</span><span class="o">.</span><span class="n">fragments</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sf</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For even finer control, use 3-tier partitioning:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">tiers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_primary</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_secondary</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_tertiary</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span>
+<span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="c1"># PF1 -&gt; PF1_SF1 -&gt; PF1_SF1_TF1, PF1_SF1_TF2, ...</span>
+</pre></div>
+</div>
+</section>
+<section id="k-means-seeding-strategies">
+<h3>K-Means Seeding Strategies<a class="headerlink" href="#k-means-seeding-strategies" title="Link to this heading"></a></h3>
+<p>Control the initial centroids for k-means clustering:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># PCA-based seeding</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="n">init_strategy</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Per-tier seeding overrides (tiered mode)</span>
+<span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+    <span class="n">tiers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_primary</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">n_secondary</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+    <span class="n">init_strategy</span><span class="o">=</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span>              <span class="c1"># default for all tiers</span>
+    <span class="n">init_strategy_secondary</span><span class="o">=</span><span class="s2">&quot;radial&quot;</span>  <span class="c1"># override for sub-fragments</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Available strategies: <code class="docutils literal notranslate"><span class="pre">&quot;halfplane&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;pca&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;axis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;radial&quot;</span></code>.</p>
+</section>
+</section>
+<section id="step-3-write-input-files">
+<h2>Step 3: Write Input Files<a class="headerlink" href="#step-3-write-input-files" title="Link to this heading"></a></h2>
+<section id="gamess-fmo">
+<h3>GAMESS FMO<a class="headerlink" href="#gamess-fmo" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">write_gamess_fmo</span><span class="p">(</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;water_fmo.inp&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+    <span class="n">runtype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
+    <span class="n">fmo_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">nbody</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="gamess-efmo">
+<h3>GAMESS EFMO<a class="headerlink" href="#gamess-efmo" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_efmo</span>
+
+<span class="n">write_gamess_efmo</span><span class="p">(</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;water_efmo.inp&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="psi4-sapt-dimer-interaction-energies">
+<h3>Psi4 SAPT (Dimer Interaction Energies)<a class="headerlink" href="#psi4-sapt-dimer-interaction-energies" title="Link to this heading"></a></h3>
+<p>For symmetry-adapted perturbation theory between fragment pairs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select two fragments for a SAPT calculation</span>
+<span class="n">dimer</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+<span class="n">write_psi4_sapt</span><span class="p">(</span>
+    <span class="n">dimer</span><span class="p">,</span>
+    <span class="s2">&quot;water_sapt.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sapt2+&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="psi4-general-fragment-calculation">
+<h3>Psi4 General Fragment Calculation<a class="headerlink" href="#psi4-general-fragment-calculation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">write_psi4_fragment</span><span class="p">(</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span>
+    <span class="s2">&quot;water_frags.dat&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mp2&quot;</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+    <span class="n">runtype</span><span class="o">=</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="other-programs">
+<h3>Other Programs<a class="headerlink" href="#other-programs" title="Link to this heading"></a></h3>
+<p>autofragment also provides writers for Q-Chem, NWChem, ORCA, Molpro, Turbomole,
+and CFOUR. See <a class="reference internal" href="output_formats.html"><span class="std std-doc">Output Formats</span></a> for the full list.</p>
+</section>
+</section>
+<section id="step-4-export-and-save-results">
+<h2>Step 4: Export and Save Results<a class="headerlink" href="#step-4-export-and-save-results" title="Link to this heading"></a></h2>
+<section id="qcschema-json">
+<h3>QCSchema JSON<a class="headerlink" href="#qcschema-json" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save the full FragmentTree</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">&quot;water20_fragments.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Reload later</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">FragmentTree</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">&quot;water20_fragments.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="qcschema-writer">
+<h3>QCSchema Writer<a class="headerlink" href="#qcschema-writer" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_qcschema</span>
+
+<span class="n">write_qcschema</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="s2">&quot;water20_qcschema.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="xyz-fragment-output">
+<h3>XYZ Fragment Output<a class="headerlink" href="#xyz-fragment-output" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_xyz_fragments</span>
+
+<span class="n">write_xyz_fragments</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span> <span class="s2">&quot;water20_fragments.xyz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="step-5-quick-api">
+<h2>Step 5: Quick API<a class="headerlink" href="#step-5-quick-api" title="Link to this heading"></a></h2>
+<p>For simple workflows, the convenience function handles reading and partitioning
+in a single call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">af</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">partition_xyz</span><span class="p">(</span><span class="s2">&quot;water20.xyz&quot;</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">&quot;water20_fragments.json&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fragment </span><span class="si">{</span><span class="n">frag</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">frag</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="complete-example">
+<h2>Complete Example<a class="headerlink" href="#complete-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;Fragment a water cluster and write GAMESS FMO input.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">autofragment</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">af</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners</span><span class="w"> </span><span class="kn">import</span> <span class="n">MolecularPartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.writers</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_gamess_fmo</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Load</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">af</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="s2">&quot;water20.xyz&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Partition with balanced clusters</span>
+    <span class="n">partitioner</span> <span class="o">=</span> <span class="n">MolecularPartitioner</span><span class="p">(</span>
+        <span class="n">n_fragments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans_constrained&quot;</span><span class="p">,</span>  <span class="c1"># requires autofragment[balanced]</span>
+    <span class="p">)</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">partitioner</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created </span><span class="si">{</span><span class="n">tree</span><span class="o">.</span><span class="n">n_fragments</span><span class="si">}</span><span class="s2"> fragments&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">frag</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">frag</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">frag</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span><span class="si">}</span><span class="s2"> atoms&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Write GAMESS FMO input</span>
+    <span class="n">write_gamess_fmo</span><span class="p">(</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">fragments</span><span class="p">,</span>
+        <span class="s2">&quot;water20_fmo.inp&quot;</span><span class="p">,</span>
+        <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;aug-cc-pVDZ&quot;</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MP2&quot;</span><span class="p">,</span>
+        <span class="n">fmo_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">nbody</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrote water20_fmo.inp&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Also save as JSON for later use</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s2">&quot;water20_fragments.json&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="tips-and-best-practices">
+<h2>Tips and Best Practices<a class="headerlink" href="#tips-and-best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Basis set</strong>: Use augmented basis sets (aug-cc-pVDZ, aug-cc-pVTZ) for accurate hydrogen bonding.</p></li>
+<li><p><strong>Balanced fragments</strong>: Use <code class="docutils literal notranslate"><span class="pre">method=&quot;kmeans_constrained&quot;</span></code> (or <code class="docutils literal notranslate"><span class="pre">strict_balanced=True</span></code>) when equal-sized fragments matter for your workflow.</p></li>
+<li><p><strong>Fragment count</strong>: Start with fewer fragments and increase; more fragments means more n-body terms.</p></li>
+<li><p><strong>Topology refinement</strong>: Enable <code class="docutils literal notranslate"><span class="pre">topology_refine=True</span></code> for better spatial locality in larger clusters.</p></li>
+<li><p><strong>Parallelization</strong>: Fragment-based QC calculations are embarrassingly parallel — each fragment or pair can run independently.</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="algorithms.html"><span class="std std-doc">Algorithms Guide</span></a>: Details on each clustering method</p></li>
+<li><p><a class="reference internal" href="proteins.html"><span class="std std-doc">Protein Fragmentation</span></a>: Apply fragmentation to biomolecules</p></li>
+<li><p><a class="reference internal" href="output_formats.html"><span class="std std-doc">Output Formats</span></a>: Complete list of QC program writers</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cli.html" class="btn btn-neutral float-left" title="Command Line" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proteins.html" class="btn btn-neutral float-right" title="Protein Fragmentation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

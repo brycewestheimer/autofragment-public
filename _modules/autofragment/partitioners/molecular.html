@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>autofragment.partitioners.molecular &mdash; autofragment  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            autofragment
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">AutoFragment Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cli.html">Command Line</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/water_clusters.html">Water Cluster Fragmentation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/proteins.html">Protein Fragmentation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/materials.html">Materials Science Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/custom_rules.html">Custom Rules Authoring Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/output_formats.html">Output Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../partitioning/geometric_tiling.html">Geometric Tiling Partitioning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io_formats.html">I/O Formats Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rules.html">Fragmentation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/algorithms.html">Fragmentation Algorithms Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biological.html">Biological System Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../materials.html">Materials Science Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multilevel.html">Multi-Level Methods &amp; QM/MM Partitioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core_concepts.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../migration.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../output.html">Output format</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Theory</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/clustering.html">Clustering Algorithms for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/graph_partitioning.html">Graph Partitioning for Molecular Fragmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/scoring.html">Fragmentation Scoring Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/mbe.html">Many-Body Expansion (MBE) Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/qmmm.html">QM/MM and Embedding Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/performance.html">Performance Profiling</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">autofragment</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../autofragment.html">autofragment</a></li>
+      <li class="breadcrumb-item active">autofragment.partitioners.molecular</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for autofragment.partitioners.molecular</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2026 Bryce M. Westheimer</span>
+<span class="c1"># SPDX-License-Identifier: BSD-3-Clause</span>
+
+<span class="sd">&quot;&quot;&quot;Molecular partitioner for water clusters and similar systems.</span>
+
+<span class="sd">This module provides the main partitioner class for creating fragments</span>
+<span class="sd">from collections of molecules (typically water clusters). Supports both</span>
+<span class="sd">flat partitioning and tiered hierarchical partitioning (2-tier and 3-tier).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.clustering</span><span class="w"> </span><span class="kn">import</span> <span class="n">partition_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.algorithms.geometric</span><span class="w"> </span><span class="kn">import</span> <span class="n">partition_by_planes</span><span class="p">,</span> <span class="n">partition_by_planes_tiered</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.core.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_centroids</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.core.types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ChemicalSystem</span><span class="p">,</span>
+    <span class="n">Fragment</span><span class="p">,</span>
+    <span class="n">FragmentTree</span><span class="p">,</span>
+    <span class="n">Molecule</span><span class="p">,</span>
+    <span class="n">system_to_molecules</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.io.output</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_partitioning_info</span><span class="p">,</span> <span class="n">format_source_info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasePartitioner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.partitioners.topology</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BondPolicy</span><span class="p">,</span>
+    <span class="n">SelectionMode</span><span class="p">,</span>
+    <span class="n">TopologyNeighborSelection</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Type aliases for tiered labels</span>
+<span class="n">LabelTuple2</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<span class="n">LabelTuple3</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PartitionError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when partitioning fails.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PartitionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of flat partitioning with labels and metadata.&quot;&quot;&quot;</span>
+
+    <span class="n">n_fragments</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">]</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TieredPartitionResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of tiered partitioning with tuple labels and metadata.&quot;&quot;&quot;</span>
+
+    <span class="n">tiers</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">n_primary</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">n_secondary</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">n_tertiary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LabelTuple2</span><span class="p">,</span> <span class="n">LabelTuple3</span><span class="p">]]</span>
+    <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="MolecularPartitioner">
+<a class="viewcode-back" href="../../../api/_generated/autofragment.MolecularPartitioner.html#autofragment.MolecularPartitioner">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MolecularPartitioner</span><span class="p">(</span><span class="n">BasePartitioner</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Partitioner for water clusters and similar molecular systems.</span>
+
+<span class="sd">    Supports both flat partitioning (default) and tiered hierarchical</span>
+<span class="sd">    partitioning (2-tier and 3-tier).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_fragments : int</span>
+<span class="sd">        Number of fragments (flat mode). Default is 4.</span>
+<span class="sd">    method : str, optional</span>
+<span class="sd">        Clustering method. Default is &quot;kmeans&quot;.</span>
+<span class="sd">    random_state : int, optional</span>
+<span class="sd">        Random seed for clustering. Default is 42.</span>
+<span class="sd">    strict_balanced : bool, optional</span>
+<span class="sd">        If True, validate equal cluster sizes. Default is True for</span>
+<span class="sd">        kmeans_constrained, False otherwise.</span>
+<span class="sd">    tiers : int, optional</span>
+<span class="sd">        Number of hierarchy tiers (2 or 3). None = flat mode (default).</span>
+<span class="sd">    n_primary : int, optional</span>
+<span class="sd">        Number of primary fragments (tiered mode).</span>
+<span class="sd">    n_secondary : int, optional</span>
+<span class="sd">        Number of secondary fragments per primary (tiered mode).</span>
+<span class="sd">    n_tertiary : int, optional</span>
+<span class="sd">        Number of tertiary fragments per secondary (3-tier mode).</span>
+<span class="sd">    init_strategy : str | ndarray | dict | None, optional</span>
+<span class="sd">        Default seeding strategy for all tiers / flat mode.</span>
+<span class="sd">    init_strategy_primary : str | ndarray | dict | None, optional</span>
+<span class="sd">        Override seeding strategy for primary (tier-1) clustering.</span>
+<span class="sd">    init_strategy_secondary : str | ndarray | dict | None, optional</span>
+<span class="sd">        Override seeding strategy for secondary (tier-2) clustering.</span>
+<span class="sd">    init_strategy_tertiary : str | ndarray | dict | None, optional</span>
+<span class="sd">        Override seeding strategy for tertiary (tier-3) clustering.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Flat mode:</span>
+
+<span class="sd">    &gt;&gt;&gt; partitioner = MolecularPartitioner(n_fragments=2, method=&quot;kmeans&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; tree = partitioner.partition(system)</span>
+<span class="sd">    &gt;&gt;&gt; len(tree.fragments)</span>
+<span class="sd">    2</span>
+
+<span class="sd">    Tiered mode:</span>
+
+<span class="sd">    &gt;&gt;&gt; partitioner = MolecularPartitioner(</span>
+<span class="sd">    ...     tiers=2, n_primary=4, n_secondary=4</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; tree = partitioner.partition(system)</span>
+<span class="sd">    &gt;&gt;&gt; tree.n_primary</span>
+<span class="sd">    4</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    autofragment.partitioners.batch.BatchPartitioner : For processing multiple files.</span>
+<span class="sd">    autofragment.core.types.FragmentTree : The result object containing fragments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MolecularPartitioner.__init__">
+<a class="viewcode-back" href="../../../api/_generated/autofragment.MolecularPartitioner.html#autofragment.MolecularPartitioner.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_fragments</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
+        <span class="n">strict_balanced</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">topology_refine</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">topology_mode</span><span class="p">:</span> <span class="n">SelectionMode</span> <span class="o">=</span> <span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+        <span class="n">topology_hops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">topology_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">topology_k_per_layer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">topology_bond_policy</span><span class="p">:</span> <span class="n">BondPolicy</span> <span class="o">=</span> <span class="s2">&quot;infer&quot;</span><span class="p">,</span>
+        <span class="c1"># Tiered parameters</span>
+        <span class="n">tiers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_primary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_secondary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_tertiary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Seeding parameters</span>
+        <span class="n">init_strategy</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">init_strategy_primary</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">init_strategy_secondary</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">init_strategy_tertiary</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a new MolecularPartitioner instance.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">=</span> <span class="n">tiers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_refine</span> <span class="o">=</span> <span class="n">topology_refine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_mode</span> <span class="o">=</span> <span class="n">topology_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_hops</span> <span class="o">=</span> <span class="n">topology_hops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_layers</span> <span class="o">=</span> <span class="n">topology_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_k_per_layer</span> <span class="o">=</span> <span class="n">topology_k_per_layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology_bond_policy</span> <span class="o">=</span> <span class="n">topology_bond_policy</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Tiered mode</span>
+            <span class="k">if</span> <span class="n">tiers</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tiers must be 2 or 3, got </span><span class="si">{</span><span class="n">tiers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n_primary</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">n_secondary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_primary and n_secondary are required for tiered mode&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">n_tertiary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_tertiary is required for 3-tier partitioning&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="o">=</span> <span class="n">n_primary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="o">=</span> <span class="n">n_secondary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="o">=</span> <span class="n">n_tertiary</span>
+            <span class="c1"># n_fragments is still set for compatibility (total leaf fragments)</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="n">n_primary</span> <span class="o">*</span> <span class="n">n_secondary</span>
+            <span class="k">if</span> <span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">*=</span> <span class="n">n_tertiary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span> <span class="o">=</span> <span class="n">total</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Flat mode</span>
+            <span class="k">if</span> <span class="n">n_fragments</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_fragments must be positive, got </span><span class="si">{</span><span class="n">n_fragments</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span> <span class="o">=</span> <span class="n">n_fragments</span>
+
+        <span class="c1"># Per-tier init strategies: per-tier override &gt; general &gt; None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_strategy</span> <span class="o">=</span> <span class="n">init_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_primary</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">init_strategy_primary</span> <span class="k">if</span> <span class="n">init_strategy_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">init_strategy</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_secondary</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">init_strategy_secondary</span> <span class="k">if</span> <span class="n">init_strategy_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">init_strategy</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_tertiary</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">init_strategy_tertiary</span> <span class="k">if</span> <span class="n">init_strategy_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">init_strategy</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strict_balanced</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strict_balanced</span> <span class="o">=</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;kmeans_constrained&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strict_balanced</span> <span class="o">=</span> <span class="n">strict_balanced</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">system</span><span class="p">:</span> <span class="n">ChemicalSystem</span><span class="p">,</span>
+        <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FragmentTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Partition a chemical system into fragments.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        system : ChemicalSystem</span>
+<span class="sd">            Chemical system to partition.</span>
+<span class="sd">        source_file : str, optional</span>
+<span class="sd">            Path to source file for metadata.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FragmentTree</span>
+<span class="sd">            Fragmentation result. Flat for non-tiered mode, hierarchical</span>
+<span class="sd">            for tiered mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">molecules</span> <span class="o">=</span> <span class="n">system_to_molecules</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">require_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partition_tiered</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">molecules</span><span class="p">),</span> <span class="n">source_file</span><span class="p">)</span>
+
+        <span class="c1"># --- Flat mode (existing path) ---</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_partition</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">molecules</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology_refine</span><span class="p">:</span>
+            <span class="n">refined_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refine_partition_topology</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">PartitionResult</span><span class="p">(</span>
+                <span class="n">n_fragments</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span>
+                <span class="n">labels</span><span class="o">=</span><span class="n">refined_labels</span><span class="p">,</span>
+                <span class="n">centroids</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">centroids</span><span class="p">,</span>
+                <span class="n">molecules</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_balanced</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_validate_partition</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="n">fragments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_fragments</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Build metadata</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">source_file</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">format_source_info</span><span class="p">(</span><span class="n">source_file</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">)</span>
+
+        <span class="n">partitioning</span> <span class="o">=</span> <span class="n">format_partitioning_info</span><span class="p">(</span>
+            <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">n_fragments</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">FragmentTree</span><span class="p">(</span>
+            <span class="n">fragments</span><span class="o">=</span><span class="n">fragments</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">partitioning</span><span class="o">=</span><span class="n">partitioning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_partition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">PartitionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the partition with labels (flat mode).&quot;&quot;&quot;</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="n">compute_centroids</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;geom_planes&quot;</span><span class="p">:</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">partition_by_planes</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
+                <span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_strategy</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">PartitionResult</span><span class="p">(</span>
+            <span class="n">n_fragments</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+            <span class="n">centroids</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span>
+            <span class="n">molecules</span><span class="o">=</span><span class="n">molecules</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_molecule_atom_indices</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">system</span><span class="p">:</span> <span class="n">ChemicalSystem</span><span class="p">,</span>
+        <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get atom indices for each molecule in order.&quot;&quot;&quot;</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s2">&quot;molecule_atom_indices&quot;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;molecule_atom_indices&quot;</span><span class="p">]]</span>
+
+        <span class="n">indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">mol</span> <span class="ow">in</span> <span class="n">molecules</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+            <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)))</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="k">return</span> <span class="n">indices</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_refine_partition_topology</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">system</span><span class="p">:</span> <span class="n">ChemicalSystem</span><span class="p">,</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">PartitionResult</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optionally refine molecule labels using topology neighborhoods around cluster centers.&quot;&quot;&quot;</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">n_molecules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_molecules</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">labels</span>
+
+        <span class="n">molecule_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_molecule_atom_indices</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">)</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">atom</span><span class="o">.</span><span class="n">coords</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">symbol</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">atoms</span><span class="p">]</span>
+        <span class="n">bonds</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bond</span><span class="p">[</span><span class="s2">&quot;atom1&quot;</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">bond</span><span class="p">[</span><span class="s2">&quot;atom2&quot;</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">bonds</span>
+            <span class="k">if</span> <span class="s2">&quot;atom1&quot;</span> <span class="ow">in</span> <span class="n">bond</span> <span class="ow">and</span> <span class="s2">&quot;atom2&quot;</span> <span class="ow">in</span> <span class="n">bond</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Representative molecule per cluster = one closest to cluster centroid.</span>
+        <span class="n">representatives</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cluster_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">):</span>
+            <span class="n">members</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">cluster_idx</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">members</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">cluster_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">members</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">rep</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">members</span><span class="p">,</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">centroids</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">cluster_center</span><span class="p">)),</span>
+            <span class="p">)</span>
+            <span class="n">representatives</span><span class="p">[</span><span class="n">cluster_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">rep</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">representatives</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">labels</span>
+
+        <span class="n">overlap_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cluster_idx</span><span class="p">,</span> <span class="n">rep_idx</span> <span class="ow">in</span> <span class="n">representatives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">selector</span> <span class="o">=</span> <span class="n">TopologyNeighborSelection</span><span class="p">(</span>
+                <span class="n">seed_atoms</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">molecule_indices</span><span class="p">[</span><span class="n">rep_idx</span><span class="p">]),</span>
+                <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology_mode</span><span class="p">,</span>
+                <span class="n">hops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology_hops</span><span class="p">,</span>
+                <span class="n">layers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology_layers</span><span class="p">,</span>
+                <span class="n">k_per_layer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology_k_per_layer</span><span class="p">,</span>
+                <span class="n">expand_residues</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">bond_policy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topology_bond_policy</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">selected_atoms</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">elements</span><span class="p">,</span> <span class="n">bonds</span><span class="o">=</span><span class="n">bonds</span><span class="p">)</span><span class="o">.</span><span class="n">selected_atoms</span>
+
+            <span class="k">for</span> <span class="n">mol_idx</span><span class="p">,</span> <span class="n">atom_ids</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">molecule_indices</span><span class="p">):</span>
+                <span class="n">overlap_scores</span><span class="p">[</span><span class="n">cluster_idx</span><span class="p">,</span> <span class="n">mol_idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_atoms</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">atom_ids</span><span class="p">))</span>
+
+        <span class="n">refined</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">mol_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_molecules</span><span class="p">):</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">mol_idx</span><span class="p">])</span>
+            <span class="n">best_cluster</span> <span class="o">=</span> <span class="n">current</span>
+            <span class="n">best_overlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">overlap_scores</span><span class="p">[</span><span class="n">current</span><span class="p">,</span> <span class="n">mol_idx</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">cluster_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">):</span>
+                <span class="n">overlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">overlap_scores</span><span class="p">[</span><span class="n">cluster_idx</span><span class="p">,</span> <span class="n">mol_idx</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">overlap</span> <span class="o">&gt;</span> <span class="n">best_overlap</span><span class="p">:</span>
+                    <span class="n">best_overlap</span> <span class="o">=</span> <span class="n">overlap</span>
+                    <span class="n">best_cluster</span> <span class="o">=</span> <span class="n">cluster_idx</span>
+            <span class="k">if</span> <span class="n">best_overlap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">refined</span><span class="p">[</span><span class="n">mol_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_cluster</span>
+
+        <span class="c1"># Preserve valid non-empty partitioning; otherwise keep original labels.</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">refined</span> <span class="o">==</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">labels</span>
+        <span class="k">return</span> <span class="n">refined</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_partition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">PartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that cluster sizes are equal (when requested).&quot;&quot;&quot;</span>
+        <span class="n">n_molecules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_molecules</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Non-integer cluster sizes: </span><span class="si">{</span><span class="n">n_molecules</span><span class="si">}</span><span class="s2"> molecules / </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="si">}</span><span class="s2"> fragments&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">expected</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">):</span>
+            <span class="n">count_k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">labels</span> <span class="o">==</span> <span class="n">k</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">count_k</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Fragment </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_k</span><span class="si">}</span><span class="s2"> != expected </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_fragments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">PartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build Fragment objects from partition result (flat mode).&quot;&quot;&quot;</span>
+        <span class="n">fragments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">):</span>
+            <span class="n">chosen</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span> <span class="o">==</span> <span class="n">k</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">chosen</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fragment </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> is empty&quot;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">Fragment</span><span class="o">.</span><span class="n">from_molecules</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;F</span><span class="si">{</span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;n_molecules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chosen</span><span class="p">)</span>
+            <span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fragments</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Tiered partitioning</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_partition_tiered</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">],</span>
+        <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FragmentTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Orchestrate hierarchical clustering and build a tiered FragmentTree.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_partition_tiered</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_balanced</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_validate_tiered_hierarchy</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="n">fragments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_tiered_fragments</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Build metadata</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">source_file</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">format_source_info</span><span class="p">(</span><span class="n">source_file</span><span class="p">,</span> <span class="s2">&quot;xyz&quot;</span><span class="p">)</span>
+
+        <span class="n">partitioning</span> <span class="o">=</span> <span class="n">format_partitioning_info</span><span class="p">(</span>
+            <span class="n">algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">n_fragments</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fragments</span><span class="p">,</span>
+            <span class="n">tiers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">,</span>
+            <span class="n">n_primary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span>
+            <span class="n">n_secondary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span>
+            <span class="n">n_tertiary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">FragmentTree</span><span class="p">(</span>
+            <span class="n">fragments</span><span class="o">=</span><span class="n">fragments</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">partitioning</span><span class="o">=</span><span class="n">partitioning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_partition_tiered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TieredPartitionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the tiered partition with tuple labels.&quot;&quot;&quot;</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="n">compute_centroids</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;geom_planes&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partition_geometric_tiered</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">centroids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partition_clustering_tiered</span><span class="p">(</span><span class="n">molecules</span><span class="p">,</span> <span class="n">centroids</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_partition_geometric_tiered</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">],</span>
+        <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TieredPartitionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Partition using geometric planes (tiered mode).&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">prim</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">ter</span> <span class="o">=</span> <span class="n">partition_by_planes_tiered</span><span class="p">(</span>
+            <span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span> <span class="n">n_t</span> <span class="ow">or</span> <span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LabelTuple2</span><span class="p">,</span> <span class="n">LabelTuple3</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">prim</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">prim</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">ter</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">TieredPartitionResult</span><span class="p">(</span>
+            <span class="n">tiers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">,</span>
+            <span class="n">n_primary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span>
+            <span class="n">n_secondary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span>
+            <span class="n">n_tertiary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="n">centroids</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span>
+            <span class="n">molecules</span><span class="o">=</span><span class="n">molecules</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_partition_clustering_tiered</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">molecules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">],</span>
+        <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TieredPartitionResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Partition using clustering algorithms (tiered mode).&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">primary_labels</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
+            <span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_primary</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LabelTuple2</span><span class="p">,</span> <span class="n">LabelTuple3</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">primary_labels</span> <span class="o">==</span> <span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2"> is empty&quot;</span><span class="p">)</span>
+
+                <span class="n">sec</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
+                    <span class="n">centroids</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                    <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_secondary</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">local_k</span><span class="p">,</span> <span class="n">wi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+                    <span class="n">labels</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">wi</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">sec</span><span class="p">[</span><span class="n">local_k</span><span class="p">]))</span>
+
+            <span class="k">return</span> <span class="n">TieredPartitionResult</span><span class="p">(</span>
+                <span class="n">tiers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">,</span>
+                <span class="n">n_primary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span>
+                <span class="n">n_secondary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span>
+                <span class="n">n_tertiary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+                <span class="n">centroids</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span>
+                <span class="n">molecules</span><span class="o">=</span><span class="n">molecules</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># 3-tier partitioning</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">labels3</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LabelTuple2</span><span class="p">,</span> <span class="n">LabelTuple3</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
+        <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+            <span class="n">idx_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">primary_labels</span> <span class="o">==</span> <span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2"> is empty&quot;</span><span class="p">)</span>
+
+            <span class="n">sec_p</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
+                <span class="n">centroids</span><span class="p">[</span><span class="n">idx_p</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_secondary</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">):</span>
+                <span class="n">idx_ps</span> <span class="o">=</span> <span class="n">idx_p</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sec_p</span> <span class="o">==</span> <span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_ps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Secondary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> is empty&quot;</span><span class="p">)</span>
+
+                <span class="n">ter_ps</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
+                    <span class="n">centroids</span><span class="p">[</span><span class="n">idx_ps</span><span class="p">],</span> <span class="n">n_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                    <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_tertiary</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">local_k</span><span class="p">,</span> <span class="n">wi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">idx_ps</span><span class="p">):</span>
+                    <span class="n">labels3</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">wi</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">ter_ps</span><span class="p">[</span><span class="n">local_k</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">TieredPartitionResult</span><span class="p">(</span>
+            <span class="n">tiers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tiers</span><span class="p">,</span>
+            <span class="n">n_primary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span>
+            <span class="n">n_secondary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span>
+            <span class="n">n_tertiary</span><span class="o">=</span><span class="n">n_t</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">labels3</span><span class="p">,</span>
+            <span class="n">centroids</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span>
+            <span class="n">molecules</span><span class="o">=</span><span class="n">molecules</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_tiered_hierarchy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">TieredPartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that cluster sizes are equal at every tier level.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">n_molecules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">expected_primary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span>
+            <span class="n">expected_secondary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">expected_primary</span> <span class="o">%</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">expected_secondary</span> <span class="o">%</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Non-integer cluster sizes for 2-tier hierarchy: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n_molecules</span><span class="si">}</span><span class="s2"> molecules / </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="si">}</span><span class="s2"> primary &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;/ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="si">}</span><span class="s2"> secondary&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">expected_primary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected_primary</span><span class="p">)</span>
+            <span class="n">expected_secondary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected_secondary</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+                <span class="n">count_p</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">count_p</span> <span class="o">!=</span> <span class="n">expected_primary</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Primary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_p</span><span class="si">}</span><span class="s2"> != expected </span><span class="si">{</span><span class="n">expected_primary</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">):</span>
+                    <span class="n">count_ps</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                        <span class="mi">1</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">count_ps</span> <span class="o">!=</span> <span class="n">expected_secondary</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Secondary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_ps</span><span class="si">}</span><span class="s2"> &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;!= expected </span><span class="si">{</span><span class="n">expected_secondary</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
+            <span class="n">expected_primary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span>
+            <span class="n">expected_secondary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">)</span>
+            <span class="n">expected_tertiary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="o">*</span> <span class="n">n_t</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">expected_primary</span> <span class="o">%</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">expected_secondary</span> <span class="o">%</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">expected_tertiary</span> <span class="o">%</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                    <span class="s2">&quot;Non-integer cluster sizes for 3-tier hierarchy&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">expected_primary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected_primary</span><span class="p">)</span>
+            <span class="n">expected_secondary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected_secondary</span><span class="p">)</span>
+            <span class="n">expected_tertiary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected_tertiary</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+                <span class="n">count_p</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">count_p</span> <span class="o">!=</span> <span class="n">expected_primary</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Primary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_p</span><span class="si">}</span><span class="s2"> != expected </span><span class="si">{</span><span class="n">expected_primary</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">):</span>
+                    <span class="n">count_ps</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                        <span class="mi">1</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">count_ps</span> <span class="o">!=</span> <span class="n">expected_secondary</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Secondary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_ps</span><span class="si">}</span><span class="s2"> &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;!= expected </span><span class="si">{</span><span class="n">expected_secondary</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_t</span><span class="p">):</span>
+                        <span class="n">count_pst</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                            <span class="mi">1</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">count_pst</span> <span class="o">!=</span> <span class="n">expected_tertiary</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="n">PartitionError</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Tertiary cluster </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">: size </span><span class="si">{</span><span class="n">count_pst</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;!= expected </span><span class="si">{</span><span class="n">expected_tertiary</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_tiered_fragments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">TieredPartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build hierarchical Fragment objects from tiered partition result.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">fragments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+                <span class="n">pf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;PF</span><span class="si">{</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">pf</span> <span class="o">=</span> <span class="n">Fragment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pf_id</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">):</span>
+                    <span class="n">sf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pf_id</span><span class="si">}</span><span class="s2">_SF</span><span class="si">{</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">chosen</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span>
+                    <span class="p">]</span>
+                    <span class="n">sf</span> <span class="o">=</span> <span class="n">Fragment</span><span class="o">.</span><span class="n">from_molecules</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="n">sf_id</span><span class="p">)</span>
+                    <span class="n">sf</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;n_molecules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chosen</span><span class="p">)</span>
+                    <span class="n">pf</span><span class="o">.</span><span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span>
+
+                <span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
+                <span class="n">pf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;PF</span><span class="si">{</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">pf</span> <span class="o">=</span> <span class="n">Fragment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pf_id</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">):</span>
+                    <span class="n">sf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pf_id</span><span class="si">}</span><span class="s2">_SF</span><span class="si">{</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">sf</span> <span class="o">=</span> <span class="n">Fragment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">sf_id</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_t</span><span class="p">):</span>
+                        <span class="n">tf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sf_id</span><span class="si">}</span><span class="s2">_TF</span><span class="si">{</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="n">chosen</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">lab</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span>
+                        <span class="p">]</span>
+                        <span class="n">tf</span> <span class="o">=</span> <span class="n">Fragment</span><span class="o">.</span><span class="n">from_molecules</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="n">tf_id</span><span class="p">)</span>
+                        <span class="n">tf</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;n_molecules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chosen</span><span class="p">)</span>
+                        <span class="n">sf</span><span class="o">.</span><span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span>
+
+                    <span class="n">pf</span><span class="o">.</span><span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span>
+
+                <span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fragments</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Bryce M. Westheimer.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
