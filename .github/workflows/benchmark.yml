@@ -1,0 +1,30 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: pip install -e ".[dev]" pytest-benchmark
+
+      - name: Run benchmarks
+        run: pytest benchmarks/ --benchmark-json=output.json
+
+      - name: Compare to baseline
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: pytest
+          output-file-path: output.json
+          alert-threshold: '150%'
+          fail-on-alert: true

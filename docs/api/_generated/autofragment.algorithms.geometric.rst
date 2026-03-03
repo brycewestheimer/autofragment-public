@@ -1,0 +1,13 @@
+autofragment.algorithms.geometric
+=================================
+
+.. automodule:: autofragment.algorithms.geometric
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      find_center
+      partition_by_planes
+   

@@ -1,0 +1,19 @@
+﻿autofragment.algorithms
+=======================
+
+.. automodule:: autofragment.algorithms
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   clustering
+   geometric
+   graph_partition
+   hungarian
+   ml_interface
+   optimizer
+   scoring

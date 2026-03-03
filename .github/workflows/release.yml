@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-pypi:
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: pip install build twine
+
+      - name: Validate release tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          tag = "${{ github.event.release.tag_name }}"
+          if not tag.startswith("v"):
+              raise SystemExit(f"Release tag must start with 'v', got: {tag}")
+
+          package_version = None
+          version_file = Path("src/autofragment/_version.py")
+          for line in version_file.read_text(encoding="utf-8").splitlines():
+              line = line.strip()
+              if line.startswith("__version__"):
+                  package_version = line.split("=", 1)[1].strip().strip('"').strip("'")
+                  break
+
+          if package_version is None:
+              raise SystemExit("Could not determine package version from src/autofragment/_version.py")
+
+          expected_tag = f"v{package_version}"
+          if tag != expected_tag:
+              raise SystemExit(
+                  f"Release tag/version mismatch: tag={tag}, package={package_version}, expected={expected_tag}"
+              )
+
+          print(f"Validated release tag {tag} matches package version {package_version}")
+          PY
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check package
+        run: twine check dist/*
+
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+
+  publish-testpypi:
+    if: ${{ github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: pip install build twine
+
+      - name: Validate release tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          tag = "${{ github.event.release.tag_name }}"
+          if not tag.startswith("v"):
+              raise SystemExit(f"Release tag must start with 'v', got: {tag}")
+
+          package_version = None
+          version_file = Path("src/autofragment/_version.py")
+          for line in version_file.read_text(encoding="utf-8").splitlines():
+              line = line.strip()
+              if line.startswith("__version__"):
+                  package_version = line.split("=", 1)[1].strip().strip('"').strip("'")
+                  break
+
+          if package_version is None:
+              raise SystemExit("Could not determine package version from src/autofragment/_version.py")
+
+          expected_tag = f"v{package_version}"
+          if tag != expected_tag:
+              raise SystemExit(
+                  f"Release tag/version mismatch: tag={tag}, package={package_version}, expected={expected_tag}"
+              )
+
+          print(f"Validated release tag {tag} matches package version {package_version}")
+          PY
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check package
+        run: twine check dist/*
+
+      - name: Upload to TestPyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
+        run: twine upload dist/*

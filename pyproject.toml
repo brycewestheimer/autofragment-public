@@ -1,0 +1,105 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autofragment"
+dynamic = ["version"]
+description = "Molecular fragmentation for computational chemistry"
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">=3.10"
+authors = [
+    { name = "Bryce M. Westheimer", email = "brycewestheimer@users.noreply.github.com" },
+]
+keywords = [
+    "chemistry",
+    "computational chemistry",
+    "fragmentation",
+    "molecular clusters",
+    "water clusters",
+    "partitioning",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+    "numpy>=1.22",
+    "scikit-learn>=1.0",
+]
+
+[project.optional-dependencies]
+balanced = ["k-means-constrained>=0.7"]
+bio = ["gemmi>=0.6"]
+graph = [
+    "networkx>=3.0",
+    "scipy>=1.9",
+]
+matsci = [
+    "ase>=3.22",
+    "pymatgen>=2023.1",
+]
+ml = []
+docs = [
+    "sphinx>=7.0",
+    "myst-parser>=2.0",
+    "breathe>=4.36.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=1.25",
+    "sphinx-copybutton>=0.5",
+]
+all = ["autofragment[balanced,bio,graph,matsci,ml]"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-benchmark>=4.0",
+    "ruff>=0.2",
+    "mypy>=1.0",
+    "pre-commit>=3.0",
+]
+
+[project.scripts]
+autofragment = "autofragment.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/brycewestheimer/autofragment-public"
+Documentation = "https://github.com/brycewestheimer/autofragment-public#readme"
+Repository = "https://github.com/brycewestheimer/autofragment-public"
+Issues = "https://github.com/brycewestheimer/autofragment-public/issues"
+
+[tool.hatch.version]
+path = "src/autofragment/_version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/autofragment"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --cov=autofragment --cov-report=xml --cov-report=term-missing"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]

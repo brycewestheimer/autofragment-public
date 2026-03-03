@@ -1,0 +1,85 @@
+# General
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / Packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit tests / Coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+*.json
+!examples/**/*.json
+!tests/*.json
+*.xyz
+!tests/fixtures/*.xyz
+!examples/**/*.xyz
+*.cif
+!tests/fixtures/*.cif
+!examples/**/*.cif
+*.pdb
+!examples/**/*.pdb
+input/
+output/
+
+# Documentation builds (generated, not committed)
+docs/_build/
+
+# Local files
+.local_files/*
+
+# Internal/private development artifacts
+archive/
+.benchmarks/
+CLAUDE.md

@@ -1,0 +1,11 @@
+name: autofragment-dev
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10,<3.13
+  - numpy>=1.22
+  - scikit-learn>=1.0
+  - pip
+  - make
+  - pip:
+      - "-e .[dev,docs]"
