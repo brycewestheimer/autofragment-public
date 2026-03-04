@@ -4,7 +4,7 @@
 [![Docs](https://github.com/brycewestheimer/autofragment-public/actions/workflows/docs.yml/badge.svg)](https://github.com/brycewestheimer/autofragment-public/actions/workflows/docs.yml)
 [![codecov](https://codecov.io/gh/brycewestheimer/autofragment-public/branch/main/graph/badge.svg)](https://codecov.io/gh/brycewestheimer/autofragment-public)
 
-`autofragment` is a production-ready Python library for chemistry-aware molecular fragmentation in computational chemistry workflows.
+`autofragment` is a Python library for chemistry-aware molecular fragmentation in computational chemistry workflows.
 
 Version: **1.0.0**
 
