@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any, Dict, List, NewType, Optional, Sequence, Union
 
 import numpy as np
 
@@ -69,7 +69,7 @@ class Atom:
 
 
 # Type alias for an isolated molecule or fragment (list of atoms).
-Molecule = List[Atom]
+Molecule = NewType('Molecule', List[Atom])
 
 
 def molecule_to_coords(molecule: Molecule) -> np.ndarray:

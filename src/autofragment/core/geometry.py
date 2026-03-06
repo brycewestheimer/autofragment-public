@@ -52,11 +52,26 @@ def compute_centroids(molecules: Sequence[Molecule]) -> np.ndarray:
     np.ndarray
         Centroids array with shape (N_molecules, 3).
     """
-    centroids = []
-    for mol in molecules:
-        coords = molecule_to_coords(mol)
-        centroids.append(coords.mean(axis=0))
-    return np.stack(centroids, axis=0)
+    if not molecules:
+        return np.empty((0, 3), dtype=float)
+
+    sizes = [len(mol) for mol in molecules]
+
+    # Uniform-size fast path (common for water clusters, etc.)
+    if len(set(sizes)) == 1:
+        all_coords = np.array(
+            [[atom.coords for atom in mol] for mol in molecules], dtype=float
+        )  # (N_mol, atoms_per_mol, 3)
+        return all_coords.mean(axis=1)
+
+    # Variable-size path: segmented sum via np.add.reduceat
+    all_coords = np.array(
+        [atom.coords for mol in molecules for atom in mol], dtype=float
+    )  # (total_atoms, 3)
+    boundaries = np.zeros(len(molecules), dtype=int)
+    np.cumsum(sizes[:-1], out=boundaries[1:])
+    sums = np.add.reduceat(all_coords, boundaries, axis=0)  # (N_mol, 3)
+    return sums / np.array(sizes, dtype=float)[:, np.newaxis]
 
 
 def compute_rmsd(coords1: np.ndarray, coords2: np.ndarray) -> float:

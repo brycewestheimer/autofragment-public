@@ -381,6 +381,89 @@ class BatchPartitioner:
         system = read_xyz(filepath, xyz_units=xyz_units)
         return self.partition(system, source_file=str(filepath), force=force)
 
+    def partition_many(
+        self,
+        systems: Sequence[ChemicalSystem],
+        *,
+        source_files: Optional[Sequence[str]] = None,
+        force: bool = False,
+        n_jobs: Optional[int] = None,
+        backend: str = "loky",
+    ) -> List[FragmentTree]:
+        """
+        Partition multiple systems in parallel.
+
+        Parameters
+        ----------
+        systems : Sequence[ChemicalSystem]
+            Chemical systems to partition.
+        source_files : Sequence[str], optional
+            Corresponding source file paths for metadata.
+        force : bool, optional
+            If True, proceed even with poor assignment quality. Default is False.
+        n_jobs : int, optional
+            Number of parallel jobs. None uses all CPUs via joblib, or falls
+            back to sequential if joblib is not installed.
+        backend : str, optional
+            Joblib backend. Default is "loky".
+
+        Returns
+        -------
+        List[FragmentTree]
+            Fragment trees for each system.
+        """
+        from autofragment.utils.parallel import parallel_map
+
+        srcs = source_files or [None] * len(systems)
+
+        def _do(args: tuple) -> FragmentTree:
+            sys, src = args
+            return self.partition(sys, source_file=src, force=force)
+
+        return parallel_map(
+            _do, list(zip(systems, srcs)), n_jobs=n_jobs, backend=backend
+        )
+
+    def partition_files(
+        self,
+        filepaths: Sequence[str | Path],
+        *,
+        force: bool = False,
+        xyz_units: Literal["angstrom", "bohr"] = "angstrom",
+        n_jobs: Optional[int] = None,
+        backend: str = "loky",
+    ) -> List[FragmentTree]:
+        """
+        Partition multiple XYZ files in parallel.
+
+        Parameters
+        ----------
+        filepaths : Sequence[str | Path]
+            Paths to XYZ files.
+        force : bool, optional
+            If True, proceed even with poor assignment quality. Default is False.
+        xyz_units : str, optional
+            Units for XYZ coordinates. Default is "angstrom".
+        n_jobs : int, optional
+            Number of parallel jobs. None uses all CPUs via joblib, or falls
+            back to sequential if joblib is not installed.
+        backend : str, optional
+            Joblib backend. Default is "loky".
+
+        Returns
+        -------
+        List[FragmentTree]
+            Fragment trees for each file.
+        """
+        from autofragment.utils.parallel import parallel_map
+
+        def _do(fp: str | Path) -> FragmentTree:
+            return self.partition_file(fp, force=force, xyz_units=xyz_units)
+
+        return parallel_map(
+            _do, list(filepaths), n_jobs=n_jobs, backend=backend
+        )
+
     def _match_molecules(self, target: List[Molecule]) -> Dict[int, int]:
         """Match target molecules to reference using optimal assignment."""
         n = len(self.reference_molecules)
@@ -389,9 +472,8 @@ class BatchPartitioner:
         if self.metric == "centroid":
             ref_cents = compute_centroids(self.reference_molecules)
             tgt_cents = compute_centroids(target)
-            for i in range(n):
-                for j in range(n):
-                    cost[i, j] = float(np.linalg.norm(ref_cents[i] - tgt_cents[j]))
+            diff = ref_cents[:, np.newaxis, :] - tgt_cents[np.newaxis, :, :]
+            cost = np.linalg.norm(diff, axis=2)
 
         elif self.metric == "rmsd":
             for i in range(n):

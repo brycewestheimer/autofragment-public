@@ -183,3 +183,66 @@ class TestBatchPartitioner:
 
         tree = batch.partition(system)
         assert tree.n_fragments == 4
+
+    def test_partition_many(self, water16_path):
+        """Test partition_many with multiple systems."""
+        system = io.read_xyz(water16_path)
+        partitioner = MolecularPartitioner(
+            n_fragments=4, method="kmeans"
+        )
+        batch = BatchPartitioner.from_partitioner(
+            partitioner, system, metric="centroid"
+        )
+
+        trees = batch.partition_many(
+            [system, system],
+            source_files=[str(water16_path), str(water16_path)],
+            n_jobs=1,
+        )
+        assert len(trees) == 2
+        for tree in trees:
+            assert tree.n_fragments == 4
+
+    def test_partition_many_no_source_files(self, water16_path):
+        """Test partition_many without source_files."""
+        system = io.read_xyz(water16_path)
+        partitioner = MolecularPartitioner(
+            n_fragments=4, method="kmeans"
+        )
+        batch = BatchPartitioner.from_partitioner(
+            partitioner, system, metric="centroid"
+        )
+
+        trees = batch.partition_many([system], n_jobs=1)
+        assert len(trees) == 1
+        assert trees[0].n_fragments == 4
+
+    def test_vectorized_centroid_cost_matrix(self, water16_path):
+        """Test that vectorized centroid cost matches naive loop."""
+        import numpy as np
+        from autofragment.core.geometry import compute_centroids
+
+        system = io.read_xyz(water16_path)
+        partitioner = MolecularPartitioner(
+            n_fragments=4, method="kmeans"
+        )
+        batch = BatchPartitioner.from_partitioner(
+            partitioner, system, metric="centroid"
+        )
+        molecules = system.to_molecules(require_metadata=True)
+
+        ref_cents = compute_centroids(batch.reference_molecules)
+        tgt_cents = compute_centroids(molecules)
+        n = len(ref_cents)
+
+        # Vectorized (as implemented)
+        diff = ref_cents[:, np.newaxis, :] - tgt_cents[np.newaxis, :, :]
+        cost_vec = np.linalg.norm(diff, axis=2)
+
+        # Naive loop for reference
+        cost_loop = np.zeros((n, n))
+        for i in range(n):
+            for j in range(n):
+                cost_loop[i, j] = float(np.linalg.norm(ref_cents[i] - tgt_cents[j]))
+
+        np.testing.assert_allclose(cost_vec, cost_loop, atol=1e-12)
