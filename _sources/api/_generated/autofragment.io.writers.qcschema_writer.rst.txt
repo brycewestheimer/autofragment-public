@@ -1,4 +1,4 @@
-autofragment.io.writers.qcschema\_writer
+﻿autofragment.io.writers.qcschema\_writer
 ========================================
 
 .. automodule:: autofragment.io.writers.qcschema_writer
@@ -9,6 +9,7 @@ autofragment.io.writers.qcschema\_writer
    .. autosummary::
    
       system_to_qcschema
+      write_qcmanybody_input
       write_qcschema
       write_qcschema_input
    
