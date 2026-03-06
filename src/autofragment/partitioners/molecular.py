@@ -455,9 +455,12 @@ class MolecularPartitioner(BasePartitioner):
         centroids: np.ndarray,
     ) -> TieredPartitionResult:
         """Partition using geometric planes (tiered mode)."""
-        assert self.tiers is not None
-        assert self.n_primary is not None
-        assert self.n_secondary is not None
+        if self.tiers is None:
+            raise ValueError("tiers must be set for tiered partitioning")
+        if self.n_primary is None:
+            raise ValueError("n_primary must be set for tiered partitioning")
+        if self.n_secondary is None:
+            raise ValueError("n_secondary must be set for tiered partitioning")
         n_t = self.n_tertiary if self.tiers == 3 else 1
         prim, sec, ter = partition_by_planes_tiered(
             centroids, self.n_primary, self.n_secondary, n_t or 1
@@ -488,9 +491,12 @@ class MolecularPartitioner(BasePartitioner):
         centroids: np.ndarray,
     ) -> TieredPartitionResult:
         """Partition using clustering algorithms (tiered mode)."""
-        assert self.tiers is not None
-        assert self.n_primary is not None
-        assert self.n_secondary is not None
+        if self.tiers is None:
+            raise ValueError("tiers must be set for tiered partitioning")
+        if self.n_primary is None:
+            raise ValueError("n_primary must be set for tiered partitioning")
+        if self.n_secondary is None:
+            raise ValueError("n_secondary must be set for tiered partitioning")
         primary_labels = partition_labels(
             centroids, self.n_primary, self.method, self.random_state,
             init=self._init_primary,
@@ -522,7 +528,8 @@ class MolecularPartitioner(BasePartitioner):
             )
 
         # 3-tier partitioning
-        assert self.n_tertiary is not None
+        if self.n_tertiary is None:
+            raise ValueError("n_tertiary must be set for 3-tier partitioning")
         labels3: List[Union[LabelTuple2, LabelTuple3]] = [(0, 0, 0)] * len(molecules)
         n_t = self.n_tertiary
 
@@ -560,8 +567,10 @@ class MolecularPartitioner(BasePartitioner):
 
     def _validate_tiered_hierarchy(self, result: TieredPartitionResult) -> None:
         """Validate that cluster sizes are equal at every tier level."""
-        assert self.n_primary is not None
-        assert self.n_secondary is not None
+        if self.n_primary is None:
+            raise ValueError("n_primary must be set for tiered validation")
+        if self.n_secondary is None:
+            raise ValueError("n_secondary must be set for tiered validation")
         n_molecules = len(result.molecules)
 
         if self.tiers == 2:
@@ -596,7 +605,8 @@ class MolecularPartitioner(BasePartitioner):
                         )
 
         elif self.tiers == 3:
-            assert self.n_tertiary is not None
+            if self.n_tertiary is None:
+                raise ValueError("n_tertiary must be set for 3-tier validation")
             n_t = self.n_tertiary
             expected_primary = n_molecules / self.n_primary
             expected_secondary = n_molecules / (self.n_primary * self.n_secondary)
@@ -641,8 +651,10 @@ class MolecularPartitioner(BasePartitioner):
 
     def _build_tiered_fragments(self, result: TieredPartitionResult) -> List[Fragment]:
         """Build hierarchical Fragment objects from tiered partition result."""
-        assert self.n_primary is not None
-        assert self.n_secondary is not None
+        if self.n_primary is None:
+            raise ValueError("n_primary must be set for building tiered fragments")
+        if self.n_secondary is None:
+            raise ValueError("n_secondary must be set for building tiered fragments")
         fragments: List[Fragment] = []
 
         if self.tiers == 2:
@@ -664,7 +676,8 @@ class MolecularPartitioner(BasePartitioner):
                 fragments.append(pf)
 
         elif self.tiers == 3:
-            assert self.n_tertiary is not None
+            if self.n_tertiary is None:
+                raise ValueError("n_tertiary must be set for building 3-tier fragments")
             n_t = self.n_tertiary
             for p in range(self.n_primary):
                 pf_id = f"PF{p + 1}"

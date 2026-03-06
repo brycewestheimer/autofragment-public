@@ -17,6 +17,7 @@ Supported methods:
 
 from __future__ import annotations
 
+import warnings
 from typing import Any, Dict, List, Union
 
 import numpy as np
@@ -130,11 +131,21 @@ def partition_labels(
     if method == "agglomerative":
         from sklearn.cluster import AgglomerativeClustering  # type: ignore[import-untyped]
 
+        if init is not None:
+            warnings.warn(
+                f"init parameter is ignored for '{method}' clustering method",
+                stacklevel=2,
+            )
         return AgglomerativeClustering(n_clusters=n_groups).fit_predict(centroids)
 
     if method == "spectral":
         from sklearn.cluster import SpectralClustering  # type: ignore[import-untyped]
 
+        if init is not None:
+            warnings.warn(
+                f"init parameter is ignored for '{method}' clustering method",
+                stacklevel=2,
+            )
         return SpectralClustering(
             n_clusters=n_groups, random_state=random_state, assign_labels="discretize"
         ).fit_predict(centroids)
@@ -162,12 +173,22 @@ def partition_labels(
     if method == "gmm":
         from sklearn.mixture import GaussianMixture  # type: ignore[import-untyped]
 
+        if init is not None:
+            warnings.warn(
+                f"init parameter is ignored for '{method}' clustering method",
+                stacklevel=2,
+            )
         model = GaussianMixture(n_components=n_groups, random_state=random_state)
         return model.fit_predict(centroids)
 
     if method == "birch":
         from sklearn.cluster import Birch  # type: ignore[import-untyped]
 
+        if init is not None:
+            warnings.warn(
+                f"init parameter is ignored for '{method}' clustering method",
+                stacklevel=2,
+            )
         return Birch(n_clusters=n_groups).fit_predict(centroids)
 
     raise ValueError(f"Unknown clustering method: {method}")

@@ -212,15 +212,18 @@ class GreedyOptimizer(FragmentationOptimizer):
         # Assuming we have a graph on system would be O(1) per edge check
         # Let's assume passed system has a .graph attribute (MolecularGraph) as per previous tasks
 
-        if hasattr(system, "graph"):
-            sg = system.graph._graph.subgraph(target_frag).copy()
-            if sg.has_edge(u, v):
-                sg.remove_edge(u, v)
-            if sg.has_edge(v, u):
-                sg.remove_edge(v, u)
-            return not import_nx().is_connected(sg)
+        if not hasattr(system, "graph"):
+            raise ValueError(
+                "ChemicalSystem must have a graph attribute to check bond splits. "
+                "Ensure the system has bonds or call system.graph to build the graph."
+            )
 
-        return True  # Fallback
+        sg = system.graph.subgraph(set(target_frag))
+        if sg.has_edge(u, v):
+            sg.remove_edge(u, v)
+        if sg.has_edge(v, u):
+            sg.remove_edge(v, u)
+        return not sg.is_connected()
 
     def _update_fragments(
         self, fragments: List[List[int]], broken_bond: Tuple[int, int], system
@@ -238,16 +241,15 @@ class GreedyOptimizer(FragmentationOptimizer):
 
         if target_frag_idx != -1:
             # Split this fragment
-            # Re-use logic from _bond_splits_fragment
-            import networkx as nx  # type: ignore[import-untyped]
+            nx = import_nx()
 
             target_frag = fragments[target_frag_idx]
-            sg = system.graph._graph.subgraph(target_frag).copy()
+            sg = system.graph.subgraph(set(target_frag))
             if sg.has_edge(u, v):
                 sg.remove_edge(u, v)
 
             # Get connected components
-            ccs = list(nx.connected_components(sg))
+            ccs = list(nx.connected_components(sg.networkx_graph))
             for cc in ccs:
                 new_fragments.append(list(cc))
 
@@ -348,7 +350,7 @@ class SimulatedAnnealingOptimizer(FragmentationOptimizer):
         if len(fragments) < 2:
             return None
 
-        graph = system.graph._graph
+        mg = system.graph
 
         # Build atom -> fragment index lookup
         atom_to_frag: dict[int, int] = {}
@@ -361,7 +363,7 @@ class SimulatedAnnealingOptimizer(FragmentationOptimizer):
         boundary: List[Tuple[int, int]] = []  # (atom, neighbour_frag_idx)
         for idx, frag in enumerate(fragments):
             for a in frag:
-                for nbr in graph.neighbors(a):
+                for nbr in mg.neighbors(a):
                     nbr_frag = atom_to_frag.get(nbr)
                     if nbr_frag is not None and nbr_frag != idx:
                         boundary.append((a, nbr_frag))
@@ -379,8 +381,8 @@ class SimulatedAnnealingOptimizer(FragmentationOptimizer):
             return None
 
         remaining = [a for a in source_frag if a != atom]
-        sub = graph.subgraph(remaining)
-        if not nx.is_connected(sub):
+        sub = mg.subgraph(set(remaining))
+        if not sub.is_connected():
             return None
 
         # Execute the move

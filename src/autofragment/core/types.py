@@ -205,19 +205,12 @@ class Fragment:
 
     @property
     def n_molecules(self) -> int:
-        """Number of molecules (for molecular systems)."""
-        # This assumes each molecule was added as a contiguous block or
-        # we can infer it. For now, if we don't have metadata, assume atomic?
-        # Actually in MolecularPartitioner it says:
-        # fragments.append(Fragment.from_molecules(chosen, f"F{k + 1}"))
+        """Number of molecules in this fragment, from metadata.
 
-        # But Fragment.from_molecules just flattens atoms.
-        # It doesn't store molecule count explicitly in Fragment structure shown in types.py.
-        # Unless we added it to metadata or change types.py.
-        # Let's check metadata.
-        # It seems not stored by default.
-        # We can estimate if we know molecule size, or just return 0 if unknown.
-        # Better yet, let's fix the NOTEBOOK to not use this property if it doesn't exist.
+        Returns 0 if the molecule count was not recorded at partitioning time.
+        The ``MolecularPartitioner`` stores this value automatically in
+        ``metadata["n_molecules"]``.
+        """
         return self.metadata.get("n_molecules", 0)
 
     def get_coords(self) -> np.ndarray:
@@ -589,7 +582,7 @@ class ChemicalSystem:
         bonds = []
 
         # Sort node indices
-        node_indices = sorted(graph._graph.nodes()) # Accessing internal graph logic
+        node_indices = graph.nodes()
         # Mapping from node index to list index (0..N-1)
         idx_map = {idx: i for i, idx in enumerate(node_indices)}
 

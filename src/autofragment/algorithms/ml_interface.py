@@ -92,7 +92,7 @@ def extract_node_features(graph: "MolecularGraph") -> np.ndarray:
              pass
 
         # Other features
-        degree = len(list(graph._graph.neighbors(i)))
+        degree = len(graph.neighbors(i))
         charge = atom.get("charge", 0.0)
 
         # Ring/Aromatic check (might be slow if repeated, but this is feature extraction)

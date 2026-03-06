@@ -179,6 +179,16 @@ class MolecularGraph:
 
 
     @property
+    def networkx_graph(self) -> "nx.Graph":
+        """Read-only access to the underlying NetworkX graph.
+
+        Use this when algorithm code needs direct access to the networkx
+        graph object (e.g. for graph partitioning routines).  Prefer the
+        public methods on ``MolecularGraph`` when possible.
+        """
+        return self._graph
+
+    @property
     def n_atoms(self) -> int:
         """Number of atoms in the graph."""
         return self._graph.number_of_nodes()
@@ -187,6 +197,54 @@ class MolecularGraph:
     def n_bonds(self) -> int:
         """Number of bonds in the graph."""
         return self._graph.number_of_edges()
+
+    def nodes(self) -> List[int]:
+        """Return a sorted list of all node (atom) indices."""
+        return sorted(self._graph.nodes())
+
+    def neighbors(self, index: int) -> List[int]:
+        """Return a list of neighbor indices for the given atom.
+
+        Args:
+            index: Atom index.
+
+        Returns:
+            List of neighbor atom indices.
+        """
+        return list(self._graph.neighbors(index))
+
+    def has_edge(self, atom1: int, atom2: int) -> bool:
+        """Check if a bond exists between two atoms.
+
+        Args:
+            atom1: First atom index.
+            atom2: Second atom index.
+
+        Returns:
+            True if a bond exists.
+        """
+        return self._graph.has_edge(atom1, atom2)
+
+    def remove_edge(self, atom1: int, atom2: int) -> None:
+        """Remove the bond between two atoms.
+
+        Args:
+            atom1: First atom index.
+            atom2: Second atom index.
+
+        Raises:
+            networkx.NetworkXError: If the bond does not exist.
+        """
+        self._graph.remove_edge(atom1, atom2)
+
+    def is_connected(self) -> bool:
+        """Check if the graph is connected.
+
+        Returns:
+            True if the graph is connected.
+        """
+        nx = require_dependency("networkx", "graph", "MolecularGraph")
+        return nx.is_connected(self._graph)
 
     def add_atom(self, index: int, element: str, coords: np.ndarray, **attrs: Any) -> None:
         """Add an atom to the graph.

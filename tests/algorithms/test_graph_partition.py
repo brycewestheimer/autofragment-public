@@ -19,11 +19,15 @@ class MockMolecularGraph:
     def __init__(self, graph):
         self._graph = graph
 
+    @property
+    def networkx_graph(self):
+        return self._graph
+
     def nodes(self):
-        return self._graph.nodes()
+        return sorted(self._graph.nodes())
 
     def neighbors(self, node):
-        return self._graph.neighbors(node)
+        return list(self._graph.neighbors(node))
 
 
 class MockMolecularGraphNoNodes:
@@ -31,6 +35,10 @@ class MockMolecularGraphNoNodes:
 
     def __init__(self, graph):
         self._graph = graph
+
+    @property
+    def networkx_graph(self):
+        return self._graph
 
 def test_min_cut_partition_simple():
     """Test standard 2-way partition on a barbell graph."""
@@ -202,10 +210,10 @@ def test_hierarchical_decomposition():
     assert len(tree.children[0].children) == 2
 
 
-def test_hierarchical_decomposition_without_nodes_method():
-    """Regression: hierarchical decomposition should not require graph.nodes()."""
+def test_hierarchical_decomposition_uses_public_api():
+    """Verify hierarchical decomposition works via public MolecularGraph API."""
     g = nx.path_graph(4)
-    mol_graph = MockMolecularGraphNoNodes(g)
+    mol_graph = MockMolecularGraph(g)
 
     tree = hierarchical_decomposition(mol_graph, min_fragment_size=1, max_levels=5)
 

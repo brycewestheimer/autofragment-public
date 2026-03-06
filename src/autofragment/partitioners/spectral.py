@@ -42,7 +42,7 @@ class SpectralPartitioner(BasePartitioner):
 
         graph = system.to_graph()
 
-        partitions = _spectral_recursive_partition(nx, graph._graph, self.config.n_fragments)
+        partitions = _spectral_recursive_partition(nx, graph.networkx_graph, self.config.n_fragments)
         fragments = _fragments_from_partitions(system, partitions)
 
         return FragmentTree(

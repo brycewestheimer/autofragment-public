@@ -46,6 +46,9 @@ class MockMolecularGraphForML:
             return self.atoms[idx]
         return {"element": "H"}
 
+    def neighbors(self, idx):
+        return list(self._graph.neighbors(idx))
+
     def find_rings(self):
         return []
 

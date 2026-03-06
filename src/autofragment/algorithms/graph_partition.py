@@ -37,7 +37,7 @@ def min_cut_partition(
         cut_edges: List of edges (u, v) that were cut
     """
     nx = require_dependency("networkx", "graph", "Graph partitioning")
-    g = graph._graph
+    g = graph.networkx_graph
 
     # Need to handle disconnected graphs for stoer_wagner
     if not nx.is_connected(g):
@@ -182,7 +182,7 @@ def community_partition(
         ImportError: If algorithm='louvain' and python-louvain is not installed.
     """
     nx = require_dependency("networkx", "graph", "Graph partitioning")
-    g = graph._graph
+    g = graph.networkx_graph
     partition_dict = {}
 
     if algorithm == "louvain":
@@ -249,7 +249,7 @@ def balanced_partition(
         Tuple of (partition_lists, cut_edges)
     """
     require_dependency("networkx", "graph", "Graph partitioning")
-    g = graph._graph
+    g = graph.networkx_graph
 
     if n_partitions < 2:
         return [list(g.nodes())], []
@@ -356,8 +356,8 @@ def hierarchical_decomposition(
     Returns:
         FragmentTree with nested partitions
     """
-    root = FragmentTree(atoms=list(graph._graph.nodes()), level=0)
-    _build_tree(root, graph._graph, min_fragment_size, max_levels)
+    root = FragmentTree(atoms=graph.nodes(), level=0)
+    _build_tree(root, graph.networkx_graph, min_fragment_size, max_levels)
     return root
 
 
@@ -407,7 +407,7 @@ def metis_partition(
         # warnings.warn("METIS (pymetis) not installed, falling back to balanced_partition")
         return balanced_partition(graph, n_partitions)
 
-    g = graph._graph
+    g = graph.networkx_graph
 
     if n_partitions < 2:
         return [list(g.nodes())], []
