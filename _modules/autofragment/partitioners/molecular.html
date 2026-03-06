@@ -577,9 +577,12 @@
         <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TieredPartitionResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Partition using geometric planes (tiered mode).&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tiers must be set for tiered partitioning&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_primary must be set for tiered partitioning&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_secondary must be set for tiered partitioning&quot;</span><span class="p">)</span>
         <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">1</span>
         <span class="n">prim</span><span class="p">,</span> <span class="n">sec</span><span class="p">,</span> <span class="n">ter</span> <span class="o">=</span> <span class="n">partition_by_planes_tiered</span><span class="p">(</span>
             <span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">,</span> <span class="n">n_t</span> <span class="ow">or</span> <span class="mi">1</span>
@@ -610,9 +613,12 @@
         <span class="n">centroids</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TieredPartitionResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Partition using clustering algorithms (tiered mode).&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tiers must be set for tiered partitioning&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_primary must be set for tiered partitioning&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_secondary must be set for tiered partitioning&quot;</span><span class="p">)</span>
         <span class="n">primary_labels</span> <span class="o">=</span> <span class="n">partition_labels</span><span class="p">(</span>
             <span class="n">centroids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
             <span class="n">init</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_init_primary</span><span class="p">,</span>
@@ -644,7 +650,8 @@
             <span class="p">)</span>
 
         <span class="c1"># 3-tier partitioning</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_tertiary must be set for 3-tier partitioning&quot;</span><span class="p">)</span>
         <span class="n">labels3</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LabelTuple2</span><span class="p">,</span> <span class="n">LabelTuple3</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">molecules</span><span class="p">)</span>
         <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
 
@@ -682,8 +689,10 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_tiered_hierarchy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">TieredPartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that cluster sizes are equal at every tier level.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_primary must be set for tiered validation&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_secondary must be set for tiered validation&quot;</span><span class="p">)</span>
         <span class="n">n_molecules</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">molecules</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -718,7 +727,8 @@
                         <span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_tertiary must be set for 3-tier validation&quot;</span><span class="p">)</span>
             <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
             <span class="n">expected_primary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span>
             <span class="n">expected_secondary</span> <span class="o">=</span> <span class="n">n_molecules</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span><span class="p">)</span>
@@ -763,8 +773,10 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_tiered_fragments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">TieredPartitionResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build hierarchical Fragment objects from tiered partition result.&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_primary must be set for building tiered fragments&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_secondary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_secondary must be set for building tiered fragments&quot;</span><span class="p">)</span>
         <span class="n">fragments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Fragment</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -786,7 +798,8 @@
                 <span class="n">fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiers</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n_tertiary must be set for building 3-tier fragments&quot;</span><span class="p">)</span>
             <span class="n">n_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_tertiary</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_primary</span><span class="p">):</span>
                 <span class="n">pf_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;PF</span><span class="si">{</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
