@@ -1765,3 +1765,228 @@ class TestQCSchemaInterfragmentBonds:
 
         mol = data["molecule"]
         assert "connectivity" in mol
+
+
+# ===========================================================================
+# QCManyBody
+# ===========================================================================
+
+class TestQCManyBodyWriter:
+    """Tests for QCManyBody (ManyBodyInput) writer."""
+
+    def test_schema_name(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            data = json.load(f)
+
+        assert data["schema_name"] == "qcschema_manybodyinput"
+        assert data["schema_version"] == 1
+
+    def test_molecule_has_fragments(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            mol = json.load(f)["molecule"]
+
+        assert "fragments" in mol
+        assert "fragment_charges" in mol
+        assert "fragment_multiplicities" in mol
+        assert len(mol["fragments"]) == 2
+
+    def test_molecule_provenance_has_routine(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            mol = json.load(f)["molecule"]
+
+        assert "routine" in mol["provenance"]
+
+    def test_single_level_specification(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(
+            water_dimer_system, out, water_dimer_fragments,
+            method="mp2", basis="cc-pvdz", program="psi4",
+        )
+
+        with open(out) as f:
+            spec = json.load(f)["specification"]
+
+        auto = spec["specification"]["(auto)"]
+        assert auto["program"] == "psi4"
+        assert auto["model"]["method"] == "mp2"
+        assert auto["model"]["basis"] == "cc-pvdz"
+        assert auto["driver"] == "energy"
+
+    def test_bsse_type_single(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments, bsse_type="cp")
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert kw["bsse_type"] == ["cp"]
+
+    def test_bsse_type_list(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(
+            water_dimer_system, out, water_dimer_fragments, bsse_type=["cp", "nocp"],
+        )
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert kw["bsse_type"] == ["cp", "nocp"]
+
+    def test_max_nbody(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments, max_nbody=2)
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert kw["max_nbody"] == 2
+
+    def test_default_max_nbody_omitted(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert "max_nbody" not in kw
+
+    def test_multi_level(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        specs = {
+            "hf_tz": {
+                "program": "psi4",
+                "driver": "energy",
+                "model": {"method": "hf", "basis": "cc-pvtz"},
+                "keywords": {},
+            },
+            "mp2_dz": {
+                "program": "psi4",
+                "driver": "energy",
+                "model": {"method": "mp2", "basis": "cc-pvdz"},
+                "keywords": {},
+            },
+        }
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(
+            water_dimer_system, out, water_dimer_fragments,
+            levels={1: "hf_tz", 2: "mp2_dz"},
+            specifications=specs,
+        )
+
+        with open(out) as f:
+            data = json.load(f)
+
+        assert "hf_tz" in data["specification"]["specification"]
+        assert "mp2_dz" in data["specification"]["specification"]
+        assert data["specification"]["keywords"]["levels"] == {"1": "hf_tz", "2": "mp2_dz"}
+
+    def test_driver_gradient(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments, driver="gradient")
+
+        with open(out) as f:
+            data = json.load(f)
+
+        assert data["specification"]["driver"] == "gradient"
+
+    def test_embedding_charges(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        charges = {0: [0.1, -0.2, 0.1], 1: [0.1, -0.2, 0.1]}
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(
+            water_dimer_system, out, water_dimer_fragments, embedding_charges=charges,
+        )
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert "embedding_charges" in kw
+
+    def test_return_total_data(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(
+            water_dimer_system, out, water_dimer_fragments, return_total_data=True,
+        )
+
+        with open(out) as f:
+            kw = json.load(f)["specification"]["keywords"]
+
+        assert kw["return_total_data"] is True
+
+    def test_qcelemental_molecule_roundtrip(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        pytest.importorskip("qcelemental")
+        from qcelemental.models import Molecule
+
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            mol_dict = json.load(f)["molecule"]
+
+        mol = Molecule(**mol_dict)
+        assert len(mol.symbols) == 6
+
+    def test_manybodyinput_roundtrip(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        pytest.importorskip("qcmanybody")
+        from qcmanybody.models import ManyBodyInput
+
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        with open(out) as f:
+            data = json.load(f)
+
+        mbi = ManyBodyInput(**data)
+        assert mbi.schema_name == "qcschema_manybodyinput"
+
+    def test_file_written(self, tmp_path, water_dimer_system, water_dimer_fragments):
+        from autofragment.io.writers.qcschema_writer import write_qcmanybody_input
+
+        out = tmp_path / "mb.json"
+        write_qcmanybody_input(water_dimer_system, out, water_dimer_fragments)
+
+        assert out.exists()
+        with open(out) as f:
+            data = json.load(f)
+        assert isinstance(data, dict)
+
+    def test_provenance_fix_in_system_to_qcschema(self, water_dimer_system):
+        from autofragment.io.writers.qcschema_writer import system_to_qcschema
+
+        result = system_to_qcschema(water_dimer_system)
+        assert "routine" in result["provenance"]

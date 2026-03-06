@@ -52,6 +52,7 @@ from autofragment.io.writers.qchem import (
 )
 from autofragment.io.writers.qcschema_writer import (
     system_to_qcschema,
+    write_qcmanybody_input,
     write_qcschema,
 )
 from autofragment.io.writers.registry import FormatRegistry
@@ -82,6 +83,7 @@ __all__ = [
     "write_orca_multijob",
     # QCSchema
     "write_qcschema",
+    "write_qcmanybody_input",
     "system_to_qcschema",
     # Molpro
     "write_molpro_sapt",

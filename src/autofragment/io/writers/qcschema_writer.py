@@ -144,6 +144,7 @@ def system_to_qcschema(
     result["provenance"] = {
         "creator": "autofragment",
         "version": __version__,
+        "routine": "",
     }
 
     return result
@@ -245,4 +246,124 @@ def write_qcschema_input(
 
     with open(path, "w") as f:
         json.dump(input_spec, f, indent=indent)
+        f.write("\n")
+
+
+def write_qcmanybody_input(
+    system: ChemicalSystem,
+    filepath: Union[str, Path],
+    fragments: List[Fragment],
+    driver: str = "energy",
+    method: str = "hf",
+    basis: str = "sto-3g",
+    program: str = "psi4",
+    bsse_type: Union[str, List[str]] = "cp",
+    max_nbody: Optional[int] = None,
+    return_total_data: Optional[bool] = None,
+    supersystem_ie_only: Optional[bool] = None,
+    embedding_charges: Optional[Dict[int, List[float]]] = None,
+    levels: Optional[Dict[Union[int, str], str]] = None,
+    specifications: Optional[Dict[str, Dict[str, Any]]] = None,
+    keywords: Optional[Dict[str, Any]] = None,
+    indent: int = 2,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
+) -> None:
+    """
+    Write QCSchema ManyBodyInput specification for QCManyBody.
+
+    Produces a ``qcschema_manybodyinput`` JSON file compatible with
+    MolSSI's QCManyBody package.  No runtime dependency on qcmanybody or
+    qcelemental is required — the output is a plain dict written as JSON.
+
+    Parameters
+    ----------
+    system : ChemicalSystem
+        The chemical system.
+    filepath : str or Path
+        Output file path.
+    fragments : list of Fragment
+        Fragment definitions (required for many-body expansion).
+    driver : str, optional
+        Calculation type (energy, gradient, hessian). Default is "energy".
+    method : str, optional
+        QC method. Default is "hf".
+    basis : str, optional
+        Basis set. Default is "sto-3g".
+    program : str, optional
+        QC program to run. Default is "psi4".
+    bsse_type : str or list of str, optional
+        BSSE correction type(s). Default is "cp".
+    max_nbody : int, optional
+        Maximum n-body level. ``None`` lets QCManyBody default to all bodies.
+    return_total_data : bool, optional
+        Whether to return total data. ``None`` omits the key.
+    supersystem_ie_only : bool, optional
+        Whether to compute only supersystem interaction energy.
+    embedding_charges : dict, optional
+        Per-fragment embedding charges, keyed by fragment index.
+    levels : dict, optional
+        Multi-level specification mapping n-body level to specification key.
+    specifications : dict, optional
+        Named specification dicts for multi-level calculations.
+    keywords : dict, optional
+        Additional keywords for the QC program.
+    indent : int, optional
+        JSON indentation level. Default is 2.
+    interfragment_bonds : list, optional
+        Interfragment bond definitions to include in connectivity.
+    """
+    path = Path(filepath)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    molecule = system_to_qcschema(system, fragments, interfragment_bonds=interfragment_bonds)
+
+    # Normalize bsse_type to list
+    if isinstance(bsse_type, str):
+        bsse_type_list = [bsse_type]
+    else:
+        bsse_type_list = list(bsse_type)
+
+    # Build ManyBodyKeywords
+    mb_keywords: Dict[str, Any] = {
+        "bsse_type": bsse_type_list,
+    }
+    if max_nbody is not None:
+        mb_keywords["max_nbody"] = max_nbody
+    if return_total_data is not None:
+        mb_keywords["return_total_data"] = return_total_data
+    if supersystem_ie_only is not None:
+        mb_keywords["supersystem_ie_only"] = supersystem_ie_only
+    if embedding_charges is not None:
+        mb_keywords["embedding_charges"] = embedding_charges
+    if levels is not None:
+        mb_keywords["levels"] = levels
+
+    # Build specification dict
+    if specifications is not None:
+        spec_dict = specifications
+    else:
+        spec_dict = {
+            "(auto)": {
+                "program": program,
+                "driver": driver,
+                "model": {"method": method, "basis": basis},
+                "keywords": keywords or {},
+            },
+        }
+
+    manybody_input: Dict[str, Any] = {
+        "schema_name": "qcschema_manybodyinput",
+        "schema_version": 1,
+        "molecule": molecule,
+        "specification": {
+            "schema_name": "qcschema_manybodyspecification",
+            "schema_version": 1,
+            "keywords": mb_keywords,
+            "driver": driver,
+            "specification": spec_dict,
+        },
+    }
+
+    with open(path, "w") as f:
+        json.dump(manybody_input, f, indent=indent)
         f.write("\n")
