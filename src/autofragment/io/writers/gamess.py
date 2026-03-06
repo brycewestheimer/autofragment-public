@@ -11,11 +11,9 @@ for fragment-based calculations (FMO, EFMO, EFP methods).
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
-
-from autofragment.core.types import ChemicalSystem, Fragment
+from autofragment.core.types import Fragment
 
 # Element symbol to atomic number
 _ELEMENT_TO_Z = {
@@ -75,51 +73,6 @@ def _format_gamess_basis(basis: str) -> str:
     return f"GBASIS={basis.upper()}"
 
 
-def _find_fragment_boundaries(
-    fragments: List[Fragment],
-    system: ChemicalSystem,
-) -> List[Tuple[int, int, int, int]]:
-    """
-    Find broken covalent bonds between fragments.
-
-    Parameters
-    ----------
-    fragments : list
-        List of Fragment objects.
-    system : ChemicalSystem
-        The chemical system with bond information.
-
-    Returns
-    -------
-    list
-        List of (atom1_idx, atom2_idx, frag1_idx, frag2_idx) tuples
-        for each interfragment bond.
-    """
-    # Build atom-to-fragment mapping
-    atom_to_frag: Dict[int, int] = {}
-
-    for frag_idx, frag in enumerate(fragments):
-        coords = frag.get_coords()
-        for i in range(len(frag.symbols)):
-            # Match atom by finding closest in system
-            frag_coord = coords[i]
-            for sys_idx, atom in enumerate(system.atoms):
-                if np.allclose(atom.coords, frag_coord, atol=1e-3):
-                    atom_to_frag[sys_idx] = frag_idx
-                    break
-
-    # Find interfragment bonds
-    broken_bonds = []
-    for bond in system.bonds:
-        a1, a2 = bond["atom1"], bond["atom2"]
-        if a1 in atom_to_frag and a2 in atom_to_frag:
-            f1, f2 = atom_to_frag[a1], atom_to_frag[a2]
-            if f1 != f2:
-                broken_bonds.append((a1, a2, f1, f2))
-
-    return broken_bonds
-
-
 def _write_data_group(
     f,
     fragments: List[Fragment],
@@ -163,6 +116,7 @@ def write_gamess_fmo(
     nbody: int = 2,
     extra_contrl: Optional[Dict[str, str]] = None,
     extra_fmo: Optional[Dict[str, str]] = None,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
 ) -> None:
     """
     Write GAMESS FMO input file.
@@ -263,6 +217,26 @@ def write_gamess_fmo(
         # $GDDI group for parallel
         f.write(" $GDDI NGROUP=1 $END\n")
 
+        # $FMOBND group for interfragment bonds
+        if interfragment_bonds:
+            frag_id_to_num = {frag.id: idx for idx, frag in enumerate(fragments, 1)}
+            f.write(" $FMOBND\n")
+            for bond in interfragment_bonds:
+                fid1 = bond["fragment1_id"]
+                fid2 = bond["fragment2_id"]
+                if fid1 not in frag_id_to_num or fid2 not in frag_id_to_num:
+                    unknown = fid1 if fid1 not in frag_id_to_num else fid2
+                    raise ValueError(
+                        f"Interfragment bond references unknown fragment: {unknown}"
+                    )
+                a1 = bond["atom1_index"] + 1  # 0-based -> 1-based
+                a2 = bond["atom2_index"] + 1
+                fn1 = frag_id_to_num[fid1]
+                fn2 = frag_id_to_num[fid2]
+                # FMO convention: negative sign on first (detached) atom
+                f.write(f"  -{a1} {fn1} {a2} {fn2}\n")
+            f.write(" $END\n")
+
         # $DATA group
         _write_data_group(f, fragments, title)
 
@@ -274,6 +248,7 @@ def write_gamess_efmo(
     memory: int = 500,
     title: str = "AutoFragment EFMO calculation",
     extra_options: Optional[Dict[str, Any]] = None,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
 ) -> None:
     """
     Write GAMESS EFMO (Effective Fragment Molecular Orbital) input file.
@@ -292,6 +267,8 @@ def write_gamess_efmo(
         Title for the calculation.
     extra_options : dict, optional
         Additional options.
+    interfragment_bonds : list, optional
+        List of interfragment bond dicts for $FMOBND group.
     """
     # EFMO uses FMO framework with specific keywords
     write_gamess_fmo(
@@ -301,6 +278,7 @@ def write_gamess_efmo(
         memory=memory,
         title=title,
         extra_fmo={"MODGRD": "1"},  # EFMO-specific
+        interfragment_bonds=interfragment_bonds,
     )
 
 

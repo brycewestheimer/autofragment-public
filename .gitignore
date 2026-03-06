@@ -83,3 +83,4 @@ docs/_build/
 archive/
 .benchmarks/
 CLAUDE.md
+.claude/

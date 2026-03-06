@@ -26,6 +26,7 @@ def system_to_qcschema(
     system: ChemicalSystem,
     fragments: Optional[List[Fragment]] = None,
     name: Optional[str] = None,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """
     Convert ChemicalSystem to QCSchema dictionary.
@@ -111,6 +112,32 @@ def system_to_qcschema(
         result["fragment_charges"] = frag_charges
         result["fragment_multiplicities"] = frag_mults
 
+        # Add interfragment bonds to connectivity
+        if interfragment_bonds:
+            # Build fragment_id -> cumulative atom offset map
+            frag_offset: Dict[str, int] = {}
+            offset = 0
+            for frag in fragments:
+                frag_offset[frag.id] = offset
+                offset += len(frag.symbols)
+
+            # Existing connectivity as a set for dedup
+            existing = {(c[0], c[1]) for c in connectivity}
+
+            for bond in interfragment_bonds:
+                fid1 = bond["fragment1_id"]
+                fid2 = bond["fragment2_id"]
+                if fid1 in frag_offset and fid2 in frag_offset:
+                    g1 = frag_offset[fid1] + bond["atom1_index"]
+                    g2 = frag_offset[fid2] + bond["atom2_index"]
+                    if (g1, g2) not in existing and (g2, g1) not in existing:
+                        connectivity.append([g1, g2, float(bond.get("bond_order", 1.0))])
+                        existing.add((g1, g2))
+
+    # Ensure connectivity is in result if interfragment bonds added entries
+    if connectivity and "connectivity" not in result:
+        result["connectivity"] = connectivity
+
     # Add provenance
     from autofragment._version import __version__
 
@@ -128,6 +155,7 @@ def write_qcschema(
     fragments: Optional[List[Fragment]] = None,
     name: Optional[str] = None,
     indent: int = 2,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
 ) -> None:
     """
     Write ChemicalSystem to QCSchema JSON file.
@@ -156,7 +184,7 @@ def write_qcschema(
     path = Path(filepath)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    data = system_to_qcschema(system, fragments, name)
+    data = system_to_qcschema(system, fragments, name, interfragment_bonds)
 
     with open(path, "w") as f:
         json.dump(data, f, indent=indent)
@@ -172,6 +200,7 @@ def write_qcschema_input(
     fragments: Optional[List[Fragment]] = None,
     keywords: Optional[Dict[str, Any]] = None,
     indent: int = 2,
+    interfragment_bonds: Optional[List[Dict[str, Any]]] = None,
 ) -> None:
     """
     Write QCSchema input specification.
@@ -198,7 +227,7 @@ def write_qcschema_input(
     path = Path(filepath)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    molecule = system_to_qcschema(system, fragments)
+    molecule = system_to_qcschema(system, fragments, interfragment_bonds=interfragment_bonds)
 
     input_spec: Dict[str, Any] = {
         "schema_name": "qcschema_input",
