@@ -181,7 +181,7 @@ Default is “rmsd”.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reference_tree</strong> (<em>FragmentTree</em>)</p></li>
-<li><p><strong>reference_molecules</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><em>List</em></a><em>[</em><em>Atom</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>reference_molecules</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Molecule</em><em>]</em>)</p></li>
 <li><p><strong>reference_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a>)</p></li>
 <li><p><strong>n_fragments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
 <li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
@@ -213,6 +213,12 @@ Default is “rmsd”.</p></li>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">partition_file</span></code>(filepath[, force, xyz_units])</p></td>
 <td><p>Partition molecules from a file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">partition_files</span></code>(filepaths, *[, force, ...])</p></td>
+<td><p>Partition multiple XYZ files in parallel.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">partition_many</span></code>(systems, *[, source_files, ...])</p></td>
+<td><p>Partition multiple systems in parallel.</p></td>
 </tr>
 </tbody>
 </table>

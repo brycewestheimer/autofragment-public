@@ -503,6 +503,89 @@
         <span class="n">system</span> <span class="o">=</span> <span class="n">read_xyz</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">xyz_units</span><span class="o">=</span><span class="n">xyz_units</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">source_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">partition_many</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">systems</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChemicalSystem</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">source_files</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;loky&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FragmentTree</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Partition multiple systems in parallel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        systems : Sequence[ChemicalSystem]</span>
+<span class="sd">            Chemical systems to partition.</span>
+<span class="sd">        source_files : Sequence[str], optional</span>
+<span class="sd">            Corresponding source file paths for metadata.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            If True, proceed even with poor assignment quality. Default is False.</span>
+<span class="sd">        n_jobs : int, optional</span>
+<span class="sd">            Number of parallel jobs. None uses all CPUs via joblib, or falls</span>
+<span class="sd">            back to sequential if joblib is not installed.</span>
+<span class="sd">        backend : str, optional</span>
+<span class="sd">            Joblib backend. Default is &quot;loky&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[FragmentTree]</span>
+<span class="sd">            Fragment trees for each system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.utils.parallel</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_map</span>
+
+        <span class="n">srcs</span> <span class="o">=</span> <span class="n">source_files</span> <span class="ow">or</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">systems</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_do</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FragmentTree</span><span class="p">:</span>
+            <span class="n">sys</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="n">args</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="n">source_file</span><span class="o">=</span><span class="n">src</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parallel_map</span><span class="p">(</span>
+            <span class="n">_do</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">systems</span><span class="p">,</span> <span class="n">srcs</span><span class="p">)),</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">partition_files</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filepaths</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">xyz_units</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;angstrom&quot;</span><span class="p">,</span> <span class="s2">&quot;bohr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;angstrom&quot;</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;loky&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FragmentTree</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Partition multiple XYZ files in parallel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filepaths : Sequence[str | Path]</span>
+<span class="sd">            Paths to XYZ files.</span>
+<span class="sd">        force : bool, optional</span>
+<span class="sd">            If True, proceed even with poor assignment quality. Default is False.</span>
+<span class="sd">        xyz_units : str, optional</span>
+<span class="sd">            Units for XYZ coordinates. Default is &quot;angstrom&quot;.</span>
+<span class="sd">        n_jobs : int, optional</span>
+<span class="sd">            Number of parallel jobs. None uses all CPUs via joblib, or falls</span>
+<span class="sd">            back to sequential if joblib is not installed.</span>
+<span class="sd">        backend : str, optional</span>
+<span class="sd">            Joblib backend. Default is &quot;loky&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[FragmentTree]</span>
+<span class="sd">            Fragment trees for each file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">autofragment.utils.parallel</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_map</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_do</span><span class="p">(</span><span class="n">fp</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FragmentTree</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition_file</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span> <span class="n">xyz_units</span><span class="o">=</span><span class="n">xyz_units</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parallel_map</span><span class="p">(</span>
+            <span class="n">_do</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">filepaths</span><span class="p">),</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span>
+        <span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_match_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Molecule</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Match target molecules to reference using optimal assignment.&quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_molecules</span><span class="p">)</span>
@@ -511,9 +594,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;centroid&quot;</span><span class="p">:</span>
             <span class="n">ref_cents</span> <span class="o">=</span> <span class="n">compute_centroids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_molecules</span><span class="p">)</span>
             <span class="n">tgt_cents</span> <span class="o">=</span> <span class="n">compute_centroids</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-                    <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">ref_cents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">tgt_cents</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">ref_cents</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">tgt_cents</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;rmsd&quot;</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>

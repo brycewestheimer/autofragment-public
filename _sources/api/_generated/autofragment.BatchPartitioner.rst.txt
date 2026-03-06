@@ -17,6 +17,8 @@
       ~BatchPartitioner.from_partitioner
       ~BatchPartitioner.partition
       ~BatchPartitioner.partition_file
+      ~BatchPartitioner.partition_files
+      ~BatchPartitioner.partition_many
    
    
 
